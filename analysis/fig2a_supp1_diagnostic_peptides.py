@@ -657,7 +657,7 @@ def box_panel(boxes, cond, out, font, letter="a", width=1215.0, ylim=None,
         for (gene, cols, (delta, p, _na, _nb)), w in zip(row, fw):
             c.rect(x0, mt, w, ph, fill="none", stroke=AXIS, sw=0.8, rx=0)
             c.text(x0 + w / 2, mt - 20, gene, 10.4, INK, "middle", "600")
-            if fc:
+            if fc and show_stat:
                 # `p` holds the BH q, or the raw Welch p with --stat p
                 qs = (f"{stat} = {p:.1e}" if p < 1e-3
                       else f"{stat} = {p:.3f}")
@@ -849,6 +849,8 @@ def main(argv=None):
     ap.add_argument("--min-group", type=int, default=3)
     ap.add_argument("--box-n", dest="box_n", action="store_true",
                     help="label each box with the patients behind its points")
+    ap.add_argument("--per-patient", dest="per_patient", action="store_true",
+                    help="--unit fc: a point per case patient per peptide, not per peptide")
     ap.add_argument("--no-stat", dest="no_stat", action="store_true",
                     help="--box: leave the per-panel statistic off")
     ap.add_argument("--box-patients", type=int, default=0,
@@ -1090,9 +1092,19 @@ def main(argv=None):
                 box_n[(g["gene"], g["canon_acc"])] = g["canon"]["box"]
                 box_n[(g["gene"], who)] = st["box"]
             pt = lambda col: [(pp, None, dg, v) for pp, dg, v in col["points"]]
-            boxes.append((g["gene"],
-                          [(g["canon_acc"], pt(g["canon"]), True),
-                           (who, pt(st), False)],
+            cols = [(g["canon_acc"], pt(g["canon"]), True), (who, pt(st), False)]
+            if args.per_patient:
+                # one point per case patient per peptide, against the peptide's control mean
+                cols = []
+                for lab, mem, is_can in ((g["canon_acc"], g["canon_members"], True),
+                                         (who, g["diag_members"][0][1], False)):
+                    vals = precursor_values(mem, idx, med, cond, args.control)
+                    cols.append((lab, [(f"{pp}{s_}", s_, dg, v) for pp, s_, dg, v in vals
+                                       if cond.get(s_) == args.case], is_can))
+                    box_n[(g["gene"], lab)] = (
+                        len({s_ for _p, s_, _d, _v in vals if cond.get(s_) == args.case}),
+                        len({s_ for _p, s_, _d, _v in vals if cond.get(s_) == args.control}))
+            boxes.append((g["gene"], cols,
                           (st["mean"],
                            st["p"] if args.stat == "p"
                            else qof.get((g["gene"], who), float("nan")),
@@ -1101,7 +1113,8 @@ def main(argv=None):
                   panel_w=args.panel_w, panel_h=args.panel_h,
                   case_label=args.case, control_label=args.control,
                   title=args.title, subtitle=args.subtitle, unit="fc",
-                  per_row=args.per_row, stat=args.stat, box_n=box_n)
+                  per_row=args.per_row, stat=args.stat, box_n=box_n,
+                  show_stat=not args.no_stat)
     elif args.out and args.box:
         boxes = []
         for g in picks:
