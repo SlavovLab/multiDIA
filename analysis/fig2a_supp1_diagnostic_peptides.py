@@ -558,7 +558,7 @@ def _quartiles(v):
 def box_panel(boxes, cond, out, font, letter="a", width=1215.0, ylim=None,
               panel_w=None, panel_h=None, case_label="LBD",
               control_label="Control", title=None, subtitle=True,
-              centre=True, unit="patient", per_row=None, stat="q", box_n=None):
+              centre=True, unit="patient", per_row=None, stat="q", box_n=None, show_stat=True):
     """Facet per gene; per proteoform column, a Control box beside an LBD box."""
     ph, gapx, ml = 176.0, 26.0, 62.0
     W = panel_w or FIG_PANEL_W
@@ -663,7 +663,7 @@ def box_panel(boxes, cond, out, font, letter="a", width=1215.0, ylim=None,
                       else f"{stat} = {p:.3f}")
                 c.text(x0 + w / 2, mt - 7, f"Δ {delta:+.2f} · {qs}", 8.0,
                        INK_SECONDARY, "middle")
-            elif delta == delta:
+            elif delta == delta and show_stat:
                 # at --unit protein: LBD minus Control of the whole protein
                 c.text(x0 + w / 2, mt - 7, _stat({"mean": delta, "p": p,
                                                   "delta": not unit.startswith("protein")}),
@@ -712,12 +712,17 @@ def box_panel(boxes, cond, out, font, letter="a", width=1215.0, ylim=None,
                               f'fill-opacity="{0.6 if fc else 0.75}"/>')
                     if not fc:
                         c.text(bx, mt + ph + 12, grp, 7.4, INK_MUTED, "middle")
+                        if box_n:
+                            n = len({s for _k, s, _d, _x in d if cond.get(s) == grp})
+                            c.text(bx, mt + ph + 23, f"n = {n}", 7.0, INK_MUTED,
+                                   "middle")
                 # one column per facet at --unit protein, titled by its gene
                 if not unit.startswith("protein"):
-                    c.text(cx, mt + ph + (14 if fc else 26), _label(lab), 8.2,
+                    c.text(cx, mt + ph + (14 if fc else 37 if box_n else 26),
+                           _label(lab), 8.2,
                            INK_SECONDARY if is_canon else INK, "middle",
                            None if is_canon else "600")
-                if box_n and (gene, lab) in box_n:
+                if fc and box_n and (gene, lab) in box_n:
                     na, nb = box_n[(gene, lab)]
                     c.text(cx, mt + ph + (26 if fc else 38),
                            f"{na} {case_label} v {nb} {control_label}", 7.4,
@@ -843,7 +848,9 @@ def main(argv=None):
                     help="rank every isoform with diagnostic evidence")
     ap.add_argument("--min-group", type=int, default=3)
     ap.add_argument("--box-n", dest="box_n", action="store_true",
-                    help="--unit fc: label each box with the patients behind its points")
+                    help="label each box with the patients behind its points")
+    ap.add_argument("--no-stat", dest="no_stat", action="store_true",
+                    help="--box: leave the per-panel statistic off")
     ap.add_argument("--box-patients", type=int, default=0,
                     help="instead of --min-group per peptide: patients per group "
                          "each box's points must span (0 = off)")
@@ -1109,7 +1116,8 @@ def main(argv=None):
                   case_label=args.case, control_label=args.control,
                   title=args.title, subtitle=args.subtitle,
                   centre=args.centre,
-                  unit=args.unit, per_row=args.per_row)
+                  unit=args.unit, per_row=args.per_row,
+                  box_n=args.box_n, show_stat=not args.no_stat)
     elif args.out:
         panel(picks, args.out, args.font, args.letter, key=args.key, ylim=ylim,
               subtitle=args.subtitle, hue=args.hue, panel_w=args.panel_w,
