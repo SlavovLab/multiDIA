@@ -599,14 +599,13 @@ def pd_grid(steps, out, font, letter="", width=1215.0, title=None, n_total=None)
 
 
 def pd_grid_dots(steps, out, font, letter="", width=1215.0, title=None,
-                 n_total=None, lengths=False):
-    """Residue bars over junction bars; `lengths` scales residues in aa."""
+                 n_total=None):
+    """Residue bars in aa over each region's length, junction bars under them."""
     from lib_palette import AXIS as AXIS_HEX, UNION as UNION_HEX
     from fig3bc_phospho_atlas import NONE_FILL, STEPS as CELL
     left = [t for t in steps if t[3] > 0 and t[6][-1] > 1e-9]
     right = [t for t in steps if t[4] > 0 and t[7][-1] > 1e-9]
-    left.sort(key=lambda t: (-t[3], -t[6][-1], t[0], t[1]) if lengths
-              else (-t[6][-1], t[0], t[1]))
+    left.sort(key=lambda t: (-t[3], -t[6][-1], t[0], t[1]))
     right.sort(key=lambda t: (-t[7][-1], t[0], t[1]))
     covered = {t[1] for t in left} | {t[1] for t in right}
     gain = len({t[1] for rows, cum in ((left, 6), (right, 7)) for t in rows
@@ -652,48 +651,38 @@ def pd_grid_dots(steps, out, font, letter="", width=1215.0, title=None,
     # Residues: trypsin from 0, then what Lys-C and Glu-C add.
     c.text(lx, mt - 34, f"Discriminating residues · {len(left)} isoforms", 9.8, INK,
            "start", "600")
-    n_aa = max(t[3] for t in left) if lengths else 1
-    end_w = max(wide(f"{round(t[6][-1] * t[3])}/{t[3]} aa", 8.4) for t in left) \
-        if lengths else wide("100%", 8.4)
+    n_aa = max(t[3] for t in left)
+    end_w = max(wide(f"{round(t[6][-1] * t[3])}/{t[3]} aa", 8.4) for t in left)
     bx0 = lx + gene_w + 8 + acc_w + 12
     bx1 = W - 20 - end_w - 8
 
     def BX(v):
         return bx0 + v / n_aa * (bx1 - bx0)
     seg = [colour["Trypsin"], colour["LysC"], colour["GluC"]]
-    if lengths:
-        step = next(s_ for s_ in (1, 2, 5, 10, 20, 25, 50, 100, 200, 500)
-                    if n_aa / s_ <= 4)
-        ticks = [(q, str(q)) for q in range(0, n_aa + 1, step)]
-    else:
-        ticks = [(q, f"{100 * q:.0f}%") for q in (0.0, 0.5, 1.0)]
-    for q, lab in ticks:
+    step = next(s_ for s_ in (1, 2, 5, 10, 20, 25, 50, 100, 200, 500)
+                if n_aa / s_ <= 4)
+    for q in range(0, n_aa + 1, step):
         c.line(BX(q), mt - 4, BX(q), mt + rh * len(left), stroke=GRID, sw=1.0)
-        c.text(BX(q), mt + rh * len(left) + 14, lab, 8.0, INK_SECONDARY, "middle")
-    if lengths:
-        c.text((bx0 + bx1) / 2, mt + rh * len(left) + 34,
-               "discriminating residues (aa); grey = not covered", 8.6,
-               INK_SECONDARY, "middle")
+        c.text(BX(q), mt + rh * len(left) + 14, str(q), 8.0, INK_SECONDARY,
+               "middle")
+    c.text((bx0 + bx1) / 2, mt + rh * len(left) + 34,
+           "discriminating residues (aa); grey = not covered", 8.6,
+           INK_SECONDARY, "middle")
     for r, t in enumerate(left):
         y = mt + r * rh + rh / 2
         c.text(lx, y + 4, t[0], 9.4, INK, "start", "600")
         c.text(lx + gene_w + 8, y + 4, t[1], 8.4, INK_SECONDARY, "start")
-        scale = t[3] if lengths else 1
-        edges = [0.0] + [v * scale for v in t[6]]    # trypsin, + Lys-C, + Glu-C
-        tip = " → ".join(f"{round(v * t[3])} aa" if lengths else f"{100 * v:.0f}%"
-                         for v in t[6])
-        c.add(f'<g><title>{t[0]} {t[1]}: trypsin, + Lys-C, + Glu-C: {tip}'
-              + (f' of {t[3]} aa' if lengths else '') + '</title>')
-        if lengths:
-            c.rect(BX(0), y - 5, BX(t[3]) - BX(0), 10, AXIS_HEX)
+        edges = [0.0] + [v * t[3] for v in t[6]]     # trypsin, + Lys-C, + Glu-C
+        tip = " → ".join(f"{round(v * t[3])} aa" for v in t[6])
+        c.add(f'<g><title>{t[0]} {t[1]}: trypsin, + Lys-C, + Glu-C: {tip} '
+              f'of {t[3]} aa</title>')
+        c.rect(BX(0), y - 5, BX(t[3]) - BX(0), 10, AXIS_HEX)
         for k in range(3):
             if edges[k + 1] > edges[k] + 1e-9:
                 c.rect(BX(edges[k]), y - 5, BX(edges[k + 1]) - BX(edges[k]), 10,
                        seg[k])
         c.add('</g>')
-        lab = f"{round(t[6][-1] * t[3])}/{t[3]} aa" if lengths \
-            else f"{100 * t[6][-1]:.0f}%"
-        c.text(BX(scale) + 6 if lengths else BX(t[6][-1]) + 6, y + 4, lab, 8.4,
+        c.text(BX(t[3]) + 6, y + 4, f"{round(t[6][-1] * t[3])}/{t[3]} aa", 8.4,
                INK, "start")
 
     # Junctions: spanning peptides from trypsin, then Lys-C, then Glu-C.
@@ -758,9 +747,7 @@ def main(argv=None):
                     help="pd: gene symbols, space- or comma-separated")
     ap.add_argument("--title", default=None)
     ap.add_argument("--grid-dots", action="store_true",
-                    help="pd: residue heatmap over a junction dot matrix")
-    ap.add_argument("--lengths", action="store_true",
-                    help="pd --grid-dots: residue bars in aa over each region's length")
+                    help="pd: residue bars in aa over junction bars")
     ap.add_argument("--grid", action="store_true",
                     help="pd: isoform x protease grid instead of bars")
     ap.add_argument("reports", nargs="*", default=["data/search/*-60min-Phospho.parquet"])
@@ -789,8 +776,7 @@ def main(argv=None):
         steps = pd_steps(paths, args.fasta, want, args.precursor_q)
         draw = pd_grid_dots if args.grid_dots else pd_grid if args.grid \
             else pd_path
-        kw = {"lengths": True} if args.lengths and args.grid_dots else {}
-        draw(steps, args.out, args.font, args.letter, args.width, args.title, **kw)
+        draw(steps, args.out, args.font, args.letter, args.width, args.title)
         return 0
     panel(load(args.tsv), args.out, args.font, args.letter, args.width,
           with_junctions=args.junctions)
