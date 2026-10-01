@@ -71,14 +71,14 @@ def cell(c, x, y, w, h, pep, tip):
 KEY_ROW = 16.0 * TEXT_BOOST
 
 
-def legend(c, x, y, size=10, max_width=None):
+def legend(c, x, y, size=10, max_width=None, gap=10.0):
     """Draw the PEP key; returns its right edge."""
     c.text(x, y - 5, "−log10 PEP (best precursor)", 9, INK_SECONDARY)
     entries = list(zip(STEPS, bin_labels())) + [(NONE_FILL, "not detected")]
     cx, cy, right = x, y, x
     for fill_, lab in entries:
-        adv = size + 3 + 0.55 * 8.5 * TEXT_BOOST * len(lab) + 10
-        if max_width and cx > x and cx + adv - 10 > x + max_width:
+        adv = size + 3 + 0.55 * 8.5 * TEXT_BOOST * len(lab) + gap
+        if max_width and cx > x and cx + adv - gap > x + max_width:
             cx, cy = x, cy + KEY_ROW
         c.rect(cx, cy, size, size, fill_)
         c.text(cx + size + 3, cy + size - 1.5, lab, 8.5, INK_SECONDARY)
@@ -282,7 +282,11 @@ def heatmap_genes(rows, S, cells, items, seqs, gn, out, font,
                    AXIS, 1.0)
         prev = m["name"]
     if key:
-        legend(c, 20, H - KEY_Y - KEY_ROW, max_width=W - 40)
+        import math
+        lab_h = max(0.55 * 8.5 * TEXT_BOOST * len(m["label"]) for m in cols) \
+            * math.sin(math.radians(60))
+        right = legend(c, 20, y_lab + lab_h + 26, gap=9.0)
+        assert right - 9.0 <= W, "PD heatmap key wider than the panel"
     ph.save(c, os.path.dirname(out) or ".", os.path.basename(out))
 
 

@@ -243,7 +243,7 @@ def panel_gained(rows, mod, out, font, letter="", width=1215.0, ts=1.7):
               + " ".join(f"{k}:{cnt.get(k, 0)}" for k in range(1, NCAP + 1)))
 
     ky = mt + pitch * (len(steps) - 1) + bh + 30
-    title = "distinct peptides placing the site"
+    title = "distinct peptides containing the site"
     c.text(ml, ky, title, 9, INK_SECONDARY)
     kx = ml + wide(title, 9) + 4
     for k in range(1, NCAP + 1):
@@ -346,7 +346,7 @@ def panel_by_digest(rows, mod, out, font, letter="", width=1215.0, ts=1.7):
     kx, ky = 740.0, mt + 14
     line = 9 * fsc * TEXT_BOOST + 1
     c.text(kx, ky, "distinct peptides", 9, INK_SECONDARY)
-    c.text(kx, ky + line, "placing the site", 9, INK_SECONDARY)
+    c.text(kx, ky + line, "containing the site", 9, INK_SECONDARY)
     for j, k in enumerate(range(NCAP, 0, -1)):
         yy = ky + line + 10 + j * 17
         c.rect(kx, yy, 12, 12, INK, fo=pep_shade(k))
@@ -399,13 +399,13 @@ def draw_grouped(c, groups, decades, x0, x_end, ml, mt, ph, bw, gap,
 def grouped_key_width(fsc):
     """-> the width `grouped_key` draws."""
     labs = [f"{k}+" if k == NCAP else f"{k}" for k in range(1, NCAP + 1)]
-    return (text_width("distinct peptides placing the site", 9, fsc) + 10
+    return (text_width("distinct peptides containing the site", 9, fsc) + 10
             + sum(14 + text_width(lab, 9, fsc) + 16 for lab in labs) - 16)
 
 
 def grouped_key(c, x, y, fsc):
     """The 1-5+ class key on one line, starting at `x`."""
-    title = "distinct peptides placing the site"
+    title = "distinct peptides containing the site"
     c.text(x, y, title, 9, INK_SECONDARY)
     kx = x + text_width(title, 9, fsc) + 10
     for k in range(1, NCAP + 1):
