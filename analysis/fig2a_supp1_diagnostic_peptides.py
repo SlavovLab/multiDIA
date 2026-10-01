@@ -273,17 +273,18 @@ def column(members, idx, med, cond, case, control, min_group,
             "unit": "patients", "n_unit": f"{len(a)} v {len(b)}"}
 
 
-def case_points(members, idx, med, cond, case, control):
+def case_points(members, idx, med, cond, case, control, centre=True):
     """-> [log2 vs the peptide's control mean], one per case patient per peptide."""
-    return [v for _p, s, _d, v in precursor_values(members, idx, med, cond, control)
+    return [v for _p, s, _d, v in precursor_values(members, idx, med, cond, control, centre)
             if cond.get(s) == case]
 
 
-def apply_case_points(can_members, iso_members, iso, idx, med, cond, case, control):
+def apply_case_points(can_members, iso_members, iso, idx, med, cond, case, control,
+                      centre=True):
     """Rewrite `iso`'s p and effect as Welch between the two forms' case points."""
     from scipy import stats
-    a = case_points(iso_members, idx, med, cond, case, control)
-    b = case_points(can_members, idx, med, cond, case, control)
+    a = case_points(iso_members, idx, med, cond, case, control, centre)
+    b = case_points(can_members, idx, med, cond, case, control, centre)
     iso["p"], iso["mean"] = float("nan"), float("nan")
     if len(a) >= 2 and len(b) >= 2:
         t = stats.ttest_ind(a, b, equal_var=False)
@@ -306,7 +307,7 @@ def testable(st, can, min_pep, box_patients=0):
 
 
 def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
-           min_pep, min_digests, p_unit="patients", box_patients=0):
+           min_pep, min_digests, p_unit="patients", box_patients=0, centre=True):
     """Rank every isoform with diagnostic evidence. -> [row dicts], BH within."""
     rows = []
     for gene, groups in sorted(bygene.items()):
@@ -323,7 +324,8 @@ def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
             if st and p_unit == "vs-canonical" and can:
                 apply_vs_canonical(can, st)
             if st and p_unit == "lbd-points" and can:
-                apply_case_points(base[1], mem, st, idx, med, cond, case, control)
+                apply_case_points(base[1], mem, st, idx, med, cond, case, control,
+                                  centre)
             if not testable(st, can, min_pep, box_patients):
                 continue
             if len(st["per_digest"]) < min_digests:
@@ -637,7 +639,8 @@ def box_panel(boxes, cond, out, font, letter="a", width=1215.0, ylim=None,
         c.text(ml, 30, title, 11.5, INK, "start", "600")
     for i, line in enumerate(head):
         c.text(ml, 46 + i * 13, line, 8.4, INK_MUTED, "start")
-    c.text(18, mt + body / 2, f"log2 {case_label} / {control_label}" if fc
+    c.text(18, mt + body / 2, "log2 vs run median" if fc and not centre
+           else f"log2 {case_label} / {control_label}" if fc
            else f"log2 vs {control_label} mean" if centre
            else "log2 quantity (run-median centred)", 9.4,
            INK_SECONDARY, "middle", rot=-90)
@@ -908,7 +911,7 @@ def main(argv=None):
                     help="per-patient boxes, Control beside the case")
     ap.add_argument("--centre", default=True,
                     action=argparse.BooleanOptionalAction,
-                    help="--box only: centre each peptide on its control mean")
+                    help="centre each peptide on its control mean (--no-centre: log2 vs run median only)")
     ap.add_argument("--unit", default="patient",
                     choices=("patient", "run", "peptide", "precursor", "fc",
                              "protein", "protein-peptide"),
@@ -947,7 +950,7 @@ def main(argv=None):
                                     else "peptide")
     rows = screen(idx, med, bygene, seqs, genes, cond, args.case, args.control,
                   args.min_group, args.min_pep, args.min_digests, args.p_unit,
-                  args.box_patients)
+                  args.box_patients, args.centre)
     best_q = min((r["q"] for r in rows if r["q"] == r["q"]), default=float("nan"))
     note = (f"{len(rows)} isoforms tested at ≥ {args.min_pep} diagnostic "
             f"peptides in ≥ {args.min_digests} digests; "
@@ -983,7 +986,9 @@ def main(argv=None):
         if args.volcano:
             volcano(rows, args.volcano, args.font, args.q_cut, args.letter,
                     title=args.title,
-                    xlab=("Δ log2 LBD / Control (isoform − canonical)"
+                    xlab=("Δ log2 vs run median, LBD (isoform − canonical)"
+                          if args.p_unit == "lbd-points" and not args.centre
+                          else "Δ log2 LBD / Control (isoform − canonical)"
                           if args.p_unit in ("vs-canonical", "lbd-points")
                           else "log2 LBD / Control"))
         return 0
@@ -1120,7 +1125,8 @@ def main(argv=None):
                 cols = []
                 for lab, mem, is_can in ((g["canon_acc"], g["canon_members"], True),
                                          (who, g["diag_members"][0][1], False)):
-                    vals = precursor_values(mem, idx, med, cond, args.control)
+                    vals = precursor_values(mem, idx, med, cond, args.control,
+                                            args.centre)
                     cols.append((lab, [(f"{pp}{s_}", s_, dg, v) for pp, s_, dg, v in vals
                                        if cond.get(s_) == args.case], is_can))
                     box_n[(g["gene"], lab)] = (
@@ -1136,7 +1142,7 @@ def main(argv=None):
                   case_label=args.case, control_label=args.control,
                   title=args.title, subtitle=args.subtitle, unit="fc",
                   per_row=args.per_row, stat=args.stat, box_n=box_n,
-                  show_stat=not args.no_stat)
+                  show_stat=not args.no_stat, centre=args.centre)
     elif args.out and args.box:
         boxes = []
         for g in picks:
