@@ -48,8 +48,8 @@ trypsin.
 peptides placing each site. **(b)** All sites by protease, coloured by the best
 precursor PEP; about 82% are seen by a single protease. **(c)** Phosphosites on
 PD-associated proteins and on tau (2N4R), including the p-tau epitopes T181,
-S202/T205, T217 and T231. Sites come from unenriched tissue and carry no
-localisation scores.
+S202/T205, T217 and T231. Sites come from unenriched tissue; Spectronaut
+reports only phosphosites localised with probability ≥ 0.75.
 
 [PNG]({{ site.baseurl }}/figures/fig3.png) · [SVG]({{ site.baseurl }}/figures/fig3.svg)
 
