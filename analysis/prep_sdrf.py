@@ -62,7 +62,7 @@ def rows(paths, cases):
                         str(case["Sex"]).strip().lower(), "1", "tissue", run,
                         "proteomic profiling by mass spectrometry", ACQUISITION, LABEL,
                         INSTRUMENT, CLEAVAGE[rep.protease]] + MODIFICATIONS
-                       + [DISSOCIATION, "1", "1", f"{run}.d", disease])
+                       + [DISSOCIATION, "1", "1", f"{run}.d.zip", disease])
     return out
 
 
