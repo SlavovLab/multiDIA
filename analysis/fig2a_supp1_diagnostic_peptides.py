@@ -558,14 +558,14 @@ def _quartiles(v):
 def box_panel(boxes, cond, out, font, letter="a", width=1215.0, ylim=None,
               panel_w=None, panel_h=None, case_label="LBD",
               control_label="Control", title=None, subtitle=True,
-              centre=True, unit="patient", per_row=None, stat="q"):
+              centre=True, unit="patient", per_row=None, stat="q", box_n=None):
     """Facet per gene; per proteoform column, a Control box beside an LBD box."""
     ph, gapx, ml = 176.0, 26.0, 62.0
     W = panel_w or FIG_PANEL_W
     per_row = per_row or len(boxes)
     rows = [boxes[i:i + per_row] for i in range(0, len(boxes), per_row)]
     # the gap between rows holds one row's labels and the next row's headers
-    rowgap = 64.0
+    rowgap = 64.0 + (14.0 if box_n else 0.0)
     fs = 1.45
     # wrapped at the drawn size, TEXT_BOOST included
     budget = int((W - ml - 20) / (0.5 * 8.4 * fs * TEXT_BOOST))
@@ -591,7 +591,8 @@ def box_panel(boxes, cond, out, font, letter="a", width=1215.0, ylim=None,
     mt = 46.0 + len(head) * 13.0 + 28.0
     top0 = mt
     body = len(rows) * ph + (len(rows) - 1) * rowgap
-    H = panel_h if panel_h and len(rows) == 1 else mt + body + 44
+    H = panel_h if panel_h and len(rows) == 1 else \
+        mt + body + 44 + (14.0 if box_n else 0.0)
     c = Canvas(W, H, font, font_scale=fs, out_w=width)
 
     vals = [pt[3] for _g, cols, _c in boxes for _l, d, _k in cols
@@ -716,6 +717,11 @@ def box_panel(boxes, cond, out, font, letter="a", width=1215.0, ylim=None,
                     c.text(cx, mt + ph + (14 if fc else 26), _label(lab), 8.2,
                            INK_SECONDARY if is_canon else INK, "middle",
                            None if is_canon else "600")
+                if box_n and (gene, lab) in box_n:
+                    na, nb = box_n[(gene, lab)]
+                    c.text(cx, mt + ph + (26 if fc else 38),
+                           f"{na} {case_label} v {nb} {control_label}", 7.4,
+                           INK_MUTED, "middle")
             x0 += w + gapx
 
     os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
@@ -836,6 +842,8 @@ def main(argv=None):
     ap.add_argument("--screen", action="store_true",
                     help="rank every isoform with diagnostic evidence")
     ap.add_argument("--min-group", type=int, default=3)
+    ap.add_argument("--box-n", dest="box_n", action="store_true",
+                    help="--unit fc: label each box with the patients behind its points")
     ap.add_argument("--box-patients", type=int, default=0,
                     help="instead of --min-group per peptide: patients per group "
                          "each box's points must span (0 = off)")
@@ -1068,9 +1076,12 @@ def main(argv=None):
                      "--p-unit vs-canonical")
         # the screen's own q
         qof = {(r["gene"], r["isoform"]): r["q"] for r in rows}
-        boxes = []
+        boxes, box_n = [], {}
         for g in picks:
             who, st = g["diag"][0]
+            if args.box_n:
+                box_n[(g["gene"], g["canon_acc"])] = g["canon"]["box"]
+                box_n[(g["gene"], who)] = st["box"]
             pt = lambda col: [(pp, None, dg, v) for pp, dg, v in col["points"]]
             boxes.append((g["gene"],
                           [(g["canon_acc"], pt(g["canon"]), True),
@@ -1083,7 +1094,7 @@ def main(argv=None):
                   panel_w=args.panel_w, panel_h=args.panel_h,
                   case_label=args.case, control_label=args.control,
                   title=args.title, subtitle=args.subtitle, unit="fc",
-                  per_row=args.per_row, stat=args.stat)
+                  per_row=args.per_row, stat=args.stat, box_n=box_n)
     elif args.out and args.box:
         boxes = []
         for g in picks:
