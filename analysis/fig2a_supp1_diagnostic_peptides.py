@@ -138,8 +138,8 @@ def sample_levels(members, digest, idx, med):
              if (s, digest) in med and v > 0}, n)
 
 
-def peptide_points(members, digest, idx, med, cond, case, control):
-    """-> [(peptide, log2 case-minus-control, n_case, n_ctrl)], one per peptide."""
+def point_patients(members, digest, idx, med, cond, case, control):
+    """-> [(peptide, log2 case-minus-control, case patients, control patients)]."""
     out = []
     for g, p in sorted(members):
         d = idx.get((g, digest), {}).get(p)
@@ -147,12 +147,19 @@ def peptide_points(members, digest, idx, med, cond, case, control):
             continue
         vals = {s: math.log2(v) - med[(s, digest)] for s, v in d.items()
                 if (s, digest) in med and v > 0}
-        a = [v for s, v in vals.items() if cond.get(s) == case]
-        b = [v for s, v in vals.items() if cond.get(s) == control]
+        a = {s: v for s, v in vals.items() if cond.get(s) == case}
+        b = {s: v for s, v in vals.items() if cond.get(s) == control}
         if not a or not b:
             continue
-        out.append((p, statistics.mean(a) - statistics.mean(b), len(a), len(b)))
+        out.append((p, statistics.mean(a.values()) - statistics.mean(b.values()),
+                    set(a), set(b)))
     return out
+
+
+def peptide_points(members, digest, idx, med, cond, case, control):
+    """-> [(peptide, log2 case-minus-control, n_case, n_ctrl)], one per peptide."""
+    return [(p, v, len(a), len(b)) for p, v, a, b in
+            point_patients(members, digest, idx, med, cond, case, control)]
 
 
 def patient_ratios(members, idx, med, cond, control, centre=True):
@@ -200,15 +207,19 @@ def apply_vs_canonical(can, iso):
 
 
 def column(members, idx, med, cond, case, control, min_group,
-           p_unit="patients", min_point=1):
+           p_unit="patients"):
     """Everything the panel needs about one proteoform column."""
     per, points = {}, []
     tested_pep = set()
+    box_case, box_ctrl = set(), set()
     pooled = collections.defaultdict(list)
     for d in ORDER:
         vals, npep = sample_levels(members, d, idx, med)
-        pts = [t for t in peptide_points(members, d, idx, med, cond, case, control)
-               if t[2] >= min_point and t[3] >= min_point]
+        pp = point_patients(members, d, idx, med, cond, case, control)
+        for _p, _v, pa, pb in pp:
+            box_case |= pa
+            box_ctrl |= pb
+        pts = [(p, v, len(pa), len(pb)) for p, v, pa, pb in pp]
         points += [(p, d, v) for p, v, _na, _nb in pts]
         # `npep` keeps the patient threshold; only the drawing is ungated
         tested_pep |= {p.split("|")[0] for p, _v, na, nb in pts
@@ -234,6 +245,7 @@ def column(members, idx, med, cond, case, control, min_group,
         return {"per_digest": per, "mean": eff,
                 "sd": statistics.stdev(vs) if len(vs) > 1 else 0.0,
                 "points": points, "npep": len(tested_pep),
+                "box": (len(box_case), len(box_ctrl)),
                 "n_case": len(vs), "n_ctrl": 0, "p": p,
                 "unit": "peptides", "n_unit": len(vs)}
 
@@ -256,12 +268,25 @@ def column(members, idx, med, cond, case, control, min_group,
             "sd": statistics.stdev(list(per.values())) if len(per) > 1 else 0.0,
             "points": points,
             "npep": len(tested_pep),
+            "box": (len(box_case), len(box_ctrl)),
             "n_case": len(a), "n_ctrl": len(b), "p": p,
             "unit": "patients", "n_unit": f"{len(a)} v {len(b)}"}
 
 
+def testable(st, can, min_pep, box_patients=0):
+    """Whether an isoform column enters the screen."""
+    if st is None:
+        return False
+    if box_patients:
+        # each box's points, pooled, span >= box_patients per group
+        return bool(can) and all(
+            len({p.split("|")[0] for p, _d, _v in c["points"]}) >= min_pep
+            and min(c["box"]) >= box_patients for c in (st, can))
+    return st["npep"] >= min_pep
+
+
 def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
-           min_pep, min_digests, p_unit="patients", min_point=1):
+           min_pep, min_digests, p_unit="patients", box_patients=0):
     """Rank every isoform with diagnostic evidence. -> [row dicts], BH within."""
     rows = []
     for gene, groups in sorted(bygene.items()):
@@ -271,13 +296,13 @@ def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
         if base is None or not diag:
             continue
         can = column(base[1], idx, med, cond, case, control, min_group,
-                     p_unit, min_point)
+                     p_unit)
         for who, mem in sorted(diag.items()):
             st = column(mem, idx, med, cond, case, control, min_group,
-                        p_unit, min_point)
+                        p_unit)
             if st and p_unit == "vs-canonical" and can:
                 apply_vs_canonical(can, st)
-            if st is None or st["npep"] < min_pep:
+            if not testable(st, can, min_pep, box_patients):
                 continue
             if len(st["per_digest"]) < min_digests:
                 continue
@@ -811,8 +836,9 @@ def main(argv=None):
     ap.add_argument("--screen", action="store_true",
                     help="rank every isoform with diagnostic evidence")
     ap.add_argument("--min-group", type=int, default=3)
-    ap.add_argument("--min-point-patients", type=int, default=1,
-                    help="patients per group each peptide point needs")
+    ap.add_argument("--box-patients", type=int, default=0,
+                    help="instead of --min-group per peptide: patients per group "
+                         "each box's points must span (0 = off)")
     ap.add_argument("--min-pep", type=int, default=2)
     ap.add_argument("--min-digests", type=int, default=2)
     ap.add_argument("--precursor-q", type=float, default=0.01)
@@ -882,7 +908,7 @@ def main(argv=None):
                                     else "peptide")
     rows = screen(idx, med, bygene, seqs, genes, cond, args.case, args.control,
                   args.min_group, args.min_pep, args.min_digests, args.p_unit,
-                  args.min_point_patients)
+                  args.box_patients)
     best_q = min((r["q"] for r in rows if r["q"] == r["q"]), default=float("nan"))
     note = (f"{len(rows)} isoforms tested at ≥ {args.min_pep} diagnostic "
             f"peptides in ≥ {args.min_digests} digests; "
@@ -986,14 +1012,14 @@ def main(argv=None):
             print(f"  {gene}: no single canonical entry, skipped")
             continue
         can = column(base[1], idx, med, cond, args.case, args.control,
-                     args.min_group, args.p_unit, args.min_point_patients)
+                     args.min_group, args.p_unit)
         keep = []
         for who, mem in sorted(diag.items()):
             st = column(mem, idx, med, cond, args.case, args.control,
-                        args.min_group, args.p_unit, args.min_point_patients)
+                        args.min_group, args.p_unit)
             if st and args.p_unit == "vs-canonical" and can:
                 apply_vs_canonical(can, st)
-            if st and st["npep"] >= args.min_pep \
+            if testable(st, can, args.min_pep, args.box_patients) \
                     and len(st["per_digest"]) >= args.min_digests:
                 keep.append((";".join(who), st))
         if can is None or not keep:
