@@ -294,11 +294,12 @@ def apply_case_points(can_members, iso_members, iso, idx, med, cond, case, contr
     return iso
 
 
-def peptide_model(can_members, iso_members, idx, med, cond, case, control):
+def peptide_model_fit(can_members, iso_members, idx, med, cond, case, control):
     """OLS of log2 quantity on peptide + case + case x isoform, one row per peptide per patient.
 
-    -> (case x isoform coefficient, p, rows, peptides). The peptide term is absorbed by demeaning
-    within each peptide (per digest), so every peptide keeps its own baseline.
+    The peptide term is absorbed by demeaning within each peptide (per digest), so every
+    peptide keeps its own baseline. -> dict with the rows, each peptide's fitted baseline,
+    the case effect, the case x isoform coefficient, its standard error and p; None if unfit.
     """
     import numpy as np
     from scipy import stats
@@ -311,27 +312,38 @@ def peptide_model(can_members, iso_members, idx, med, cond, case, control):
                     continue
                 for s, x in q.items():
                     if (s, d) in med and x > 0 and cond.get(s) in (case, control):
-                        rows[(p, d, form)].append((math.log2(x) - med[(s, d)],
-                                                   1.0 if cond.get(s) == case else 0.0, form))
-    if not rows:
-        return float("nan"), float("nan"), 0, 0
+                        rows[(p, d, form)].append((s, math.log2(x) - med[(s, d)],
+                                                   1.0 if cond.get(s) == case else 0.0))
     y, X = [], []
-    for v in rows.values():
-        a = np.array(v)
-        a = a - a.mean(axis=0) if len(a) > 1 else a * 0.0
+    for (_p, _d, form), v in rows.items():
+        a = np.array([(yy, cc) for _s, yy, cc in v])
+        a = a - a.mean(axis=0)
         y.extend(a[:, 0])
-        X.extend(zip(a[:, 1], a[:, 1] * v[0][2]))     # form is constant within a peptide
-    y, X = np.array(y), np.array(X)
+        X.extend(zip(a[:, 1], a[:, 1] * form))     # form is constant within a peptide
     n, k = len(y), len(rows)
     dof = n - k - 2
+    y, X = np.array(y), np.array(X)
     if dof < 1 or np.linalg.matrix_rank(X) < 2:
-        return float("nan"), float("nan"), n, k
+        return None
     beta, *_ = np.linalg.lstsq(X, y, rcond=None)
     resid = y - X @ beta
-    s2 = float(resid @ resid) / dof
-    cov = s2 * np.linalg.inv(X.T @ X)
-    t = beta[1] / math.sqrt(cov[1, 1])
-    return float(beta[1]), float(2 * stats.t.sf(abs(t), dof)), n, k
+    cov = float(resid @ resid) / dof * np.linalg.inv(X.T @ X)
+    se = math.sqrt(cov[1, 1])
+    base = {key: statistics.mean(yy for _s, yy, _c in v)
+            - beta[0] * statistics.mean(c for _s, _y, c in v)
+            - beta[1] * form * statistics.mean(c for _s, _y, c in v)
+            for key, v in rows.items() for form in (key[2],)}
+    return {"rows": rows, "baseline": base, "case": float(beta[0]),
+            "interaction": float(beta[1]), "se": se, "dof": dof,
+            "p": float(2 * stats.t.sf(abs(beta[1] / se), dof)), "n": n, "k": k}
+
+
+def peptide_model(can_members, iso_members, idx, med, cond, case, control):
+    """-> (case x isoform coefficient, p, rows, peptides) from `peptide_model_fit`."""
+    f = peptide_model_fit(can_members, iso_members, idx, med, cond, case, control)
+    if f is None:
+        return float("nan"), float("nan"), 0, 0
+    return f["interaction"], f["p"], f["n"], f["k"]
 
 
 def testable(st, can, min_pep, box_patients=0):
