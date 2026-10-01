@@ -2369,15 +2369,22 @@ def case_phospho(tmp):
     check("venn_regions: the regions partition the sites",
           sum(reg.values()), len(vs))
     import math
-    cen = [(100.0 - 54, 100.0), (100.0 + 54, 100.0),
-           (100.0, 100.0 + 54 * math.sqrt(3))]
-    pts = mod_sites.venn_label_points(cen, 92.0)
+    reg3 = {frozenset(k): v for k, v in [
+        (["Trypsin"], 1646), (["LysC"], 1087), (["GluC"], 263),
+        (["LysC", "GluC"], 32), (["Trypsin", "GluC"], 42),
+        (["Trypsin", "LysC"], 485), (["Trypsin", "LysC", "GluC"], 94)]}
+    cen, rad = mod_sites.venn_layout(reg3, ["Trypsin", "LysC", "GluC"], 90.0)
+    check("venn_layout: circle areas are in proportion to the totals",
+          [round((r / rad[0]) ** 2, 3) for r in rad],
+          [1.0, round(1698 / 2267, 3), round(431 / 2267, 3)])
+    pts = mod_sites.venn_label_points(cen, rad)
 
     def members(x, y):
-        return frozenset(i for i, (cx, cy) in enumerate(cen)
-                         if (x - cx) ** 2 + (y - cy) ** 2 < 92.0 ** 2)
+        return frozenset(i for i, ((cx, cy), r) in enumerate(zip(cen, rad))
+                         if (x - cx) ** 2 + (y - cy) ** 2 < r ** 2)
     check("venn labels: each count lands inside exactly its own region",
-          all(members(*xy) == k for k, xy in pts.items()) and len(pts) == 7, True)
+          all(members(x, y) == k for k, (x, y, _f) in pts.items()) and len(pts) == 7,
+          True)
     check("gained: most sites first, ties broken by the most confirmed",
           mod_sites.gained(toy),
           [("Trypsin", 3, 0), ("LysC", 4, 2), ("GluC", 5, 2)])

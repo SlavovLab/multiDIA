@@ -451,48 +451,108 @@ def venn_regions(sel, sets):
     return out
 
 
-def venn_label_points(centres, r, step=0.25):
-    """-> {frozenset of circle indices: (x, y)} a label point inside each region."""
+def venn_layout(regions, sets, R):
+    """-> (centres, radii): circle areas match the totals, overlaps fitted."""
     import math
-    ox = sum(x for x, _y in centres) / len(centres)
-    oy = sum(y for _x, y in centres) / len(centres)
+    import numpy as np
+    from scipy.optimize import brentq, minimize
+    tots = [sum(v for k, v in regions.items() if d in k) for d in sets]
+    r = [math.sqrt(t / tots[0]) for t in tots]           # largest = 1
+    per = math.pi / tots[0]                               # area per site
+
+    def lens(r1, r2, d):
+        if d >= r1 + r2:
+            return 0.0
+        if d <= abs(r1 - r2):
+            return math.pi * min(r1, r2) ** 2
+        return (r1 * r1 * math.acos((d * d + r1 * r1 - r2 * r2) / (2 * d * r1))
+                + r2 * r2 * math.acos((d * d + r2 * r2 - r1 * r1) / (2 * d * r2))
+                - 0.5 * math.sqrt((-d + r1 + r2) * (d + r1 - r2) * (d - r1 + r2)
+                                  * (d + r1 + r2)))
+
+    def dist(i, j):
+        want = per * sum(v for k, v in regions.items() if sets[i] in k and sets[j] in k)
+        lo, hi = abs(r[i] - r[j]) + 1e-9, r[i] + r[j]
+        return hi if want <= 0 else brentq(lambda d: lens(r[i], r[j], d) - want, lo, hi)
+    d01, d02, d12 = dist(0, 1), dist(0, 2), dist(1, 2)
+    gx = (d02 ** 2 - d12 ** 2 + d01 ** 2) / (2 * d01)
+    gy = math.sqrt(max(d02 ** 2 - gx ** 2, 0.0))
+    g = np.linspace(-1.1, 1.1 + d01 + r[1], 700)
+    X, Y = np.meshgrid(g, g)
+    cell = (g[1] - g[0]) ** 2
+    keys = list(regions)
+
+    def loss(q):
+        cen = [(0.0, 0.0), (q[0], 0.0), (q[1], q[2])]
+        m = [(X - cx) ** 2 + (Y - cy) ** 2 < ri * ri for (cx, cy), ri in zip(cen, r)]
+        err = 0.0
+        for k in keys:
+            z = np.ones_like(X, bool)
+            for i, d in enumerate(sets):
+                z &= m[i] if d in k else ~m[i]
+            err += (z.sum() * cell / per - regions[k]) ** 2
+        return err
+    q = minimize(loss, [d01, gx, gy], method="Nelder-Mead",
+                 options={"xatol": 1e-3, "fatol": 0.5}).x
+    cen = [(0.0, 0.0), (q[0], 0.0), (q[1], q[2])]
+    return [(R * x, R * y) for x, y in cen], [R * ri for ri in r]
+
+
+def venn_label_points(centres, radii, box=(0.0, 0.0), step=1.0, avoid=()):
+    """-> {frozenset of circle indices: (x, y, fits)} the roomiest point per region.
+
+    `fits` says a `box` (w, h) centred there stays inside the region and clear
+    of the `avoid` segments."""
+    import itertools
 
     def inside(x, y):
-        return frozenset(i for i, (cx, cy) in enumerate(centres)
+        return frozenset(i for i, ((cx, cy), r) in enumerate(zip(centres, radii))
                          if (x - cx) ** 2 + (y - cy) ** 2 < r * r)
+
+    def clear(x, y):
+        return min(abs(((x - cx) ** 2 + (y - cy) ** 2) ** 0.5 - r)
+                   for (cx, cy), r in zip(centres, radii))
+    x0 = min(cx - r for (cx, _y), r in zip(centres, radii))
+    x1 = max(cx + r for (cx, _y), r in zip(centres, radii))
+    y0 = min(cy - r for (_x, cy), r in zip(centres, radii))
+    y1 = max(cy + r for (_x, cy), r in zip(centres, radii))
+    w, h = box
+    corners = [(dx * w / 2, dy * h / 2) for dx in (-1, 0, 1) for dy in (-1, 0, 1)]
+    pts = [(ax + t / 20 * (bx - ax), ay + t / 20 * (by - ay))
+           for (ax, ay), (bx, by) in avoid for t in range(21)]
+
+    def blocked(x, y):
+        return any(abs(px - x) < w / 2 + 3 and abs(py - y) < h / 2 + 3
+                   for px, py in pts)
+    best = {}
+    y = y0
+    while y <= y1:
+        x = x0
+        while x <= x1:
+            k = inside(x, y)
+            if k:
+                fits = all(inside(x + dx, y + dy) == k for dx, dy in corners) \
+                    and not blocked(x, y)
+                score = (fits, clear(x, y))
+                if k not in best or score > best[k][0]:
+                    best[k] = (score, (x, y, fits))
+            x += step
+        y += step
     n = len(centres)
-    out = {frozenset(range(n)): (ox, oy)}
-    for k in (1, 2):
-        for combo in __import__("itertools").combinations(range(n), k):
-            tx = sum(centres[i][0] for i in combo) / k - ox
-            ty = sum(centres[i][1] for i in combo) / k - oy
-            norm = math.hypot(tx, ty)
-            ux, uy = tx / norm, ty / norm
-            runs, cur, t = [], [], 0.0
-            while t < 3 * r:
-                if inside(ox + ux * t, oy + uy * t) == frozenset(combo):
-                    cur.append(t)
-                elif cur:
-                    runs.append(cur)
-                    cur = []
-                t += step
-            if cur:
-                runs.append(cur)
-            run = max(runs, key=len)
-            tm = (run[0] + run[-1]) / 2
-            out[frozenset(combo)] = (ox + ux * tm, oy + uy * tm)
-    return out
+    return {frozenset(c): best[frozenset(c)][1]
+            for k in range(1, n + 1) for c in itertools.combinations(range(n), k)
+            if frozenset(c) in best}
 
 
 VENN = ["Trypsin", "LysC", "GluC"]
 
 
-def draw_venn(c, regions, centres, rad, names, tots, fsc):
-    """Three-set Venn with region counts and per-circle totals."""
+def draw_venn(c, regions, centres, radii, names, tots, fsc):
+    """Area-proportional three-set Venn with region counts and circle totals."""
     colour = assign(ORDER + ["All"])
     fill_o = 0.16
-    for (cx, cy), d in zip(centres, VENN):
-        c.add(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{rad}" fill="{colour[d]}" '
+    for (cx, cy), r, d in zip(centres, radii, VENN):
+        c.add(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="{colour[d]}" '
               f'fill-opacity="{fill_o}" stroke="{colour[d]}" stroke-width="1.8"/>')
 
     def composite(members):
@@ -503,22 +563,63 @@ def draw_venn(c, regions, centres, rad, names, tots, fsc):
             for j in range(3):
                 rgb[j] = rgb[j] * (1 - fill_o) + int(h[1 + 2 * j:3 + 2 * j], 16) * fill_o
         return "#" + "".join(f"{round(v):02x}" for v in rgb)
-    points = venn_label_points(centres, rad)
-    for members, (x, y) in points.items():
-        n = regions[frozenset(VENN[i] for i in members)]
-        assert ink_on(composite(members)) == INK
-        c.text(x, y + 0.35 * 10 * fsc * TEXT_BOOST, f"{n:,}", 10, INK, "middle",
-               "600")
     line = 10 * fsc * TEXT_BOOST
-    for i, ((cx, cy), name, tot) in enumerate(zip(centres, names, tots)):
+    w = max(text_width(f"{n:,}", 10, fsc) for n in regions.values())
+    box = (w + 4, 0.8 * line)
+    points = venn_label_points(centres, radii, box)
+    # slivers: a leader to a row under the circles, left to right as anchored
+    (gx, _gy), rg = centres[2], radii[2]
+    ly = venn_extent(centres, radii)[3] + line
+    slivers = sorted((xy[0], k) for k, xy in points.items() if not xy[2])
+    want = [x + (0 if abs(x - gx) < 0.25 * rg else (1 if x > gx else -1) * 0.6 * w)
+            for x, _k in slivers]
+    for i in range(1, len(want)):
+        want[i] = max(want[i], want[i - 1] + w + 12)
+    leaders = {k: ((points[k][0], points[k][1]), (lx, ly - 0.8 * line))
+               for (_x, k), lx in zip(slivers, want)}
+    again = venn_label_points(centres, radii, box, avoid=list(leaders.values()))
+    for members, (x, y, fits) in points.items():
+        n = regions[frozenset(VENN[i] for i in members)]
+        if members in leaders:
+            (ax, ay), (bx, by) = leaders[members]
+            c.line(ax, ay, bx, by, INK_MUTED, 1.0)
+            c.add(f'<circle cx="{ax:.1f}" cy="{ay:.1f}" r="1.6" fill="{INK_MUTED}"/>')
+            x, y = bx, ly - 0.35 * line
+        else:
+            x, y = again[members][:2]
+            assert ink_on(composite(members)) == INK
+        c.text(x, y + 0.35 * line, f"{n:,}", 10, INK, "middle", "600")
+    for i, ((cx, cy), r, name, tot) in enumerate(zip(centres, radii, names, tots)):
         if i == 2:
-            x, anchor, y = cx + rad * 0.78 + 12, "start", cy + rad * 0.62
+            x = max([cx + r + 12] + [bx + w / 2 + 12 for _a, (bx, _b)
+                                       in leaders.values()])
+            anchor = "start"
+            span = [x + t / 10 * text_width(name, 10, fsc) for t in range(11)]
+            under = max((oy + (ro * ro - (sx - ox_) ** 2) ** 0.5
+                         for (ox_, oy), ro in zip(centres[:2], radii[:2])
+                         for sx in span if abs(sx - ox_) < ro), default=cy)
+            y = min(max(cy, under + 0.8 * line), ly - 2.1 * line)
         else:
             left = i == 0
-            x = cx - rad - 12 if left else cx + rad + 12
-            anchor, y = ("end" if left else "start"), cy - rad * 0.35
+            x = cx - r - 12 if left else cx + r + 12
+            anchor, y = ("end" if left else "start"), cy - r * 0.35
         c.text(x, y, name, 10, INK, anchor, "600")
         c.text(x, y + line, f"{tot:,}", 10, INK_SECONDARY, anchor)
+
+
+def venn_extent(centres, radii):
+    """-> (x0, y0, x1, y1) of the circles."""
+    return (min(cx - r for (cx, _y), r in zip(centres, radii)),
+            min(cy - r for (_x, cy), r in zip(centres, radii)),
+            max(cx + r for (cx, _y), r in zip(centres, radii)),
+            max(cy + r for (_x, cy), r in zip(centres, radii)))
+
+
+def venn_at(regions, R, x0, y0):
+    """-> `venn_layout` shifted so the circles start at (x0, y0)."""
+    centres, radii = venn_layout(regions, VENN, R)
+    ex, ey = venn_extent(centres, radii)[:2]
+    return [(x - ex + x0, y - ey + y0) for x, y in centres], radii
 
 
 def panel_venn(rows, mod, out, font, letter="", width=1215.0, ts=1.7):
@@ -533,25 +634,19 @@ def panel_venn(rows, mod, out, font, letter="", width=1215.0, ts=1.7):
 
     def wide(txt, size):
         return text_width(txt, size, fsc)
-    rad, side = 92.0, 108.0
-    rc = side / math.sqrt(3)
     names = [display(d) for d in VENN]
     tots = [sum(v for k, v in regions.items() if d in k) for d in VENN]
     lab_w = max(wide(t, 10) for t in names + [f"{v:,}" for v in tots])
-    W = 2 * (side / 2 + rad + 14 + lab_w) + 24
-    mt = 78.0
-    oy = mt + rc / 2 + rad
-    ox = W / 2
-    centres = [(ox - side / 2, oy - rc / 2), (ox + side / 2, oy - rc / 2),
-               (ox, oy + rc)]
-    W, H = round(W, 1), round(oy + rc + rad + 18, 1)
+    centres, radii = venn_at(regions, 100.0, 12 + lab_w + 14, 78.0)
+    x1, y1 = venn_extent(centres, radii)[2:]
+    W, H = round(x1 + 14 + lab_w + 12, 1), round(y1 + 50, 1)
     c = Canvas(W, H, font, font_scale=fsc, out_w=width * W / 1010.0)
     if letter:
         c.text(20, 30, letter, 13, INK, "start", "600")
     c.text(48, 30, "Number of phosphosites detected", 11.5, INK, "start", "600")
     c.text(48, 50, f"n = {total:,} phosphosites", 9.6, INK_SECONDARY, "start")
 
-    draw_venn(c, regions, centres, rad, names, tots, fsc)
+    draw_venn(c, regions, centres, radii, names, tots, fsc)
     for members, n in sorted(regions.items(), key=lambda kv: (len(kv[0]), sorted(kv[0]))):
         print(f"    {' + '.join(display(d) for d in VENN if d in members):<26} {n:>6,}")
     print(f"    total {total:,}; circles " +
@@ -577,16 +672,12 @@ def panel_venn_grouped(rows, mod, out, font, letter="", width=1215.0, ts=1.7):
     def wide(txt, size):
         return text_width(txt, size, fsc)
     W = 1010.0
-    rad, side = 78.0, 92.0
-    rc = side / math.sqrt(3)
     names = [display(d) for d in VENN]
     tots = [sum(v for k, v in regions.items() if d in k) for d in VENN]
     lab_w = max(wide(t, 10) for t in names + [f"{v:,}" for v in tots])
-    wv = 2 * (side / 2 + rad + 14 + lab_w) + 24
-    vmt = 84.0
-    ox, oy = wv / 2, vmt + rc / 2 + rad
-    centres = [(ox - side / 2, oy - rc / 2), (ox + side / 2, oy - rc / 2),
-               (ox, oy + rc)]
+    centres, radii = venn_at(regions, 84.0, 12 + lab_w + 14, 96.0)
+    x1, y1 = venn_extent(centres, radii)[2:]
+    wv = x1 + 14 + lab_w + 12
     mt, ph = 84.0, 230.0
     x0 = wv
     ml = x0 + 36 + wide(f"{10 ** decades:,}", 9) + 10
@@ -594,14 +685,14 @@ def panel_venn_grouped(rows, mod, out, font, letter="", width=1215.0, ts=1.7):
     slot = (x_end - ml) / len(groups)
     gap = 2.0
     bw = round((0.84 * slot - (NCAP - 1) * gap) / NCAP, 1)
-    H = round(max(oy + rc + rad + 18, mt + ph + 46), 1)
+    H = round(max(y1 + 50, mt + ph + 46), 1)
     c = Canvas(W, H, font, font_scale=fsc, out_w=width)
     if letter:
         c.text(20, 30, letter, 13, INK, "start", "600")
     c.text(48, 30, "Number of phosphosites detected", 11.5, INK, "start", "600")
     c.text(48, 54, f"n = {total:,} phosphosites", 9.6, INK_SECONDARY, "start")
     grouped_key(c, x0 + 10, 54.0, fsc)
-    draw_venn(c, regions, centres, rad, names, tots, fsc)
+    draw_venn(c, regions, centres, radii, names, tots, fsc)
     draw_grouped(c, groups, decades, x0, x_end, ml, mt, ph, bw=bw, gap=gap,
                  rotate=True)
     print(f"    Venn {wv:.0f} units wide; bars {bw} units, total {total:,}")
