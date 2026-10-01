@@ -15,6 +15,7 @@ $P analysis/prep_counts.py "$S" --sample-regex "$RX" --min-run-count 10 --out de
 $P analysis/prep_phospho.py scan "$S" --fasta $F --outdir derived/mods
 $P analysis/prep_phospho.py export --scan derived/mods --complete --out derived/mods/sites_phospho_complete.tsv
 $P analysis/fig2cd_isoform_coverage.py scan "$S" --fasta $F --junctions --tsv derived/da_iso/isoform_disc_coverage.tsv
+$P analysis/prep_sdrf.py "$S" --metadata $M --out derived/multiDIA.sdrf.tsv
 
 # Figure 1
 $P analysis/fig1a_workflow.py --letter a --fasta $F --protein P00352 --label ALDH1A1 \

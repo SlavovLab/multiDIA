@@ -19,27 +19,32 @@ ORDER = ["GluC", "LysC", "Trypsin"]
 CONDITION = {"Lewy body disease (LBD/DLB)": "LBD", "Control": "Control"}
 
 
-def read_metadata(path):
-    """-> {sample id: condition}, from `data/metadata.xlsx`."""
+def read_cases(path):
+    """-> {sample id: {column: value}}, one row per case of `data/metadata.xlsx`."""
     from openpyxl import load_workbook
     rows = load_workbook(path, read_only=True, data_only=True).active.iter_rows(
         values_only=True)
     head = [str(h).strip() if h is not None else "" for h in next(rows)]
-    try:
-        i_id, i_dx = head.index("ADRC #"), head.index("NPDX1")
-    except ValueError:
-        sys.exit(f"{path}: needs 'ADRC #' and 'NPDX1' columns, has {head}")
+    for need in ("ADRC #", "NPDX1"):
+        if need not in head:
+            sys.exit(f"{path}: needs 'ADRC #' and 'NPDX1' columns, has {head}")
     out = {}
     for r in rows:
-        sid, dx = r[i_id], r[i_dx]
+        row = dict(zip(head, r))
+        sid, dx = row["ADRC #"], row["NPDX1"]
         if sid is None or dx is None:
             continue
-        dx = str(dx).strip()
-        if dx not in CONDITION:
+        if str(dx).strip() not in CONDITION:
             sys.exit(f"{path}: case {sid} has diagnosis {dx!r}, which maps to "
                      f"no condition; add it to report.CONDITION")
-        out[str(sid).strip()] = CONDITION[dx]
+        out[str(sid).strip()] = row
     return out
+
+
+def read_metadata(path):
+    """-> {sample id: condition}."""
+    return {sid: CONDITION[str(row["NPDX1"]).strip()]
+            for sid, row in read_cases(path).items()}
 
 
 SAMPLE_RX = r"CF[_-](?:[A-Za-z]{1,3}[_-])?(\d{4})"

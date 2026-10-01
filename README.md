@@ -24,6 +24,7 @@ index.md …    the website, https://multidia.slavovlab.net (GitHub Pages: _conf
 | `derived/counts/` | per-sample counts (Fig. 1a–c) |
 | `derived/da_iso/` | discriminating-region coverage (Fig. 2c) |
 | `derived/mods/` | the phospho scan and its site table (Fig. 3) |
+| `derived/multiDIA.sdrf.tsv` | the SDRF-Proteomics sample table for the PRIDE submission, one row per raw file (`prep_sdrf.py`) |
 
 ## Code
 
@@ -32,7 +33,7 @@ Each file in `analysis/` is named for what it produces:
 | prefix | role | files |
 |---|---|---|
 | `fig…_` | draws that figure's panels | `fig1a_workflow`, `fig1b_depth`, `fig1cd_coverage`, `fig2a_supp1_diagnostic_peptides`, `fig2b_isoform_strip`, `fig2cd_isoform_coverage`, `fig3a_phospho_sites`, `fig3bc_phospho_atlas` |
-| `prep_` | builds `derived/` or the `data/` caches | `prep_counts`, `prep_phospho`, `prep_splice_events`, `prep_uniprot`, `prep_parquet` |
+| `prep_` | builds `derived/` or the `data/` caches | `prep_counts`, `prep_phospho`, `prep_sdrf`, `prep_splice_events`, `prep_uniprot`, `prep_parquet` |
 | `lib_` | shared by the figures | `lib_report` (reports, run names, metadata), `lib_fasta`, `lib_palette`, `lib_svg`, `lib_compose` (stacking panels) |
 | `extra_` | exploratory; no final figure | `extra_differential`, `extra_isoform_da`, `extra_isoform_unique`, `extra_changed_proteoforms`, `extra_digest_upset`, `extra_reported_groups`, `extra_perm_null`, `extra_why_multienzyme` |
 
