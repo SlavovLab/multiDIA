@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1215" height="433" viewBox="0 0 1010 360" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
+<rect width="1010" height="360" fill="#ffffff"/>
+<text x="22.0" y="32.0" font-size="21.12" fill="#0b0b0b" text-anchor="start" font-weight="600">a</text>
+<rect x="40.0" y="76.0" width="169.7" height="120.0" fill="#f0efec" stroke="#c3c2b7" stroke-width="1.1" rx="7"/>
+<text x="124.9" y="104.0" font-size="17.06" fill="#0b0b0b" text-anchor="middle" font-weight="600">Post-mortem brain</text>
+<text x="124.9" y="128.0" font-size="14.95" fill="#2c2b28" text-anchor="middle">6 LBD · 6 control</text>
+<text x="124.9" y="145.9" font-size="14.95" fill="#2c2b28" text-anchor="middle">100 ng</text>
+<text x="124.9" y="163.9" font-size="14.95" fill="#2c2b28" text-anchor="middle">SP3 clean-up</text>
+<rect x="356.0" y="26.0" width="360.0" height="42.0" fill="#f0efec" stroke="#c3c2b7" stroke-width="1.0" rx="4"/>
+<line x1="552.0" y1="26.0" x2="552.0" y2="68.0" stroke="#c3c2b7" stroke-width="1.0"/>
+<text x="454.0" y="45.0" font-size="16.25" fill="#0b0b0b" text-anchor="middle" font-weight="600">dia-PASEF</text>
+<text x="454.0" y="62.0" font-size="13.65" fill="#2c2b28" text-anchor="middle">65 min · 60 windows</text>
+<text x="634.0" y="45.0" font-size="16.25" fill="#0b0b0b" text-anchor="middle" font-weight="600">directDIA</text>
+<text x="634.0" y="62.0" font-size="13.65" fill="#2c2b28" text-anchor="middle">Spectronaut · 1% FDR</text>
+<path d="M 209.7 136.0 L 216.7 136.0 Q 223.7 136.0 223.7 129.0 L 223.7 99.0 Q 223.7 92.0 230.7 92.0 L 231.5 92.0" fill="none" stroke="#2c2b28" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M 237.7 92.0 L 231.2 88.9 L 231.2 95.1 Z" fill="#2c2b28"/>
+<rect x="237.7" y="73.0" width="100.0" height="38.0" fill="#eb6834" stroke="#eb6834" stroke-width="1.6" rx="7" fill-opacity="0.1"/>
+<text x="287.7" y="89.9" font-size="17.88" fill="#0b0b0b" text-anchor="middle" font-weight="600">Glu-C</text>
+<text x="287.7" y="105.6" font-size="14.30" fill="#2c2b28" text-anchor="middle">after E</text>
+<line x1="337.7" y1="92.0" x2="716.0" y2="92.0" stroke="#eb6834" stroke-width="2.2"/>
+<line x1="356.0" y1="88.0" x2="356.0" y2="96.0" stroke="#eb6834" stroke-width="2.2"/>
+<line x1="552.0" y1="88.0" x2="552.0" y2="96.0" stroke="#eb6834" stroke-width="2.2"/>
+<line x1="716.0" y1="88.0" x2="716.0" y2="96.0" stroke="#eb6834" stroke-width="2.2"/>
+<path d="M 716.0 92.0 L 734.2 92.0 Q 740.0 92.0 740.0 97.8 L 740.0 130.2 Q 740.0 136.0 745.8 136.0 L 745.8 136.0" fill="none" stroke="#2c2b28" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M 752.0 136.0 L 745.5 132.9 L 745.5 139.1 Z" fill="#2c2b28"/>
+<path d="M 209.7 136.0 L 231.5 136.0" fill="none" stroke="#2c2b28" stroke-width="1.4"/>
+<path d="M 237.7 136.0 L 231.2 132.9 L 231.2 139.1 Z" fill="#2c2b28"/>
+<rect x="237.7" y="117.0" width="100.0" height="38.0" fill="#2a78d6" stroke="#2a78d6" stroke-width="1.6" rx="7" fill-opacity="0.1"/>
+<text x="287.7" y="133.9" font-size="17.88" fill="#0b0b0b" text-anchor="middle" font-weight="600">Lys-C</text>
+<text x="287.7" y="149.6" font-size="14.30" fill="#2c2b28" text-anchor="middle">after K</text>
+<line x1="337.7" y1="136.0" x2="716.0" y2="136.0" stroke="#2a78d6" stroke-width="2.2"/>
+<line x1="356.0" y1="132.0" x2="356.0" y2="140.0" stroke="#2a78d6" stroke-width="2.2"/>
+<line x1="552.0" y1="132.0" x2="552.0" y2="140.0" stroke="#2a78d6" stroke-width="2.2"/>
+<line x1="716.0" y1="132.0" x2="716.0" y2="140.0" stroke="#2a78d6" stroke-width="2.2"/>
+<path d="M 716.0 136.0 L 745.8 136.0" fill="none" stroke="#2c2b28" stroke-width="1.4"/>
+<path d="M 752.0 136.0 L 745.5 132.9 L 745.5 139.1 Z" fill="#2c2b28"/>
+<path d="M 209.7 136.0 L 216.7 136.0 Q 223.7 136.0 223.7 143.0 L 223.7 173.0 Q 223.7 180.0 230.7 180.0 L 231.5 180.0" fill="none" stroke="#2c2b28" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M 237.7 180.0 L 231.2 176.9 L 231.2 183.1 Z" fill="#2c2b28"/>
+<rect x="237.7" y="161.0" width="100.0" height="38.0" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.6" rx="7" fill-opacity="0.1"/>
+<text x="287.7" y="177.9" font-size="17.88" fill="#0b0b0b" text-anchor="middle" font-weight="600">Trypsin</text>
+<text x="287.7" y="193.6" font-size="14.30" fill="#2c2b28" text-anchor="middle">after K, R</text>
+<line x1="337.7" y1="180.0" x2="716.0" y2="180.0" stroke="#1baf7a" stroke-width="2.2"/>
+<line x1="356.0" y1="176.0" x2="356.0" y2="184.0" stroke="#1baf7a" stroke-width="2.2"/>
+<line x1="552.0" y1="176.0" x2="552.0" y2="184.0" stroke="#1baf7a" stroke-width="2.2"/>
+<line x1="716.0" y1="176.0" x2="716.0" y2="184.0" stroke="#1baf7a" stroke-width="2.2"/>
+<path d="M 716.0 180.0 L 734.2 180.0 Q 740.0 180.0 740.0 174.2 L 740.0 141.8 Q 740.0 136.0 745.8 136.0 L 745.8 136.0" fill="none" stroke="#2c2b28" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M 752.0 136.0 L 745.5 132.9 L 745.5 139.1 Z" fill="#2c2b28"/>
+<rect x="752.0" y="114.0" width="228.0" height="44.0" fill="#4a3aa7" stroke="#4a3aa7" stroke-width="1.6" rx="7" fill-opacity="0.1"/>
+<text x="866.0" y="140.0" font-size="17.88" fill="#0b0b0b" text-anchor="middle" font-weight="600">All proteases</text>
+<g transform="translate(0 30)">
+<line x1="44.0" y1="196.0" x2="980.0" y2="196.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="26.0" y="216.0" font-size="15.44" fill="#0b0b0b" text-anchor="start" font-weight="600">ALDH1A1 · P00352</text>
+<line x1="201.8" y1="219.0" x2="201.8" y2="223.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="201.8" y="216.0" font-size="13.33" fill="#2c2b28" text-anchor="middle">50</text>
+<line x1="287.7" y1="219.0" x2="287.7" y2="223.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="287.7" y="216.0" font-size="13.33" fill="#2c2b28" text-anchor="middle">100</text>
+<line x1="373.5" y1="219.0" x2="373.5" y2="223.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="373.5" y="216.0" font-size="13.33" fill="#2c2b28" text-anchor="middle">150</text>
+<line x1="459.3" y1="219.0" x2="459.3" y2="223.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="459.3" y="216.0" font-size="13.33" fill="#2c2b28" text-anchor="middle">200</text>
+<line x1="545.1" y1="219.0" x2="545.1" y2="223.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="545.1" y="216.0" font-size="13.33" fill="#2c2b28" text-anchor="middle">250</text>
+<line x1="631.0" y1="219.0" x2="631.0" y2="223.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="631.0" y="216.0" font-size="13.33" fill="#2c2b28" text-anchor="middle">300</text>
+<line x1="716.8" y1="219.0" x2="716.8" y2="223.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="716.8" y="216.0" font-size="13.33" fill="#2c2b28" text-anchor="middle">350</text>
+<line x1="802.6" y1="219.0" x2="802.6" y2="223.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="802.6" y="216.0" font-size="13.33" fill="#2c2b28" text-anchor="middle">400</text>
+<line x1="888.5" y1="219.0" x2="888.5" y2="223.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="888.5" y="216.0" font-size="13.33" fill="#2c2b28" text-anchor="middle">450</text>
+<line x1="974.3" y1="219.0" x2="974.3" y2="223.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="974.3" y="216.0" font-size="13.33" fill="#2c2b28" text-anchor="middle">500</text>
+<rect x="103.0" y="241.0" width="9.0" height="9.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="2"/>
+<text x="97.0" y="249.0" font-size="15.44" fill="#0b0b0b" text-anchor="end">Glu-C</text>
+<rect x="117.0" y="240.0" width="46.1" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="165.1" y="240.0" width="28.9" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="216.6" y="240.0" width="42.6" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="261.2" y="240.0" width="20.3" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="283.5" y="240.0" width="15.2" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="453.4" y="240.0" width="23.7" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="544.4" y="240.0" width="10.0" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="556.4" y="240.0" width="20.3" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="578.8" y="240.0" width="32.3" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="613.1" y="240.0" width="37.5" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="662.9" y="240.0" width="10.0" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="674.9" y="240.0" width="39.2" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="716.1" y="240.0" width="15.2" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="750.4" y="240.0" width="39.2" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="954.7" y="240.0" width="20.3" height="12.0" fill="#eb6834" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="103.0" y="263.0" width="9.0" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="2"/>
+<text x="97.0" y="271.0" font-size="15.44" fill="#0b0b0b" text-anchor="end">Lys-C</text>
+<rect x="117.0" y="262.0" width="27.2" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="154.8" y="262.0" width="22.0" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="180.5" y="262.0" width="32.3" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="228.6" y="262.0" width="42.6" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="273.2" y="262.0" width="35.8" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="311.0" y="262.0" width="23.7" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="336.7" y="262.0" width="16.9" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="424.3" y="262.0" width="22.0" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="448.3" y="262.0" width="27.2" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="530.7" y="262.0" width="16.9" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="570.2" y="262.0" width="13.4" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="681.8" y="262.0" width="30.6" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="722.9" y="262.0" width="13.4" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="747.0" y="262.0" width="16.9" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="765.9" y="262.0" width="32.3" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="800.2" y="262.0" width="18.6" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="824.2" y="262.0" width="10.0" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="836.2" y="262.0" width="25.5" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="923.8" y="262.0" width="32.3" height="12.0" fill="#2a78d6" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="103.0" y="285.0" width="9.0" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="2"/>
+<text x="97.0" y="293.0" font-size="15.44" fill="#0b0b0b" text-anchor="end">Trypsin</text>
+<rect x="117.0" y="284.0" width="27.2" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="154.8" y="284.0" width="22.0" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="180.5" y="284.0" width="32.3" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="233.7" y="284.0" width="15.2" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="250.9" y="284.0" width="10.0" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="273.2" y="284.0" width="10.0" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="288.7" y="284.0" width="20.3" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="311.0" y="284.0" width="23.7" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="341.9" y="284.0" width="11.7" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="362.5" y="284.0" width="20.3" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="384.8" y="284.0" width="37.5" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="530.7" y="284.0" width="16.9" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="571.9" y="284.0" width="11.7" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="645.7" y="284.0" width="20.3" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="681.8" y="284.0" width="30.6" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="722.9" y="284.0" width="13.4" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="747.0" y="284.0" width="16.9" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="765.9" y="284.0" width="27.2" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="800.2" y="284.0" width="18.6" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="824.2" y="284.0" width="10.0" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="838.0" y="284.0" width="23.7" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="934.1" y="284.0" width="22.0" height="12.0" fill="#1baf7a" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="103.0" y="307.0" width="9.0" height="9.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" rx="2"/>
+<text x="97.0" y="315.0" font-size="15.44" fill="#0b0b0b" text-anchor="end">All</text>
+<rect x="117.0" y="306.0" width="95.8" height="12.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="216.6" y="306.0" width="137.0" height="12.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="362.5" y="306.0" width="114.7" height="12.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="530.7" y="306.0" width="205.7" height="12.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="747.0" y="306.0" width="71.8" height="12.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="824.2" y="306.0" width="37.5" height="12.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+<rect x="923.8" y="306.0" width="51.2" height="12.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" rx="3" fill-opacity="0.85"/>
+</g>
+</svg>

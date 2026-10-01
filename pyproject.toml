@@ -1,0 +1,15 @@
+[project]
+name = "multidia"
+version = "0.0.0"
+description = "Analysis and figures for the multiDIA manuscript"
+requires-python = ">=3.14"
+dependencies = [
+    "numpy>=2.5",
+    "openpyxl>=3.1.5",
+    "pyarrow>=25",
+    "pymupdf>=1.28",
+    "scipy>=1.18",
+]
+
+[tool.uv]
+package = false

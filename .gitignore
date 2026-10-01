@@ -1,0 +1,16 @@
+# Linked worktrees, made per session by an agent or by the frontend's worktree
+# base path, which points here. Each holds a checkout of this repository.
+/.claude/
+
+# The project's own Python environment, built with uv.
+.venv/
+
+# Bytecode caches.
+__pycache__/
+
+# macOS Finder metadata.
+.DS_Store
+
+# Too large for GitHub: kept locally.
+data/search/*.parquet
+data/gencode/gencode.v50.annotation.gtf.gz
