@@ -273,6 +273,26 @@ def column(members, idx, med, cond, case, control, min_group,
             "unit": "patients", "n_unit": f"{len(a)} v {len(b)}"}
 
 
+def case_points(members, idx, med, cond, case, control):
+    """-> [log2 vs the peptide's control mean], one per case patient per peptide."""
+    return [v for _p, s, _d, v in precursor_values(members, idx, med, cond, control)
+            if cond.get(s) == case]
+
+
+def apply_case_points(can_members, iso_members, iso, idx, med, cond, case, control):
+    """Rewrite `iso`'s p and effect as Welch between the two forms' case points."""
+    from scipy import stats
+    a = case_points(iso_members, idx, med, cond, case, control)
+    b = case_points(can_members, idx, med, cond, case, control)
+    iso["p"], iso["mean"] = float("nan"), float("nan")
+    if len(a) >= 2 and len(b) >= 2:
+        t = stats.ttest_ind(a, b, equal_var=False)
+        iso["p"] = float(t.pvalue) if t.pvalue == t.pvalue else float("nan")
+        iso["mean"] = statistics.mean(a) - statistics.mean(b)
+    iso["unit"], iso["n_unit"] = "case points", f"{len(a)} v {len(b)}"
+    return iso
+
+
 def testable(st, can, min_pep, box_patients=0):
     """Whether an isoform column enters the screen."""
     if st is None:
@@ -302,6 +322,8 @@ def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
                         p_unit)
             if st and p_unit == "vs-canonical" and can:
                 apply_vs_canonical(can, st)
+            if st and p_unit == "lbd-points" and can:
+                apply_case_points(base[1], mem, st, idx, med, cond, case, control)
             if not testable(st, can, min_pep, box_patients):
                 continue
             if len(st["per_digest"]) < min_digests:
@@ -865,7 +887,7 @@ def main(argv=None):
                     help="isoform columns per gene, best-supported first")
     ap.add_argument("--p-unit", dest="p_unit", default="patients",
                     choices=("patients", "patient-ratio", "peptides",
-                             "vs-canonical"),
+                             "vs-canonical", "lbd-points"),
                     help="replication unit for the p-value and the quoted effect")
     ap.add_argument("--hue", action="store_true",
                     help="colour each point by the protease that produced it")
@@ -962,7 +984,7 @@ def main(argv=None):
             volcano(rows, args.volcano, args.font, args.q_cut, args.letter,
                     title=args.title,
                     xlab=("Δ log2 LBD / Control (isoform − canonical)"
-                          if args.p_unit == "vs-canonical"
+                          if args.p_unit in ("vs-canonical", "lbd-points")
                           else "log2 LBD / Control"))
         return 0
 
