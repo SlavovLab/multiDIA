@@ -99,6 +99,32 @@ def read_reports(paths, seqs, genes, precursor_q=0.01, min_run_peptides=1000,
     return idx, med, dict(bygene)
 
 
+def common_medians(idx, med):
+    """-> run medians recomputed over the peptides every kept run of the digest quantified.
+
+    A shallow run misses mostly weak peptides, which inflates a median over its own detections;
+    a median over the shared set is independent of depth.
+    """
+    runs = collections.defaultdict(set)
+    for s, d in med:
+        runs[d].add(s)
+    vals = collections.defaultdict(list)
+    shared = collections.Counter()
+    for (g, d), peps in idx.items():
+        need = runs.get(d)
+        if not need:
+            continue
+        for p, q in peps.items():
+            if need <= {s for s, v in q.items() if v > 0}:
+                shared[d] += 1
+                for s in need:
+                    vals[(s, d)].append(math.log2(q[s]))
+    out = {k: statistics.median(vals[k]) for k in med if vals.get(k)}
+    for d, n in sorted(shared.items()):
+        print(f"  {d}: {n:,} peptides quantified in all {len(runs[d])} runs")
+    return out
+
+
 def diagnostic(gene, groups, seqs, genes, idx, fasta_isoforms=False):
     """Split a gene's quantified peptides into canonical and isoform-diagnostic.
 
@@ -940,6 +966,8 @@ def main(argv=None):
     ap.add_argument("--min-group", type=int, default=3)
     ap.add_argument("--box-n", dest="box_n", action="store_true",
                     help="label each box with the patients behind its points")
+    ap.add_argument("--common-median", dest="common_median", action="store_true",
+                    help="normalise each run by the median of peptides every run of its digest quantified")
     ap.add_argument("--fasta-isoforms", dest="fasta_isoforms", action="store_true",
                     help="assign each peptide to every isoform whose sequence contains it")
     ap.add_argument("--no-run-median", dest="no_run_median", action="store_true",
@@ -1018,6 +1046,8 @@ def main(argv=None):
                                     args.min_run_peptides,
                                     key="precursor" if args.unit == "precursor"
                                     else "peptide")
+    if args.common_median:
+        med = common_medians(idx, med)
     if args.no_run_median:
         # Spectronaut's cross-run normalisation already applied; keep only the run gate
         med = {k: 0.0 for k in med}
