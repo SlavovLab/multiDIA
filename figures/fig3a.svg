@@ -3,7 +3,7 @@
 <text x="20.0" y="30.0" font-size="24.51" fill="#0b0b0b" text-anchor="start" font-weight="600">a</text>
 <text x="48.0" y="30.0" font-size="21.68" fill="#0b0b0b" text-anchor="start" font-weight="600">Number of phosphosites detected</text>
 <text x="48.0" y="54.0" font-size="18.10" fill="#1f1e1c" text-anchor="start">n = 3,649 phosphosites</text>
-<text x="444.8" y="54.0" font-size="16.96" fill="#1f1e1c" text-anchor="start">distinct peptides containing the site</text>
+<text x="792.0" y="54.0" font-size="16.96" fill="#1f1e1c" text-anchor="end">distinct peptides containing the site</text>
 <rect x="800.0" y="45.0" width="10.0" height="10.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.28800000000000003"/>
 <text x="814.0" y="54.0" font-size="16.96" fill="#1f1e1c" text-anchor="start">1</text>
 <rect x="839.3" y="45.0" width="10.0" height="10.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.396"/>

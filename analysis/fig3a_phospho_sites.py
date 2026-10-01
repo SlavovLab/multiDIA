@@ -406,8 +406,8 @@ def grouped_key_width(fsc):
 def grouped_key(c, x, y, fsc):
     """The 1-5+ class key on one line, starting at `x`."""
     title = "distinct peptides containing the site"
-    c.text(x, y, title, 9, INK_SECONDARY)
     kx = x + text_width(title, 9, fsc) + 10
+    c.text(kx - 8, y, title, 9, INK_SECONDARY, "end")    # hugs the first box
     for k in range(1, NCAP + 1):
         lab = f"{k}+" if k == NCAP else f"{k}"
         c.rect(kx, y - 9, 10, 10, UNION, fo=pep_shade(k))

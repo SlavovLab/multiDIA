@@ -893,14 +893,6 @@ def volcano(rows, out, font, q_cut=0.05, letter="", title=None,
     c.rect(ml, mt, pw, ph, fill="none", stroke=AXIS, sw=0.8, rx=0)
     c.text(ml + pw / 2, mt + ph + 32, xlab, 9.4, INK_SECONDARY, "middle")
     c.text(18, mt + ph / 2, "−log10 p", 9.4, INK_SECONDARY, "middle", rot=-90)
-    if hit:
-        pc = max(r["p"] for r in hit)
-        yl = Y(-math.log10(pc))
-        # dashes drawn as segments: preview.py's MuPDF draws a dasharray solid
-        x = ml
-        while x < ml + pw:
-            c.line(x, yl, min(x + 6, ml + pw), yl, stroke=red, sw=1.2)
-            x += 10
     for r in sorted(ok, key=lambda r: r["q"] <= q_cut):
         on = r["q"] <= q_cut
         c.add(f'<circle cx="{X(r["log2fc"]):.1f}" '
