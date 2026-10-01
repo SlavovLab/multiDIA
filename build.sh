@@ -44,7 +44,7 @@ $P analysis/fig3a_phospho_sites.py panel --sites derived/mods/sites_phospho_comp
 $P analysis/fig3bc_phospho_atlas.py heatmap --scan derived/mods --fasta $F --no-legend --no-title \
     --out "$T/heatmap.svg"
 $P analysis/lib_compose.py "$T/heatmap.svg" --width 1215 --letter b --out figures/fig3b.svg
-$P analysis/fig3bc_phospho_atlas.py heatmap --scan derived/mods --fasta $F --width 350 --height 290 \
+$P analysis/fig3bc_phospho_atlas.py heatmap --scan derived/mods --fasta $F --width 350 --height 234 \
     --out "$T/pd.svg" --genes SNCA LRRK2 PINK1 PRKN "Ubiquitin:UBB,UBC,UBA52,RPS27A@P62987" \
     RAB10 RAB8A RAB12 RAB29 RAB35 TH@P07101-3 GSK3B@P49841 PLK2 "CK2:CSNK2A1,CSNK2A2,CSNK2B" \
     PARK7 SYNJ1 EIF4EBP1 "ERM:MSN,EZR,RDX" VPS35
@@ -52,7 +52,7 @@ $P analysis/fig3bc_phospho_atlas.py protein data/search/GluC-60min-Phospho.parqu
     data/search/LysC-60min-Phospho.parquet data/search/Trypsin-60min-Phospho.parquet \
     --scan derived/mods --fasta $F --isoform P10636-8 --region N1:45-73 --region N2:74-102 \
     --region "Proline-rich:151-243" --uniprot-cache data/uniprot --rename "Tau/MAP =R" \
-    --width 370 --height 290 --cell 8 --pad 3 --label-size 8 --no-legend --out "$T/mapt.svg"
+    --width 370 --height 234 --cell 8 --pad 3 --label-size 8 --no-legend --out "$T/mapt.svg"
 $P analysis/lib_compose.py "$T/pd.svg" "$T/mapt.svg" --row --out "$T/row.svg"
 $P analysis/lib_compose.py "$T/row.svg" --width 1215 --letter c --out figures/fig3c.svg
 

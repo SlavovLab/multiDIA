@@ -90,9 +90,13 @@ def legend(c, x, y, size=10, max_width=None, gap=10.0):
 KEY_Y = 32.0
 
 
-def cell_key(c, x, y, size=14):
+def cell_key(c, x, y, size=14, inline=False):
     """Draw the digest order of a box's cells; returns its right edge."""
-    c.text(x, y - 5, "Cell order", 9, INK_SECONDARY)
+    if inline:                               # label left of the boxes, one line
+        c.text(x, y + size - 3.5, "Cell order", 9, INK_SECONDARY)
+        x += 0.5 * 9 * TEXT_BOOST * len("Cell order") + 6
+    else:
+        c.text(x, y - 5, "Cell order", 9, INK_SECONDARY)
     names = [display(d) for d in ORDER]
     w = 0.55 * 8.5 * TEXT_BOOST * max(map(len, names)) + 8
     for j, name in enumerate(names):
@@ -259,7 +263,11 @@ def heatmap_genes(rows, S, cells, items, seqs, gn, out, font,
     cw = min(22.0, (W - x0 - 20) / max(len(cols), 1))
     y_map = 44.0
     y_lab = y_map + 3 * row_h + 6
-    H = max(y_lab + 70 + (44 + KEY_ROW if key else 0), height)
+    import math
+    lab_h = max(0.55 * 8.5 * TEXT_BOOST * len(m["label"]) for m in cols) \
+        * math.sin(math.radians(60))
+    y_key = y_lab + lab_h + 26
+    H = max((y_key + 10 if key else y_lab + lab_h) + 8, height)
     c = Canvas(W, H, font)
     ph.header(c, TITLE_X, 20, "Phosphosites on PD-implicated proteins")
     print(f"  {len(cols)} sites on {len(items) - len(empty)} of {len(items)} "
@@ -282,10 +290,7 @@ def heatmap_genes(rows, S, cells, items, seqs, gn, out, font,
                    AXIS, 1.0)
         prev = m["name"]
     if key:
-        import math
-        lab_h = max(0.55 * 8.5 * TEXT_BOOST * len(m["label"]) for m in cols) \
-            * math.sin(math.radians(60))
-        right = legend(c, 20, y_lab + lab_h + 26, gap=9.0)
+        right = legend(c, 20, y_key, gap=9.0)
         assert right - 9.0 <= W, "PD heatmap key wider than the panel"
     ph.save(c, os.path.dirname(out) or ".", os.path.basename(out))
 
@@ -452,10 +457,11 @@ def protein(args):
     reach = 44.0
     # alternate labels are staggered by one line
     line = args.label_size * TEXT_BOOST * 1.2
-    y_bar = 48 + 14 + reach + line
+    key_h = 14.0                             # the cell-order key under the title
+    y_bar = 48 + key_h + 14 + reach + line
     bar_h = 22.0
-    H = max(y_bar + bar_h + reach + 14 + 56 + line + KEY_ROW,
-            args.height)
+    bottom = y_bar + bar_h + reach + cs + 9 + line + 6
+    H = max(bottom + (0 if args.no_legend else 56 + KEY_ROW), args.height)
     nth = {-1: 0, 1: 0}
     c = Canvas(W, H, font=args.font)
     ph.header(c, TITLE_X, 20, f"{gene} ({args.isoform}, {len(seq)} aa): modified "
@@ -491,9 +497,9 @@ def protein(args):
                    (f"PEP {pep:.2g}, {n} patient{'s' * (n != 1)}"
                     if pep is not None else "not detected"))
             cell(c, x + args.pad / 2 + j * cs, yb, cs - 1, cs - 1, pep, tip)
-    yk = H - KEY_Y - KEY_ROW
-    kx = lo if args.no_legend else legend(c, lo, yk) + 10
-    cell_key(c, kx, yk)
+    cell_key(c, TITLE_X, 32, inline=True)
+    if not args.no_legend:
+        legend(c, lo, H - KEY_Y - KEY_ROW)
     ph.save(c, os.path.dirname(args.out) or ".", os.path.basename(args.out))
 
 

@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1215" height="1246" viewBox="0 0 1215 1246">
-<rect width="1215" height="1246" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1215" height="1152" viewBox="0 0 1215 1152">
+<rect width="1215" height="1152" fill="#ffffff"/>
 <g transform="translate(0 0.00) scale(1.202970)" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
 
 <rect width="1010.0" height="360.0" fill="#ffffff"/>
@@ -1282,13 +1282,13 @@
 </g>
 <g transform="translate(0 757.07) scale(1.000000)" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
 
-<rect width="1215" height="489" fill="#ffffff"/>
+<rect width="1215" height="395" fill="#ffffff"/>
 <g transform="translate(0 0.00) scale(1.687500)" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
 
-<rect width="720" height="290" fill="#ffffff"/>
+<rect width="720" height="234" fill="#ffffff"/>
 <g transform="translate(0.00 0) scale(1.000000)" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
 
-<rect width="350.0" height="290.0" fill="#ffffff"/>
+<rect width="350.0" height="234.0" fill="#ffffff"/>
 <text x="36.0" y="20.0" font-size="14.95" fill="#0b0b0b" text-anchor="start" font-weight="600">Phosphosites on PD-implicated proteins</text>
 <text x="64.0" y="56.5" font-size="13.00" fill="#0b0b0b" text-anchor="end">Glu-C</text>
 <g><title>Ubiquitin T22 · Glu-C · not detected</title>
@@ -1417,295 +1417,295 @@
 </g>
 <g transform="translate(350.00 0) scale(1.000000)" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
 
-<rect width="370.0" height="290.0" fill="#ffffff"/>
+<rect width="370.0" height="234.0" fill="#ffffff"/>
 <text x="36.0" y="20.0" font-size="14.95" fill="#0b0b0b" text-anchor="start" font-weight="600">MAPT (P10636-8, 441 aa): modified residues</text>
-<rect x="20.0" y="118.5" width="330.0" height="22.0" fill="#ffffff" stroke="#c3c2b7" stroke-width="1.0"/>
-<rect x="53.3" y="118.5" width="21.3" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
-<text x="63.8" y="133.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">N1</text>
-<rect x="75.0" y="118.5" width="21.3" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
-<text x="85.5" y="133.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">N2</text>
-<rect x="132.6" y="118.5" width="69.2" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
-<text x="167.0" y="133.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">Proline-rich</text>
-<rect x="202.2" y="118.5" width="22.8" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
-<text x="213.4" y="133.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">R1</text>
-<rect x="225.4" y="118.5" width="22.8" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
-<text x="236.6" y="133.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">R2</text>
-<rect x="248.6" y="118.5" width="22.8" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
-<text x="259.8" y="133.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">R3</text>
-<rect x="271.8" y="118.5" width="23.6" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
-<text x="283.4" y="133.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">R4</text>
-<line x1="20.4" y1="140.5" x2="20.4" y2="143.5" stroke="#2c2b28" stroke-width="0.8"/>
-<text x="20.4" y="152.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">1</text>
-<line x1="94.5" y1="140.5" x2="94.5" y2="143.5" stroke="#2c2b28" stroke-width="0.8"/>
-<text x="94.5" y="152.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">100</text>
-<line x1="169.3" y1="140.5" x2="169.3" y2="143.5" stroke="#2c2b28" stroke-width="0.8"/>
-<text x="169.3" y="152.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">200</text>
-<line x1="244.1" y1="140.5" x2="244.1" y2="143.5" stroke="#2c2b28" stroke-width="0.8"/>
-<text x="244.1" y="152.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">300</text>
-<line x1="318.9" y1="140.5" x2="318.9" y2="143.5" stroke="#2c2b28" stroke-width="0.8"/>
-<text x="318.9" y="152.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">400</text>
-<line x1="349.6" y1="140.5" x2="349.6" y2="143.5" stroke="#2c2b28" stroke-width="0.8"/>
-<text x="349.6" y="152.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">441</text>
-<path d="M 21.1 118.5 L 21.1 113.5 L 6.5 88.5 L 6.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="6.5" y="71.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">Ac-A2</text>
+<rect x="20.0" y="132.5" width="330.0" height="22.0" fill="#ffffff" stroke="#c3c2b7" stroke-width="1.0"/>
+<rect x="53.3" y="132.5" width="21.3" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
+<text x="63.8" y="147.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">N1</text>
+<rect x="75.0" y="132.5" width="21.3" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
+<text x="85.5" y="147.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">N2</text>
+<rect x="132.6" y="132.5" width="69.2" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
+<text x="167.0" y="147.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">Proline-rich</text>
+<rect x="202.2" y="132.5" width="22.8" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
+<text x="213.4" y="147.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">R1</text>
+<rect x="225.4" y="132.5" width="22.8" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
+<text x="236.6" y="147.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">R2</text>
+<rect x="248.6" y="132.5" width="22.8" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
+<text x="259.8" y="147.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">R3</text>
+<rect x="271.8" y="132.5" width="23.6" height="22.0" fill="#f0efec" stroke="#1f1e1c" stroke-width="0.8"/>
+<text x="283.4" y="147.0" font-size="11.70" fill="#0b0b0b" text-anchor="middle">R4</text>
+<line x1="20.4" y1="154.5" x2="20.4" y2="157.5" stroke="#2c2b28" stroke-width="0.8"/>
+<text x="20.4" y="166.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">1</text>
+<line x1="94.5" y1="154.5" x2="94.5" y2="157.5" stroke="#2c2b28" stroke-width="0.8"/>
+<text x="94.5" y="166.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">100</text>
+<line x1="169.3" y1="154.5" x2="169.3" y2="157.5" stroke="#2c2b28" stroke-width="0.8"/>
+<text x="169.3" y="166.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">200</text>
+<line x1="244.1" y1="154.5" x2="244.1" y2="157.5" stroke="#2c2b28" stroke-width="0.8"/>
+<text x="244.1" y="166.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">300</text>
+<line x1="318.9" y1="154.5" x2="318.9" y2="157.5" stroke="#2c2b28" stroke-width="0.8"/>
+<text x="318.9" y="166.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">400</text>
+<line x1="349.6" y1="154.5" x2="349.6" y2="157.5" stroke="#2c2b28" stroke-width="0.8"/>
+<text x="349.6" y="166.5" font-size="9.75" fill="#2c2b28" text-anchor="middle">441</text>
+<path d="M 21.1 132.5 L 21.1 127.5 L 6.5 102.5 L 6.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="6.5" y="85.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">Ac-A2</text>
 <g><title>Ac-A2 · Glu-C · PEP 8.5e-26, 10 patients</title>
-<rect x="-5.5" y="74.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="-5.5" y="88.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>Ac-A2 · Lys-C · PEP 1.8e-31, 10 patients</title>
-<rect x="2.5" y="74.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
+<rect x="2.5" y="88.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>Ac-A2 · Trypsin · not detected</title>
-<rect x="10.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="10.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 27.9 140.5 L 27.9 145.5 L 33.5 178.5 L 33.5 183.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="33.5" y="201.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">M11ox</text>
+<path d="M 27.9 154.5 L 27.9 159.5 L 33.5 192.5 L 33.5 197.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="33.5" y="215.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">M11ox</text>
 <g><title>M11ox · Glu-C · not detected</title>
-<rect x="21.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="21.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>M11ox · Lys-C · PEP 2.3e-24, 10 patients</title>
-<rect x="29.5" y="184.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="29.5" y="198.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>M11ox · Trypsin · PEP 7.3e-26, 10 patients</title>
-<rect x="37.5" y="184.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="37.5" y="198.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 42.8 118.5 L 42.8 113.5 L 36.5 88.5 L 36.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="36.5" y="59.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">M31ox</text>
+<path d="M 42.8 132.5 L 42.8 127.5 L 36.5 102.5 L 36.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="36.5" y="73.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">M31ox</text>
 <g><title>M31ox · Glu-C · PEP 1e-22, 9 patients</title>
-<rect x="24.5" y="74.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="24.5" y="88.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>M31ox · Lys-C · PEP 3.2e-24, 9 patients</title>
-<rect x="32.5" y="74.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="32.5" y="88.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>M31ox · Trypsin · PEP 2.1e-36, 10 patients</title>
-<rect x="40.5" y="74.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
+<rect x="40.5" y="88.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 54.0 140.5 L 54.0 145.5 L 63.5 178.5 L 63.5 183.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="63.5" y="214.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS46</text>
+<path d="M 54.0 154.5 L 54.0 159.5 L 63.5 192.5 L 63.5 197.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="63.5" y="228.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS46</text>
 <g><title>pS46 · Glu-C · not detected</title>
-<rect x="51.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="51.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS46 · Lys-C · PEP 0.00018, 3 patients</title>
-<rect x="59.5" y="184.5" width="7.0" height="7.0" fill="#fc8e87" stroke="none" stroke-width="1.0"/>
+<rect x="59.5" y="198.5" width="7.0" height="7.0" fill="#fc8e87" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS46 · Trypsin · PEP 7.9e-27, 7 patients</title>
-<rect x="67.5" y="184.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="67.5" y="198.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 57.0 118.5 L 57.0 113.5 L 66.5 88.5 L 66.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="66.5" y="71.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT50</text>
+<path d="M 57.0 132.5 L 57.0 127.5 L 66.5 102.5 L 66.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="66.5" y="85.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT50</text>
 <g><title>pT50 · Glu-C · not detected</title>
-<rect x="54.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="54.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT50 · Lys-C · not detected</title>
-<rect x="62.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="62.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT50 · Trypsin · PEP 0, 1 patient</title>
-<rect x="70.5" y="74.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
+<rect x="70.5" y="88.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 58.5 140.5 L 58.5 145.5 L 93.5 178.5 L 93.5 183.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="93.5" y="201.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT52</text>
+<path d="M 58.5 154.5 L 58.5 159.5 L 93.5 192.5 L 93.5 197.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="93.5" y="215.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT52</text>
 <g><title>pT52 · Glu-C · not detected</title>
-<rect x="81.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="81.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT52 · Lys-C · PEP 6.8e-20, 1 patient</title>
-<rect x="89.5" y="184.5" width="7.0" height="7.0" fill="#fa5251" stroke="none" stroke-width="1.0"/>
+<rect x="89.5" y="198.5" width="7.0" height="7.0" fill="#fa5251" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT52 · Trypsin · not detected</title>
-<rect x="97.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="97.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 61.5 118.5 L 61.5 113.5 L 96.5 88.5 L 96.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="96.5" y="59.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS56</text>
+<path d="M 61.5 132.5 L 61.5 127.5 L 96.5 102.5 L 96.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="96.5" y="73.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS56</text>
 <g><title>pS56 · Glu-C · not detected</title>
-<rect x="84.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="84.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS56 · Lys-C · not detected</title>
-<rect x="92.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="92.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS56 · Trypsin · PEP 9.8e-21, 6 patients</title>
-<rect x="100.5" y="74.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="100.5" y="88.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 71.3 140.5 L 71.3 145.5 L 123.5 178.5 L 123.5 183.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="123.5" y="214.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT69</text>
+<path d="M 71.3 154.5 L 71.3 159.5 L 123.5 192.5 L 123.5 197.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="123.5" y="228.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT69</text>
 <g><title>pT69 · Glu-C · not detected</title>
-<rect x="111.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="111.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT69 · Lys-C · PEP 1e-23, 2 patients</title>
-<rect x="119.5" y="184.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="119.5" y="198.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT69 · Trypsin · not detected</title>
-<rect x="127.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="127.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 72.8 118.5 L 72.8 113.5 L 126.5 88.5 L 126.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="126.5" y="71.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT71</text>
+<path d="M 72.8 132.5 L 72.8 127.5 L 126.5 102.5 L 126.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="126.5" y="85.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT71</text>
 <g><title>pT71 · Glu-C · not detected</title>
-<rect x="114.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="114.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT71 · Lys-C · PEP 2.8e-07, 5 patients</title>
-<rect x="122.5" y="74.5" width="7.0" height="7.0" fill="#fc8e87" stroke="none" stroke-width="1.0"/>
+<rect x="122.5" y="88.5" width="7.0" height="7.0" fill="#fc8e87" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT71 · Trypsin · not detected</title>
-<rect x="130.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="130.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 114.7 140.5 L 114.7 145.5 L 153.5 178.5 L 153.5 183.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="153.5" y="201.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">M127ox</text>
+<path d="M 114.7 154.5 L 114.7 159.5 L 153.5 192.5 L 153.5 197.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="153.5" y="215.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">M127ox</text>
 <g><title>M127ox · Glu-C · not detected</title>
-<rect x="141.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="141.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>M127ox · Lys-C · PEP 1.3e-27, 10 patients</title>
-<rect x="149.5" y="184.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="149.5" y="198.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>M127ox · Trypsin · not detected</title>
-<rect x="157.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="157.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 155.1 118.5 L 155.1 113.5 L 156.5 88.5 L 156.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="156.5" y="59.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT181</text>
+<path d="M 155.1 132.5 L 155.1 127.5 L 156.5 102.5 L 156.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="156.5" y="73.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT181</text>
 <g><title>pT181 · Glu-C · not detected</title>
-<rect x="144.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="144.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT181 · Lys-C · PEP 8.3e-32, 9 patients</title>
-<rect x="152.5" y="74.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
+<rect x="152.5" y="88.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT181 · Trypsin · PEP 1.3e-21, 10 patients</title>
-<rect x="160.5" y="74.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="160.5" y="88.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 168.5 140.5 L 168.5 145.5 L 183.5 178.5 L 183.5 183.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="183.5" y="214.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS199</text>
+<path d="M 168.5 154.5 L 168.5 159.5 L 183.5 192.5 L 183.5 197.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="183.5" y="228.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS199</text>
 <g><title>pS199 · Glu-C · not detected</title>
-<rect x="171.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="171.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS199 · Lys-C · not detected</title>
-<rect x="179.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="179.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS199 · Trypsin · PEP 2e-23, 5 patients</title>
-<rect x="187.5" y="184.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="187.5" y="198.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 170.8 118.5 L 170.8 113.5 L 186.5 88.5 L 186.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="186.5" y="71.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS202</text>
+<path d="M 170.8 132.5 L 170.8 127.5 L 186.5 102.5 L 186.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="186.5" y="85.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS202</text>
 <g><title>pS202 · Glu-C · not detected</title>
-<rect x="174.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="174.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS202 · Lys-C · PEP 1.1e-17, 3 patients</title>
-<rect x="182.5" y="74.5" width="7.0" height="7.0" fill="#fa5251" stroke="none" stroke-width="1.0"/>
+<rect x="182.5" y="88.5" width="7.0" height="7.0" fill="#fa5251" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS202 · Trypsin · PEP 2e-35, 10 patients</title>
-<rect x="190.5" y="74.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
+<rect x="190.5" y="88.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 173.0 140.5 L 173.0 145.5 L 213.5 178.5 L 213.5 183.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="213.5" y="201.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT205</text>
+<path d="M 173.0 154.5 L 173.0 159.5 L 213.5 192.5 L 213.5 197.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="213.5" y="215.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT205</text>
 <g><title>pT205 · Glu-C · not detected</title>
-<rect x="201.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="201.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT205 · Lys-C · not detected</title>
-<rect x="209.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="209.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT205 · Trypsin · PEP 1.1e-05, 3 patients</title>
-<rect x="217.5" y="184.5" width="7.0" height="7.0" fill="#fc8e87" stroke="none" stroke-width="1.0"/>
+<rect x="217.5" y="198.5" width="7.0" height="7.0" fill="#fc8e87" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 179.8 118.5 L 179.8 113.5 L 216.5 88.5 L 216.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="216.5" y="59.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS214</text>
+<path d="M 179.8 132.5 L 179.8 127.5 L 216.5 102.5 L 216.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="216.5" y="73.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS214</text>
 <g><title>pS214 · Glu-C · not detected</title>
-<rect x="204.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="204.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS214 · Lys-C · not detected</title>
-<rect x="212.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="212.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS214 · Trypsin · PEP 3.9e-06, 3 patients</title>
-<rect x="220.5" y="74.5" width="7.0" height="7.0" fill="#fc8e87" stroke="none" stroke-width="1.0"/>
+<rect x="220.5" y="88.5" width="7.0" height="7.0" fill="#fc8e87" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 182.0 140.5 L 182.0 145.5 L 243.5 178.5 L 243.5 183.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="243.5" y="214.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT217</text>
+<path d="M 182.0 154.5 L 182.0 159.5 L 243.5 192.5 L 243.5 197.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="243.5" y="228.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT217</text>
 <g><title>pT217 · Glu-C · not detected</title>
-<rect x="231.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="231.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT217 · Lys-C · PEP 1.6e-17, 1 patient</title>
-<rect x="239.5" y="184.5" width="7.0" height="7.0" fill="#fa5251" stroke="none" stroke-width="1.0"/>
+<rect x="239.5" y="198.5" width="7.0" height="7.0" fill="#fa5251" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT217 · Trypsin · not detected</title>
-<rect x="247.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="247.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 192.5 118.5 L 192.5 113.5 L 246.5 88.5 L 246.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="246.5" y="71.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT231</text>
+<path d="M 192.5 132.5 L 192.5 127.5 L 246.5 102.5 L 246.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="246.5" y="85.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pT231</text>
 <g><title>pT231 · Glu-C · not detected</title>
-<rect x="234.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="234.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT231 · Lys-C · PEP 3.7e-36, 9 patients</title>
-<rect x="242.5" y="74.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
+<rect x="242.5" y="88.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pT231 · Trypsin · PEP 4.2e-37, 10 patients</title>
-<rect x="250.5" y="74.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
+<rect x="250.5" y="88.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 195.5 140.5 L 195.5 145.5 L 273.5 178.5 L 273.5 183.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="273.5" y="201.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS235</text>
+<path d="M 195.5 154.5 L 195.5 159.5 L 273.5 192.5 L 273.5 197.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="273.5" y="215.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS235</text>
 <g><title>pS235 · Glu-C · not detected</title>
-<rect x="261.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="261.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS235 · Lys-C · not detected</title>
-<rect x="269.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="269.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS235 · Trypsin · PEP 9.8e-24, 3 patients</title>
-<rect x="277.5" y="184.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="277.5" y="198.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 206.7 118.5 L 206.7 113.5 L 276.5 88.5 L 276.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="276.5" y="59.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">M250ox</text>
+<path d="M 206.7 132.5 L 206.7 127.5 L 276.5 102.5 L 276.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="276.5" y="73.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">M250ox</text>
 <g><title>M250ox · Glu-C · not detected</title>
-<rect x="264.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="264.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>M250ox · Lys-C · PEP 2.8e-27, 10 patients</title>
-<rect x="272.5" y="74.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="272.5" y="88.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>M250ox · Trypsin · PEP 3.5e-33, 10 patients</title>
-<rect x="280.5" y="74.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
+<rect x="280.5" y="88.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 286.0 140.5 L 286.0 145.5 L 303.5 178.5 L 303.5 183.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="303.5" y="214.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS356</text>
+<path d="M 286.0 154.5 L 286.0 159.5 L 303.5 192.5 L 303.5 197.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="303.5" y="228.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS356</text>
 <g><title>pS356 · Glu-C · not detected</title>
-<rect x="291.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="291.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS356 · Lys-C · PEP 0.069, 1 patient</title>
-<rect x="299.5" y="184.5" width="7.0" height="7.0" fill="#f0efec" stroke="none" stroke-width="1.0"/>
+<rect x="299.5" y="198.5" width="7.0" height="7.0" fill="#f0efec" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS356 · Trypsin · not detected</title>
-<rect x="307.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="307.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 321.9 118.5 L 321.9 113.5 L 306.5 88.5 L 306.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="306.5" y="71.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS404</text>
+<path d="M 321.9 132.5 L 321.9 127.5 L 306.5 102.5 L 306.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="306.5" y="85.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS404</text>
 <g><title>pS404 · Glu-C · not detected</title>
-<rect x="294.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="294.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS404 · Lys-C · PEP 3.5e-06, 2 patients</title>
-<rect x="302.5" y="74.5" width="7.0" height="7.0" fill="#fc8e87" stroke="none" stroke-width="1.0"/>
+<rect x="302.5" y="88.5" width="7.0" height="7.0" fill="#fc8e87" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS404 · Trypsin · PEP 4.4e-31, 9 patients</title>
-<rect x="310.5" y="74.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
+<rect x="310.5" y="88.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 325.7 140.5 L 325.7 145.5 L 333.5 178.5 L 333.5 183.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="333.5" y="201.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS409</text>
+<path d="M 325.7 154.5 L 325.7 159.5 L 333.5 192.5 L 333.5 197.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="333.5" y="215.5" font-size="10.40" fill="#0b0b0b" text-anchor="middle">pS409</text>
 <g><title>pS409 · Glu-C · not detected</title>
-<rect x="321.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="321.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS409 · Lys-C · PEP 1.5e-34, 5 patients</title>
-<rect x="329.5" y="184.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
+<rect x="329.5" y="198.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>pS409 · Trypsin · not detected</title>
-<rect x="337.5" y="184.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="337.5" y="198.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
-<path d="M 333.2 118.5 L 333.2 113.5 L 336.5 88.5 L 336.5 83.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
-<text x="336.5" y="59.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">M419ox</text>
+<path d="M 333.2 132.5 L 333.2 127.5 L 336.5 102.5 L 336.5 97.5" fill="none" stroke="#2c2b28" stroke-width="0.7"/>
+<text x="336.5" y="73.0" font-size="10.40" fill="#0b0b0b" text-anchor="middle">M419ox</text>
 <g><title>M419ox · Glu-C · PEP 1.2e-22, 10 patients</title>
-<rect x="324.5" y="74.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
+<rect x="324.5" y="88.5" width="7.0" height="7.0" fill="#dd1e2d" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>M419ox · Lys-C · not detected</title>
-<rect x="332.5" y="74.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
+<rect x="332.5" y="88.5" width="7.0" height="7.0" fill="#000000" stroke="none" stroke-width="1.0"/>
 </g>
 <g><title>M419ox · Trypsin · PEP 0, 10 patients</title>
-<rect x="340.5" y="74.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
+<rect x="340.5" y="88.5" width="7.0" height="7.0" fill="#970f1b" stroke="none" stroke-width="1.0"/>
 </g>
-<text x="20.0" y="232.2" font-size="11.70" fill="#1f1e1c" text-anchor="start">Cell order</text>
-<rect x="20.0" y="237.2" width="49.5" height="14.0" fill="#ffffff" stroke="#2c2b28" stroke-width="0.8"/>
-<text x="44.8" y="247.2" font-size="11.05" fill="#1f1e1c" text-anchor="middle">Glu-C</text>
-<rect x="70.5" y="237.2" width="49.5" height="14.0" fill="#ffffff" stroke="#2c2b28" stroke-width="0.8"/>
-<text x="95.3" y="247.2" font-size="11.05" fill="#1f1e1c" text-anchor="middle">Lys-C</text>
-<rect x="121.1" y="237.2" width="49.5" height="14.0" fill="#ffffff" stroke="#2c2b28" stroke-width="0.8"/>
-<text x="145.9" y="247.2" font-size="11.05" fill="#1f1e1c" text-anchor="middle">Trypsin</text>
+<text x="36.0" y="42.5" font-size="11.70" fill="#1f1e1c" text-anchor="start">Cell order</text>
+<rect x="100.5" y="32.0" width="49.5" height="14.0" fill="#ffffff" stroke="#2c2b28" stroke-width="0.8"/>
+<text x="125.3" y="42.0" font-size="11.05" fill="#1f1e1c" text-anchor="middle">Glu-C</text>
+<rect x="151.0" y="32.0" width="49.5" height="14.0" fill="#ffffff" stroke="#2c2b28" stroke-width="0.8"/>
+<text x="175.8" y="42.0" font-size="11.05" fill="#1f1e1c" text-anchor="middle">Lys-C</text>
+<rect x="201.6" y="32.0" width="49.5" height="14.0" fill="#ffffff" stroke="#2c2b28" stroke-width="0.8"/>
+<text x="226.4" y="42.0" font-size="11.05" fill="#1f1e1c" text-anchor="middle">Trypsin</text>
 
 </g>
 
