@@ -294,6 +294,46 @@ def apply_case_points(can_members, iso_members, iso, idx, med, cond, case, contr
     return iso
 
 
+def peptide_model(can_members, iso_members, idx, med, cond, case, control):
+    """OLS of log2 quantity on peptide + case + case x isoform, one row per peptide per patient.
+
+    -> (case x isoform coefficient, p, rows, peptides). The peptide term is absorbed by demeaning
+    within each peptide (per digest), so every peptide keeps its own baseline.
+    """
+    import numpy as np
+    from scipy import stats
+    rows = collections.defaultdict(list)
+    for form, members in ((0.0, can_members), (1.0, iso_members)):
+        for d in ORDER:
+            for g, p in members:
+                q = idx.get((g, d), {}).get(p)
+                if not q:
+                    continue
+                for s, x in q.items():
+                    if (s, d) in med and x > 0 and cond.get(s) in (case, control):
+                        rows[(p, d, form)].append((math.log2(x) - med[(s, d)],
+                                                   1.0 if cond.get(s) == case else 0.0, form))
+    if not rows:
+        return float("nan"), float("nan"), 0, 0
+    y, X = [], []
+    for v in rows.values():
+        a = np.array(v)
+        a = a - a.mean(axis=0) if len(a) > 1 else a * 0.0
+        y.extend(a[:, 0])
+        X.extend(zip(a[:, 1], a[:, 1] * v[0][2]))     # form is constant within a peptide
+    y, X = np.array(y), np.array(X)
+    n, k = len(y), len(rows)
+    dof = n - k - 2
+    if dof < 1 or np.linalg.matrix_rank(X) < 2:
+        return float("nan"), float("nan"), n, k
+    beta, *_ = np.linalg.lstsq(X, y, rcond=None)
+    resid = y - X @ beta
+    s2 = float(resid @ resid) / dof
+    cov = s2 * np.linalg.inv(X.T @ X)
+    t = beta[1] / math.sqrt(cov[1, 1])
+    return float(beta[1]), float(2 * stats.t.sf(abs(t), dof)), n, k
+
+
 def testable(st, can, min_pep, box_patients=0):
     """Whether an isoform column enters the screen."""
     if st is None:
@@ -323,6 +363,9 @@ def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
                         p_unit)
             if st and p_unit == "vs-canonical" and can:
                 apply_vs_canonical(can, st)
+            if st and p_unit == "peptide-model" and can:
+                st["mean"], st["p"], _n, _k = peptide_model(base[1], mem, idx, med, cond,
+                                                            case, control)
             if st and p_unit == "lbd-points" and can:
                 apply_case_points(base[1], mem, st, idx, med, cond, case, control,
                                   centre)
@@ -874,6 +917,8 @@ def main(argv=None):
     ap.add_argument("--min-group", type=int, default=3)
     ap.add_argument("--box-n", dest="box_n", action="store_true",
                     help="label each box with the patients behind its points")
+    ap.add_argument("--no-run-median", dest="no_run_median", action="store_true",
+                    help="skip the run-median subtraction (runs below --min-run-peptides still dropped)")
     ap.add_argument("--per-patient", dest="per_patient", action="store_true",
                     help="--unit fc: a point per case patient per peptide, not per peptide")
     ap.add_argument("--no-stat", dest="no_stat", action="store_true",
@@ -890,7 +935,7 @@ def main(argv=None):
                     help="isoform columns per gene, best-supported first")
     ap.add_argument("--p-unit", dest="p_unit", default="patients",
                     choices=("patients", "patient-ratio", "peptides",
-                             "vs-canonical", "lbd-points"),
+                             "vs-canonical", "lbd-points", "peptide-model"),
                     help="replication unit for the p-value and the quoted effect")
     ap.add_argument("--hue", action="store_true",
                     help="colour each point by the protease that produced it")
@@ -948,6 +993,9 @@ def main(argv=None):
                                     args.min_run_peptides,
                                     key="precursor" if args.unit == "precursor"
                                     else "peptide")
+    if args.no_run_median:
+        # Spectronaut's cross-run normalisation already applied; keep only the run gate
+        med = {k: 0.0 for k in med}
     rows = screen(idx, med, bygene, seqs, genes, cond, args.case, args.control,
                   args.min_group, args.min_pep, args.min_digests, args.p_unit,
                   args.box_patients, args.centre)
@@ -989,7 +1037,7 @@ def main(argv=None):
                     xlab=("Δ log2 vs run median, LBD (isoform − canonical)"
                           if args.p_unit == "lbd-points" and not args.centre
                           else "Δ log2 LBD / Control (isoform − canonical)"
-                          if args.p_unit in ("vs-canonical", "lbd-points")
+                          if args.p_unit in ("vs-canonical", "lbd-points", "peptide-model")
                           else "log2 LBD / Control"))
         return 0
 
