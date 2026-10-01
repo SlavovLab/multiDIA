@@ -200,14 +200,15 @@ def apply_vs_canonical(can, iso):
 
 
 def column(members, idx, med, cond, case, control, min_group,
-           p_unit="patients"):
+           p_unit="patients", min_point=1):
     """Everything the panel needs about one proteoform column."""
     per, points = {}, []
     tested_pep = set()
     pooled = collections.defaultdict(list)
     for d in ORDER:
         vals, npep = sample_levels(members, d, idx, med)
-        pts = peptide_points(members, d, idx, med, cond, case, control)
+        pts = [t for t in peptide_points(members, d, idx, med, cond, case, control)
+               if t[2] >= min_point and t[3] >= min_point]
         points += [(p, d, v) for p, v, _na, _nb in pts]
         # `npep` keeps the patient threshold; only the drawing is ungated
         tested_pep |= {p.split("|")[0] for p, _v, na, nb in pts
@@ -260,7 +261,7 @@ def column(members, idx, med, cond, case, control, min_group,
 
 
 def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
-           min_pep, min_digests, p_unit="patients"):
+           min_pep, min_digests, p_unit="patients", min_point=1):
     """Rank every isoform with diagnostic evidence. -> [row dicts], BH within."""
     rows = []
     for gene, groups in sorted(bygene.items()):
@@ -270,10 +271,10 @@ def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
         if base is None or not diag:
             continue
         can = column(base[1], idx, med, cond, case, control, min_group,
-                     p_unit)
+                     p_unit, min_point)
         for who, mem in sorted(diag.items()):
             st = column(mem, idx, med, cond, case, control, min_group,
-                        p_unit)
+                        p_unit, min_point)
             if st and p_unit == "vs-canonical" and can:
                 apply_vs_canonical(can, st)
             if st is None or st["npep"] < min_pep:
@@ -810,6 +811,8 @@ def main(argv=None):
     ap.add_argument("--screen", action="store_true",
                     help="rank every isoform with diagnostic evidence")
     ap.add_argument("--min-group", type=int, default=3)
+    ap.add_argument("--min-point-patients", type=int, default=1,
+                    help="patients per group each peptide point needs")
     ap.add_argument("--min-pep", type=int, default=2)
     ap.add_argument("--min-digests", type=int, default=2)
     ap.add_argument("--precursor-q", type=float, default=0.01)
@@ -878,7 +881,8 @@ def main(argv=None):
                                     key="precursor" if args.unit == "precursor"
                                     else "peptide")
     rows = screen(idx, med, bygene, seqs, genes, cond, args.case, args.control,
-                  args.min_group, args.min_pep, args.min_digests, args.p_unit)
+                  args.min_group, args.min_pep, args.min_digests, args.p_unit,
+                  args.min_point_patients)
     best_q = min((r["q"] for r in rows if r["q"] == r["q"]), default=float("nan"))
     note = (f"{len(rows)} isoforms tested at ≥ {args.min_pep} diagnostic "
             f"peptides in ≥ {args.min_digests} digests; "
@@ -982,11 +986,11 @@ def main(argv=None):
             print(f"  {gene}: no single canonical entry, skipped")
             continue
         can = column(base[1], idx, med, cond, args.case, args.control,
-                     args.min_group, args.p_unit)
+                     args.min_group, args.p_unit, args.min_point_patients)
         keep = []
         for who, mem in sorted(diag.items()):
             st = column(mem, idx, med, cond, args.case, args.control,
-                        args.min_group, args.p_unit)
+                        args.min_group, args.p_unit, args.min_point_patients)
             if st and args.p_unit == "vs-canonical" and can:
                 apply_vs_canonical(can, st)
             if st and st["npep"] >= args.min_pep \

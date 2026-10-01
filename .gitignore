@@ -17,3 +17,6 @@ data/gencode/gencode.v50.annotation.gtf.gz
 
 # Office lock files.
 ~$*
+
+# Local-only experiments and decks.
+local/
