@@ -1,0 +1,22 @@
+# GitHub Pages site for multidia.slavovlab.net
+title: multiDIA
+description: Multi-protease DIA proteomics of human Lewy body disease brain | Slavov Laboratory
+url: https://multidia.slavovlab.net
+baseurl: ""
+
+remote_theme: just-the-docs/just-the-docs
+plugins:
+  - jekyll-remote-theme
+
+permalink: pretty
+search_enabled: false
+
+aux_links:
+  "GitHub Repository":
+    - "https://github.com/SlavovLab/multiDIA"
+  "Slavov Lab":
+    - "https://slavovlab.net"
+  "SCP Hub":
+    - "https://scp.slavovlab.net"
+
+exclude: ["analysis/", "data/", "derived/", "build.sh", "pyproject.toml", "uv.lock", "README.md", ".venv/"]

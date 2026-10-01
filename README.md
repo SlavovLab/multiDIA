@@ -11,7 +11,7 @@ derived/      tables built from data/ and read by the figures
 analysis/     all code, and its tests
 figures/      the paper's figures: panels, whole figures and PNGs
 build.sh      rebuilds derived/ and figures/ from data/
-docs.zip      archived notes, captions, references and tool READMEs
+index.md …    the website, https://multidia.slavovlab.net (GitHub Pages: _config.yml, CNAME, *.md)
 ```
 
 | path | contents |
