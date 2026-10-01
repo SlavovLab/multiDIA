@@ -99,18 +99,24 @@ def read_reports(paths, seqs, genes, precursor_q=0.01, min_run_peptides=1000,
     return idx, med, dict(bygene)
 
 
-def diagnostic(gene, groups, seqs, genes, idx):
-    """Split a gene's quantified peptides into canonical and isoform-diagnostic."""
+def diagnostic(gene, groups, seqs, genes, idx, fasta_isoforms=False):
+    """Split a gene's quantified peptides into canonical and isoform-diagnostic.
+
+    `fasta_isoforms`: a peptide's isoforms are every isoform of the gene whose sequence
+    contains it, not only those in the protein group its digest reported it under.
+    """
     canon = [a for a in seqs
              if "-" not in a and (genes.get(a) == gene
                                   or genes.get(a.split("-")[0]) == gene)]
     if len(canon) != 1:
         return None, {}
     ref = seqs[canon[0]]
+    family = [a for a in seqs if "-" in a and a.split("-")[0] == canon[0]]
     diag = collections.defaultdict(set)
     base = set()
     for g in groups:
-        mem = [a.strip() for a in g.split(";") if a.strip() in seqs]
+        mem = family if fasta_isoforms else [a.strip() for a in g.split(";")
+                                             if a.strip() in seqs]
         for d in ORDER:
             for p in idx.get((g, d), {}):
                 # a precursor key leads with its stripped sequence
@@ -359,13 +365,14 @@ def testable(st, can, min_pep, box_patients=0):
 
 
 def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
-           min_pep, min_digests, p_unit="patients", box_patients=0, centre=True):
+           min_pep, min_digests, p_unit="patients", box_patients=0, centre=True,
+           fasta_isoforms=False):
     """Rank every isoform with diagnostic evidence. -> [row dicts], BH within."""
     rows = []
     for gene, groups in sorted(bygene.items()):
         if gene is None:
             continue
-        base, diag = diagnostic(gene, groups, seqs, genes, idx)
+        base, diag = diagnostic(gene, groups, seqs, genes, idx, fasta_isoforms)
         if base is None or not diag:
             continue
         can = column(base[1], idx, med, cond, case, control, min_group,
@@ -878,6 +885,10 @@ def volcano(rows, out, font, q_cut=0.05, letter="", title=None,
     fsz = 8.2 * c.fs * TEXT_BOOST      # the size the label is drawn at
     pts = [(X(r["log2fc"]), Y(-math.log10(r["p"]))) for r in hit]
     boxes = []
+    names = [r["gene"] for r in hit]
+    # a gene labelled twice gets each isoform's suffix
+    lab = {id(r): (f'{r["gene"]} -{r["isoform"].split(";")[0].split("-")[-1]}'
+                   if names.count(r["gene"]) > 1 else r["gene"]) for r in hit}
 
     def free(x0, y0, x1, y1, own):
         if any(x0 < bx1 and bx0 < x1 and y0 < by1 and by0 < y1
@@ -889,7 +900,7 @@ def volcano(rows, out, font, q_cut=0.05, letter="", title=None,
     for i, r in sorted(enumerate(hit), key=lambda t: t[1]["p"]):
         px, py = pts[i]
         # bold caps run ~0.66 em
-        tw = 0.72 * fsz * len(r["gene"])   # bold caps at TEXT_BOOST
+        tw = 0.72 * fsz * len(lab[id(r)])   # bold caps at TEXT_BOOST
         out_ = 1 if r["log2fc"] >= 0 else -1
         for dy in (0, -12, 12, -24, 24):
             done = False
@@ -899,7 +910,7 @@ def volcano(rows, out, font, q_cut=0.05, letter="", title=None,
                 y0 = py + dy - fsz * 0.45
                 if free(x0, y0, x0 + tw, y0 + fsz, i):
                     boxes.append((x0, y0, x0 + tw, y0 + fsz))
-                    c.text(x0, py + dy + fsz * 0.3, r["gene"], 8.2, INK,
+                    c.text(x0, py + dy + fsz * 0.3, lab[id(r)], 8.2, INK,
                            "start", "600")
                     done = True
                     break
@@ -929,6 +940,8 @@ def main(argv=None):
     ap.add_argument("--min-group", type=int, default=3)
     ap.add_argument("--box-n", dest="box_n", action="store_true",
                     help="label each box with the patients behind its points")
+    ap.add_argument("--fasta-isoforms", dest="fasta_isoforms", action="store_true",
+                    help="assign each peptide to every isoform whose sequence contains it")
     ap.add_argument("--no-run-median", dest="no_run_median", action="store_true",
                     help="skip the run-median subtraction (runs below --min-run-peptides still dropped)")
     ap.add_argument("--per-patient", dest="per_patient", action="store_true",
@@ -1010,7 +1023,7 @@ def main(argv=None):
         med = {k: 0.0 for k in med}
     rows = screen(idx, med, bygene, seqs, genes, cond, args.case, args.control,
                   args.min_group, args.min_pep, args.min_digests, args.p_unit,
-                  args.box_patients, args.centre)
+                  args.box_patients, args.centre, args.fasta_isoforms)
     best_q = min((r["q"] for r in rows if r["q"] == r["q"]), default=float("nan"))
     note = (f"{len(rows)} isoforms tested at ≥ {args.min_pep} diagnostic "
             f"peptides in ≥ {args.min_digests} digests; "
@@ -1111,7 +1124,7 @@ def main(argv=None):
         if not groups:
             print(f"  {gene}: no reported group passed the filters")
             continue
-        base, diag = diagnostic(gene, groups, seqs, genes, idx)
+        base, diag = diagnostic(gene, groups, seqs, genes, idx, args.fasta_isoforms)
         if base is None:
             print(f"  {gene}: no single canonical entry, skipped")
             continue
