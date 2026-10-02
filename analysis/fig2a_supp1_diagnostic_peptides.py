@@ -392,7 +392,7 @@ def testable(st, can, min_pep, box_patients=0):
 
 def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
            min_pep, min_digests, p_unit="patients", box_patients=0, centre=True,
-           fasta_isoforms=False):
+           fasta_isoforms=False, lopo=False, q_cut=0.05):
     """Rank every isoform with diagnostic evidence. -> [row dicts], BH within."""
     rows = []
     for gene, groups in sorted(bygene.items()):
@@ -411,6 +411,7 @@ def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
             if st and p_unit == "peptide-model" and can:
                 st["mean"], st["p"], _n, _k = peptide_model(base[1], mem, idx, med, cond,
                                                             case, control)
+                st["_members"] = (base[1], mem)
             if st and p_unit == "lbd-points" and can:
                 apply_case_points(base[1], mem, st, idx, med, cond, case, control,
                                   centre)
@@ -425,7 +426,8 @@ def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
                          "n_pep": st["npep"], "p": st["p"],
                          "canonical_log2fc": can["mean"] if can else float("nan"),
                          "canonical_digests": len(can["per_digest"]) if can
-                         else 0})
+                         else 0,
+                         "box": st.get("box"), "_members": st.get("_members")})
     ok = [r for r in rows if r["p"] == r["p"]]
     if ok:
         import numpy as np
@@ -436,6 +438,24 @@ def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
             r["q"] = float(qq)
     for r in rows:
         r.setdefault("q", float("nan"))
+    if lopo:
+        # a hit must keep p < q_cut, same sign, with any one patient left out
+        for r in rows:
+            if r["q"] == r["q"] and r["q"] <= q_cut and r["_members"]:
+                cm, im = r["_members"]
+                worst = 0.0
+                r["robust"] = True
+                for drop in sorted(cond):
+                    c2 = {k: v for k, v in cond.items() if k != drop}
+                    b, p, _n, _k = peptide_model(cm, im, idx, med, c2, case, control)
+                    worst = max(worst, p if p == p else 1.0)
+                    if not (p == p and p < q_cut and b * r["log2fc"] > 0):
+                        r["robust"] = False
+                r["lopo_worst_p"] = worst
+            else:
+                r["robust"] = False
+    for r in rows:
+        r.pop("_members", None)
     # replication first, as in `proteoform_bands.py --screen`
     rows.sort(key=lambda r: -(abs(r["log2fc"]) - 1.5 * r["sd"]))
     return rows
@@ -856,7 +876,9 @@ def volcano(rows, out, font, q_cut=0.05, letter="", title=None,
             panel_w=None, panel_h=None):
     """Every screened isoform: effect against -log10 p, BH survivors marked."""
     ok = [r for r in rows if r["p"] == r["p"] and r["p"] > 0]
-    hit = [r for r in ok if r["q"] <= q_cut]
+    sig = [r for r in ok if r["q"] <= q_cut]
+    lopo = any("robust" in r for r in ok)
+    hit = [r for r in sig if r.get("robust")] if lopo else sig
     red = DIVERGING_HIGH[2]
     W = panel_w or FIG_PANEL_W
     ml, mr, mt, ph = 62.0, 30.0, 74.0, 250.0
@@ -875,7 +897,8 @@ def volcano(rows, out, font, q_cut=0.05, letter="", title=None,
     c.text(20, 30, letter, 13, INK, "start", "600")
     c.text(ml, 30, title or "Isoform-specific differential abundance",
            11.5, INK, "start", "600")
-    c.text(ml, 46, f"n = {len(ok):,} isoforms · {len(hit)} with q ≤ {q_cut:g}",
+    c.text(ml, 46, f"n = {len(ok):,} isoforms · {len(sig)} with q ≤ {q_cut:g}"
+           + (f" · {len(hit)} robust to leaving out any patient (labelled)" if lopo else ""),
            8.4, INK_MUTED, "start")
     step = 2.0 if ym > 8 else 1.0
     t = 0.0
@@ -893,12 +916,13 @@ def volcano(rows, out, font, q_cut=0.05, letter="", title=None,
     c.rect(ml, mt, pw, ph, fill="none", stroke=AXIS, sw=0.8, rx=0)
     c.text(ml + pw / 2, mt + ph + 32, xlab, 9.4, INK_SECONDARY, "middle")
     c.text(18, mt + ph / 2, "−log10 p", 9.4, INK_SECONDARY, "middle", rot=-90)
-    for r in sorted(ok, key=lambda r: r["q"] <= q_cut):
+    for r in sorted(ok, key=lambda r: (r["q"] <= q_cut, bool(r.get("robust")))):
         on = r["q"] <= q_cut
+        weak = on and lopo and not r.get("robust")
         c.add(f'<circle cx="{X(r["log2fc"]):.1f}" '
               f'cy="{Y(-math.log10(r["p"])):.1f}" r="{3.4 if on else 2.4}" '
               f'fill="{red if on else INK_MUTED}" '
-              f'fill-opacity="{0.9 if on else 0.35}"/>')
+              f'fill-opacity="{0.3 if weak else 0.9 if on else 0.35}"/>')
     # labels: first free slot of right, left, above, below
     fsz = 8.2 * c.fs * TEXT_BOOST      # the size the label is drawn at
     pts = [(X(r["log2fc"]), Y(-math.log10(r["p"]))) for r in hit]
@@ -958,6 +982,8 @@ def main(argv=None):
     ap.add_argument("--min-group", type=int, default=3)
     ap.add_argument("--box-n", dest="box_n", action="store_true",
                     help="label each box with the patients behind its points")
+    ap.add_argument("--lopo", action="store_true",
+                    help="--p-unit peptide-model: a hit must survive leaving out any one patient")
     ap.add_argument("--common-median", dest="common_median", action="store_true",
                     help="normalise each run by the median of peptides every run of its digest quantified")
     ap.add_argument("--fasta-isoforms", dest="fasta_isoforms", action="store_true",
@@ -1045,7 +1071,8 @@ def main(argv=None):
         med = {k: 0.0 for k in med}
     rows = screen(idx, med, bygene, seqs, genes, cond, args.case, args.control,
                   args.min_group, args.min_pep, args.min_digests, args.p_unit,
-                  args.box_patients, args.centre, args.fasta_isoforms)
+                  args.box_patients, args.centre, args.fasta_isoforms, args.lopo,
+                  args.q_cut)
     best_q = min((r["q"] for r in rows if r["q"] == r["q"]), default=float("nan"))
     note = (f"{len(rows)} isoforms tested at ≥ {args.min_pep} diagnostic "
             f"peptides in ≥ {args.min_digests} digests; "
