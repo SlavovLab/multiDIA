@@ -16,7 +16,7 @@ from lib_report import CONDITION, ORDER, open_reports, read_cases, runs_of, samp
 
 ORGANISM_PART = "dorsolateral striatum"
 INSTRUMENT = "NT=timsTOF Ultra 2;AC=MS:1003412"
-ACQUISITION = "NT=data-independent acquisition;AC=MS:1003215"
+ACQUISITION = "data-independent acquisition"
 DISSOCIATION = "NT=collision-induced dissociation;AC=MS:1000133"
 LABEL = "label free sample"
 CLEAVAGE = {"Trypsin": "NT=Trypsin;AC=MS:1001251",
@@ -41,10 +41,10 @@ COLUMNS = (["source name", "characteristics[organism]", "characteristics[organis
 
 
 def age(value):
-    """Years as SDRF wants them; the de-identified '≥90' becomes the range 90Y-."""
+    """Years as SDRF wants them; the de-identified '≥90' becomes >=90Y."""
     v = str(value).strip()
     if v.startswith(("≥", ">=")):
-        return v.lstrip("≥>=").strip() + "Y-"
+        return ">=" + v.lstrip("≥>=").strip() + "Y"
     return f"{int(float(v))}Y"
 
 
