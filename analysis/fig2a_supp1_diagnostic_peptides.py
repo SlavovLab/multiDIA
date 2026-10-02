@@ -964,8 +964,7 @@ def volcano(rows, out, font, q_cut=0.05, letter="", title=None,
     c.text(20, 30, letter, 13, INK, "start", "600")
     c.text(ml, 30, title or "Isoform-specific differential abundance",
            11.5, INK, "start", "600")
-    c.text(ml, 46, f"n = {len(ok):,} isoforms · {len(sig)} with q ≤ {q_cut:g}"
-           + (f" · {len(hit)} robust to leaving out any patient (labelled)" if lopo else ""),
+    c.text(ml, 46, f"n = {len(ok):,} isoforms · {len(sig)} with q ≤ {q_cut:g}",
            8.4, INK_MUTED, "start")
     step = 2.0 if ym > 8 else 1.0
     t = 0.0
