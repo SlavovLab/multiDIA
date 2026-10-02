@@ -30,8 +30,12 @@ groups detected by all three digests: the same proteins are covered more deeply.
 
 ![Figure 2]({{ site.baseurl }}/figures/fig2.png)
 
-**(a)** Each isoform with ≥ 2 discriminating peptides, its log2 LBD/control
-against its canonical's (Δ); 9 of 571 at Benjamini–Hochberg q ≤ 0.05 (red).
+**(a)** Each isoform's change in LBD relative to its canonical form (Δ), from a
+per-peptide linear model on every measurement (log2 quantity ~ peptide + LBD +
+LBD × isoform; runs normalised to the peptides every run of a digest quantified).
+Isoform and canonical peptides each span ≥ 3 LBD and ≥ 3 control patients; red,
+the 4 of 1,119 at Benjamini–Hochberg q ≤ 0.05 that also hold with any one patient
+left out.
 **(b)** RUFY3 isoform Q7L099-3, seen only by Lys-C and Glu-C peptides inside its
 110-residue insert. **(c)** Pooled digests cover more of the sequence that
 distinguishes isoforms, and more junctions are spanned by a single peptide.
@@ -53,12 +57,13 @@ reports only phosphosites localised with probability ≥ 0.75.
 
 [PNG]({{ site.baseurl }}/figures/fig3.png) · [SVG]({{ site.baseurl }}/figures/fig3.svg)
 
-## Supplementary Figure 1 | Isoform-specific differential abundance
+## Supplementary Figure 1 | The model behind each isoform in Fig. 2a
 
-![Supplementary Figure 1]({{ site.baseurl }}/figures/supp1_isoform_boxplots.png)
+![Supplementary Figure 1]({{ site.baseurl }}/figures/supp1_isoform_models.png)
 
-The evidence behind each isoform highlighted in Fig. 2a: log2 LBD/control of the
-canonical's peptides and of the isoform's discriminating peptides, one point per
-peptide per protease.
+For each Fig. 2a isoform, every peptide measurement in every patient, minus that
+peptide's fitted baseline, for the canonical's and the isoform's peptides in
+control and LBD patients; black lines, the model's fitted levels. Δ is the
+isoform's LBD effect minus the canonical's.
 
-[PNG]({{ site.baseurl }}/figures/supp1_isoform_boxplots.png) · [SVG]({{ site.baseurl }}/figures/supp1_isoform_boxplots.svg)
+[PNG]({{ site.baseurl }}/figures/supp1_isoform_models.png) · [SVG]({{ site.baseurl }}/figures/supp1_isoform_models.svg)

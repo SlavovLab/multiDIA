@@ -36,8 +36,8 @@ windows) and searched with Spectronaut 21 directDIA at 1% FDR.
   the same proteins more deeply: 4.0K protein groups reach ≥ 50% sequence
   coverage pooled, against 2.6K with trypsin alone.
 - **Isoforms.** Pooled digests reach more of the sequence that tells isoforms
-  apart. Nine of 571 tested isoforms change differently from their canonical
-  form in LBD; four of them have no tryptic discriminating peptide.
+  apart. Four of 1,119 tested isoforms (MAP4, RTN1, LRRFIP1, IL1RAP) change
+  differently from their canonical form in LBD.
 - **Phosphosites.** Without enrichment, each added protease contributes
   phosphosites the others miss: 1,382 of 3,649 sites are placed only by Lys-C or
   Glu-C.

@@ -370,6 +370,73 @@ def peptide_model_fit(can_members, iso_members, idx, med, cond, case, control):
             "p": float(2 * stats.t.sf(abs(beta[1] / se), dof)), "n": n, "k": k}
 
 
+def model_plot(fit, gene, iso, canon, out, font, case="LBD", control="Control"):
+    """One isoform's per-peptide model: every measurement minus its peptide's fitted baseline."""
+    groups = {(f, c): [] for f in (0.0, 1.0) for c in (0.0, 1.0)}
+    for (p, d, f), v in fit["rows"].items():
+        for s, y, c in v:
+            groups[(f, c)].append((p, d, s, y - fit["baseline"][(p, d, f)]))
+    b1, b2 = fit["case"], fit["interaction"]
+    level = {(0.0, 0.0): 0.0, (0.0, 1.0): b1, (1.0, 0.0): 0.0, (1.0, 1.0): b1 + b2}
+    W, H, ml, mt, ph = FIG_PANEL_W, 470.0, 64.0, 132.0, 260.0
+    c = Canvas(W, H, font, font_scale=1.45, out_w=1215)
+    vals = sorted(y for g in groups.values() for *_r, y in g)
+    lo = min(vals[int(0.005 * len(vals))], -1.0) - 0.3
+    hi = max(vals[int(0.995 * len(vals)) - 1], 1.0) + 0.3
+
+    def Y(v):
+        return mt + ph * (hi - v) / (hi - lo)
+
+    pw = W - ml - 24
+    c.text(20, 30, f"{gene} · isoform {iso.split(';')[0]}"
+           + (f" (+{iso.count(';')})" if ";" in iso else "") + f" v canonical {canon}",
+           11, INK, "start", "600")
+    c.text(20, 54, f"Δ = {b2:+.2f} ± {fit['se']:.2f}", 10, UNION, "start", "600")
+    c.text(235, 54, f"p = {fit['p']:.1e} · {fit['n']:,} values from {fit['k']} peptides",
+           7.8, INK_SECONDARY, "start")
+    col = assign(ORDER)
+    kx = 20
+    for dg in ORDER:
+        c.add(f'<circle cx="{kx + 3:.1f}" cy="76" r="3.2" fill="{col[dg]}"/>')
+        c.text(kx + 10, 79.5, display(dg), 7.6, INK_SECONDARY, "start")
+        kx += 64
+    step = 1 if hi - lo < 8 else 2
+    t = int(lo) - 1
+    while t <= hi:
+        if t >= lo:
+            c.line(ml, Y(t), ml + pw, Y(t), stroke=AXIS if t == 0 else GRID, sw=0.8)
+            c.text(ml - 6, Y(t) + 3, f"{t:+d}" if t else "0", 7.6, INK_MUTED, "end")
+        t += step
+    c.rect(ml, mt, pw, ph, stroke=AXIS, sw=0.8)
+    c.line(ml + pw * 0.5, mt, ml + pw * 0.5, mt + ph, stroke=AXIS, sw=0.8)
+    c.text(16, mt + ph / 2, "log2 quantity − peptide baseline", 8.0, INK_SECONDARY,
+           "middle", rot=-90)
+    xs = {(0.0, 0.0): 0.14, (0.0, 1.0): 0.36, (1.0, 0.0): 0.64, (1.0, 1.0): 0.86}
+    for key, frac in xs.items():
+        cx = ml + pw * frac
+        pts = groups[key]
+        for p, d, s, y in pts:
+            if lo <= y <= hi:
+                h = int(hashlib.md5(f"{p}{d}{s}".encode()).hexdigest()[:8], 16) / 0xFFFFFFFF
+                c.add(f'<circle cx="{cx + (h - 0.5) * pw * 0.13:.1f}" cy="{Y(y):.1f}" '
+                      f'r="1.7" fill="{col[d]}" fill-opacity="0.45"/>')
+        c.line(cx - pw * 0.085, Y(level[key]), cx + pw * 0.085, Y(level[key]),
+               stroke=INK, sw=2.4)
+        c.text(cx, mt + ph + 14, case if key[1] else control, 8.0, INK_SECONDARY, "middle")
+        c.text(cx, mt + ph + 26, f"{len(pts):,} values", 7.0, INK_MUTED, "middle")
+        c.text(cx, mt + ph + 37, f"{len({s for _p, _d, s, _y in pts})} patients", 7.0,
+               INK_MUTED, "middle")
+    for f, lab in ((0.0, f"canonical {canon}"), (1.0, f"isoform {iso.split(';')[0]}")):
+        x = ml + pw * (0.25 if f == 0 else 0.75)
+        c.text(x, mt + ph + 56, lab, 8.6, INK, "middle", "600")
+        c.text(x, mt - 8, f"{case} effect {b1 + (b2 if f else 0):+.2f}", 8.2,
+               INK if f else INK_SECONDARY, "middle", "600" if f else None)
+    os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+    with open(out, "w") as fh:
+        fh.write(c.out())
+    print(f"  wrote {out}  ({gene} {iso}: Δ {b2:+.2f}, p {fit['p']:.1e})")
+
+
 def peptide_model(can_members, iso_members, idx, med, cond, case, control):
     """-> (case x isoform coefficient, p, rows, peptides) from `peptide_model_fit`."""
     f = peptide_model_fit(can_members, iso_members, idx, med, cond, case, control)
@@ -933,6 +1000,8 @@ def volcano(rows, out, font, q_cut=0.05, letter="", title=None,
                    if names.count(r["gene"]) > 1 else r["gene"]) for r in hit}
 
     def free(x0, y0, x1, y1, own):
+        if x0 < ml + 2 or x1 > ml + pw - 2:      # inside the plot, clear of the axis labels
+            return False
         if any(x0 < bx1 and bx0 < x1 and y0 < by1 and by0 < y1
                for bx0, by0, bx1, by1 in boxes):
             return False
@@ -982,6 +1051,8 @@ def main(argv=None):
     ap.add_argument("--min-group", type=int, default=3)
     ap.add_argument("--box-n", dest="box_n", action="store_true",
                     help="label each box with the patients behind its points")
+    ap.add_argument("--model-plots", dest="model_plots", default=None, metavar="GENE:ISO,...",
+                    help="per-peptide model plot for each isoform, written into --out as a folder")
     ap.add_argument("--lopo", action="store_true",
                     help="--p-unit peptide-model: a hit must survive leaving out any one patient")
     ap.add_argument("--common-median", dest="common_median", action="store_true",
@@ -1069,6 +1140,16 @@ def main(argv=None):
     if args.no_run_median:
         # Spectronaut's cross-run normalisation already applied; keep only the run gate
         med = {k: 0.0 for k in med}
+    if args.model_plots:
+        os.makedirs(args.out, exist_ok=True)
+        for item in args.model_plots.split(","):
+            gene, iso = item.split(":")
+            base, diag = diagnostic(gene, bygene[gene], seqs, genes, idx, args.fasta_isoforms)
+            fit = peptide_model_fit(base[1], diag[tuple(iso.split(";"))], idx, med, cond,
+                                    args.case, args.control)
+            model_plot(fit, gene, iso, base[0], os.path.join(args.out, f"{gene}.svg"),
+                       args.font, args.case, args.control)
+        return 0
     rows = screen(idx, med, bygene, seqs, genes, cond, args.case, args.control,
                   args.min_group, args.min_pep, args.min_digests, args.p_unit,
                   args.box_patients, args.centre, args.fasta_isoforms, args.lopo,
