@@ -926,17 +926,23 @@ def box_panel(boxes, cond, out, font, letter="a", width=1215.0, ylim=None,
                                   f'fill-opacity="0.45"/>')
                     if len(v) >= 3:
                         q1, q2, q3, wl, wh = _quartiles(v)
-                        c.line(bx, Y(wh), bx, Y(q3), stroke=stroke, sw=1.0)
-                        c.line(bx, Y(q1), bx, Y(wl), stroke=stroke, sw=1.0)
+
+                        def Yc(val):
+                            # clamp to the panel; a clipped whisker loses its cap
+                            return Y(min(max(val, lo), hi))
+                        c.line(bx, Yc(wh), bx, Yc(q3), stroke=stroke, sw=1.0)
+                        c.line(bx, Yc(q1), bx, Yc(wl), stroke=stroke, sw=1.0)
                         for wy in (wl, wh):
-                            c.line(bx - bw * 0.25, Y(wy), bx + bw * 0.25, Y(wy),
-                                   stroke=stroke, sw=1.0)
-                        c.add(f'<rect x="{bx - bw / 2:.1f}" y="{Y(q3):.1f}" '
-                              f'width="{bw:.1f}" height="{Y(q1) - Y(q3):.1f}" '
+                            if lo <= wy <= hi:
+                                c.line(bx - bw * 0.25, Y(wy), bx + bw * 0.25, Y(wy),
+                                       stroke=stroke, sw=1.0)
+                        c.add(f'<rect x="{bx - bw / 2:.1f}" y="{Yc(q3):.1f}" '
+                              f'width="{bw:.1f}" height="{Yc(q1) - Yc(q3):.1f}" '
                               f'fill="{fill}" fill-opacity="{0.10 if dense else 0.18}" '
                               f'stroke="{stroke}" stroke-width="1.2"/>')
-                        c.line(bx - bw / 2, Y(q2), bx + bw / 2, Y(q2),
-                               stroke=INK, sw=2.0)
+                        if lo <= q2 <= hi:
+                            c.line(bx - bw / 2, Y(q2), bx + bw / 2, Y(q2),
+                                   stroke=INK, sw=2.0)
                     for k_, s, dg, x in ([] if dense else pts):
                         px = bx + _jitter(f"{k_}{s}", lab, bw * 0.7)
                         c.add(f'<circle cx="{px:.1f}" cy="{Y(x):.1f}" '
