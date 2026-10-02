@@ -22,7 +22,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from lib_svg import Canvas                                  # noqa: E402
+from lib_svg import Canvas, swarm                           # noqa: E402
 from lib_palette import (AXIS, DIVERGING_HIGH, FONT, GRID, INK, INK_MUTED,
                      INK_SECONDARY, TEXT_BOOST, UNION, assign,
                      display)                                      # noqa: E402
@@ -415,11 +415,10 @@ def model_plot(fit, gene, iso, canon, out, font, case="LBD", control="Control"):
     for key, frac in xs.items():
         cx = ml + pw * frac
         pts = groups[key]
-        for p, d, s, y in pts:
-            if lo <= y <= hi:
-                h = int(hashlib.md5(f"{p}{d}{s}".encode()).hexdigest()[:8], 16) / 0xFFFFFFFF
-                c.add(f'<circle cx="{cx + (h - 0.5) * pw * 0.13:.1f}" cy="{Y(y):.1f}" '
-                      f'r="1.7" fill="{col[d]}" fill-opacity="0.45"/>')
+        inside = [((p, d, s), y) for p, d, s, y in pts if lo <= y <= hi]
+        for (_p, d, _s), off, yy in swarm(inside, Y, 2.4 * (hi - lo) / ph, pw * 0.17):
+            c.add(f'<circle cx="{cx + off:.1f}" cy="{yy:.1f}" r="1.5" '
+                  f'fill="{col[d]}" fill-opacity="0.55"/>')
         c.line(cx - pw * 0.085, Y(level[key]), cx + pw * 0.085, Y(level[key]),
                stroke=INK, sw=2.4)
         c.text(cx, mt + ph + 14, case if key[1] else control, 8.0, INK_SECONDARY, "middle")

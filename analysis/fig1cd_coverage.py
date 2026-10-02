@@ -21,7 +21,7 @@ from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from lib_svg import Canvas, esc                          # noqa: E402
+from lib_svg import Canvas, esc, swarm                          # noqa: E402
 from lib_fasta import read_fasta                                   # noqa: E402
 from lib_palette import (AXIS, DEPTH, EMPTY, EMPTY_DARK, FONT, GRID, INK, INK_MUTED,
                      INK_SECONDARY, STRIP_FILL, SURFACE, UNION, assign,
@@ -377,20 +377,9 @@ def draw_beeswarm(prot, out, font, letter, width=1215.0, height=430.0, ts=1.7,
         cx = ml + (k + 0.5) * cw
         # beeswarm: bin by coverage, lay points out symmetrically within each bin
         band = cw * 0.62
-        rows = collections.defaultdict(list)
-        for g, r in prot.items():
-            if nm in r:
-                rows[round(r[nm] / bin_h)].append(g)
-        widest = max((len(v) for v in rows.values()), default=1)
-        dots = []
-        for b_, members in rows.items():
-            yv = Y(b_ * bin_h)
-            # width scaled to the fullest bin, capped to stay inside the column
-            span = band * min(1.0, (len(members) / widest) ** 0.55)
-            n_ = len(members)
-            for i, g in enumerate(sorted(members)):
-                off = 0.0 if n_ == 1 else (i / (n_ - 1) - 0.5) * span
-                dots.append(f'<circle cx="{cx + off:.1f}" cy="{yv:.2f}" r="1.05"/>')
+        dots = [f'<circle cx="{cx + off:.1f}" cy="{yv:.2f}" r="1.05"/>'
+                for _g, off, yv in swarm(((g, r[nm]) for g, r in prot.items() if nm in r),
+                                         Y, bin_h, band)]
         c.add(f'<g fill="{colour[nm]}" fill-opacity="0.55">' + "".join(dots)
               + "</g>")
 

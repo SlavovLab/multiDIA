@@ -1,5 +1,7 @@
 """The SVG canvas every figure draws on."""
 
+import collections
+
 from lib_palette import AXIS, INK, INK_MUTED, SURFACE, TEXT_BOOST, boost_type
 
 
@@ -100,3 +102,23 @@ class Canvas:
 
     def out(self):
         return boost_type("\n".join(self.parts + ["</svg>"]) + "\n")
+
+
+def swarm(items, Y, step, band):
+    """Beeswarm layout. items = [(key, value)] -> [(key, x offset, y)].
+
+    Values are binned by `step` and each bin's points spread symmetrically, the
+    span scaled to the fullest bin and capped at `band`.
+    """
+    rows = collections.defaultdict(list)
+    for k, v in items:
+        rows[round(v / step)].append(k)
+    widest = max((len(m) for m in rows.values()), default=1)
+    out = []
+    for b, members in rows.items():
+        y = Y(b * step)
+        span = band * min(1.0, (len(members) / widest) ** 0.55)
+        n = len(members)
+        for i, k in enumerate(sorted(members)):
+            out.append((k, 0.0 if n == 1 else (i / (n - 1) - 0.5) * span, y))
+    return out
