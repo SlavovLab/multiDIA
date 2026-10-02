@@ -370,7 +370,7 @@ def peptide_model_fit(can_members, iso_members, idx, med, cond, case, control):
             "p": float(2 * stats.t.sf(abs(beta[1] / se), dof)), "n": n, "k": k}
 
 
-def diff_of_diffs(can_members, iso_members, idx, med, cond, case, control):
+def diff_of_diffs(can_members, iso_members, idx, med, cond, case, control, centre_all=False):
     """(isoform LBD - control) minus (canonical LBD - control), one point per peptide per patient.
 
     Each peptide is centred on its control mean; each form's change is a Welch-style
@@ -379,7 +379,7 @@ def diff_of_diffs(can_members, iso_members, idx, med, cond, case, control):
     from scipy import stats
     parts, eff, peps, n = [], [], set(), 0
     for sign, members in ((1.0, iso_members), (-1.0, can_members)):
-        vals = precursor_values(members, idx, med, cond, control)
+        vals = precursor_values(members, idx, med, cond, control, centre_all=centre_all)
         a = [v for _p, s, _d, v in vals if cond.get(s) == case]
         b = [v for _p, s, _d, v in vals if cond.get(s) == control]
         if len(a) < 2 or len(b) < 2:
@@ -711,8 +711,12 @@ def panel(picks, out, font, letter="c", width=1215.0, ts=1.7, key=True,
               f"fixed y-scale [{lo:+.1f}, {hi:+.1f}]")
 
 
-def precursor_values(members, idx, med, cond, control, centre=True):
-    """-> [(key, patient, digest, value)], one per precursor per patient."""
+def precursor_values(members, idx, med, cond, control, centre=True, centre_all=False):
+    """-> [(key, patient, digest, value)], one per precursor per patient.
+
+    `centre_all`: centre each peptide on its mean over every patient that has it, so a
+    peptide seen in one group only is kept.
+    """
     out = []
     for d in ORDER:
         for g, pep in sorted(members):
@@ -721,7 +725,8 @@ def precursor_values(members, idx, med, cond, control, centre=True):
                 continue
             v = {s: math.log2(x) - med[(s, d)] for s, x in q.items()
                  if (s, d) in med and x > 0}
-            ref = [x for s, x in v.items() if cond.get(s) == control]
+            ref = list(v.values()) if centre_all else [x for s, x in v.items()
+                                                       if cond.get(s) == control]
             if not ref:
                 continue
             mid = statistics.mean(ref) if centre else 0.0
@@ -1082,6 +1087,8 @@ def main(argv=None):
                     help="per-peptide model plot for each isoform, written into --out as a folder")
     ap.add_argument("--lopo", action="store_true",
                     help="--p-unit peptide-model: a hit must survive leaving out any one patient")
+    ap.add_argument("--centre-all", dest="centre_all", action="store_true",
+                    help="diff-of-diffs: centre each peptide on all its patients, keeping one-group peptides")
     ap.add_argument("--common-median", dest="common_median", action="store_true",
                     help="normalise each run by the median of peptides every run of its digest quantified")
     ap.add_argument("--fasta-isoforms", dest="fasta_isoforms", action="store_true",
@@ -1167,6 +1174,9 @@ def main(argv=None):
     if args.no_run_median:
         # Spectronaut's cross-run normalisation already applied; keep only the run gate
         med = {k: 0.0 for k in med}
+    if args.centre_all:
+        import functools
+        TESTS["diff-of-diffs"] = functools.partial(diff_of_diffs, centre_all=True)
     if args.model_plots:
         os.makedirs(args.out, exist_ok=True)
         for item in args.model_plots.split(","):
@@ -1357,7 +1367,7 @@ def main(argv=None):
                 for lab, mem, is_can in ((g["canon_acc"], g["canon_members"], True),
                                          (who, g["diag_members"][0][1], False)):
                     vals = precursor_values(mem, idx, med, cond, args.control,
-                                            args.centre)
+                                            args.centre, args.centre_all)
                     cols.append((lab, [(f"{pp}{s_}", s_, dg, v) for pp, s_, dg, v in vals
                                        if cond.get(s_) == args.case], is_can))
                     box_n[(g["gene"], lab)] = (
