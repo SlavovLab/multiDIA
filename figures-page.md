@@ -32,10 +32,11 @@ groups detected by all three digests: the same proteins are covered more deeply.
 
 **(a)** RUFY3 isoform Q7L099-3, seen only by Lys-C and Glu-C peptides inside its
 110-residue insert.
-**(b)** The per-peptide model behind each isoform called in Supp. Fig. 1: every
-peptide measurement in every patient, minus that peptide's fitted baseline, for the
-canonical's and the isoform's peptides in control and LBD patients; black lines, the
-model's fitted levels. Δ is the isoform's LBD effect minus the canonical's.
+**(b)** The per-peptide model behind the two strongest isoforms called in Supp.
+Fig. 1 (MAP4, IL1RAP): boxes of every peptide measurement in every patient, minus
+that peptide's fitted baseline, for the canonical's and the isoform's peptides in
+control and LBD patients; diamonds, the model's fitted levels. Δ is the isoform's
+LBD effect minus the canonical's.
 **(c)** Isoforms of PD-implicated genes reached as Lys-C and Glu-C are added to
 trypsin.
 **(d)** Pooled digests cover more of the sequence that distinguishes isoforms, and

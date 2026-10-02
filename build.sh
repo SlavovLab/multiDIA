@@ -33,10 +33,9 @@ $P analysis/fig2b_isoform_strip.py "$S" --fasta $F --protein Q7L099 --isoform Q7
     --gap-numbers --no-mechanism --out "$T/strip.svg"
 $P analysis/lib_compose.py "$T/strip.svg" --letter a --key Glu-C,Lys-C,Trypsin --out figures/fig2a.svg
 $P analysis/fig2a_supp1_diagnostic_peptides.py "$S" --fasta $F --metadata $M --common-median --fasta-isoforms \
-    --model-plots MAP4:P27816-3,RTN1:Q16799-3,LRRFIP1:Q32MZ4-4,IL1RAP:Q9NPH3-5 --out "$T/models"
-$P analysis/lib_compose.py "$T/models/MAP4.svg" "$T/models/RTN1.svg" --row --out "$T/row1.svg"
-$P analysis/lib_compose.py "$T/models/LRRFIP1.svg" "$T/models/IL1RAP.svg" --row --out "$T/row2.svg"
-$P analysis/lib_compose.py "$T/row1.svg" "$T/row2.svg" --width 1215 --pad-top 30 --letter b --out figures/fig2b.svg
+    --model-plots MAP4:P27816-3,IL1RAP:Q9NPH3-5 --out "$T/models"
+$P analysis/lib_compose.py "$T/models/MAP4.svg" "$T/models/IL1RAP.svg" --row --out "$T/row1.svg"
+$P analysis/lib_compose.py "$T/row1.svg" --width 1215 --pad-top 30 --letter b --out figures/fig2b.svg
 $P analysis/fig2cd_isoform_coverage.py pd "$S" --grid-dots --letter c --out figures/fig2c.svg
 $P analysis/fig2cd_isoform_coverage.py --junctions --letter d --out figures/fig2d.svg
 

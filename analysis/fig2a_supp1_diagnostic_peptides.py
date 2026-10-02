@@ -22,7 +22,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from lib_svg import Canvas, swarm                           # noqa: E402
+from lib_svg import Canvas                                  # noqa: E402
 from lib_palette import (AXIS, DIVERGING_HIGH, FONT, GRID, INK, INK_MUTED,
                      INK_SECONDARY, TEXT_BOOST, UNION, assign,
                      display)                                      # noqa: E402
@@ -396,8 +396,13 @@ def diff_of_diffs(can_members, iso_members, idx, med, cond, case, control, centr
     return delta, float(2 * stats.t.sf(abs(delta) / math.sqrt(se2), df)), n, len(peps)
 
 
+def diamond(x, y, r):
+    """-> an SVG path for a diamond centred on (x, y)."""
+    return f"M {x:.1f} {y - r:.1f} L {x + r:.1f} {y:.1f} L {x:.1f} {y + r:.1f} L {x - r:.1f} {y:.1f} Z"
+
+
 def model_plot(fit, gene, iso, canon, out, font, case="LBD", control="Control"):
-    """One isoform's per-peptide model: every measurement minus its peptide's fitted baseline."""
+    """One isoform's per-peptide model: boxes of every measurement minus its peptide's baseline."""
     groups = {(f, c): [] for f in (0.0, 1.0) for c in (0.0, 1.0)}
     for (p, d, f), v in fit["rows"].items():
         for s, y, c in v:
@@ -420,12 +425,8 @@ def model_plot(fit, gene, iso, canon, out, font, case="LBD", control="Control"):
     c.text(20, 54, f"Δ = {b2:+.2f} ± {fit['se']:.2f}", 10, UNION, "start", "600")
     c.text(235, 54, f"p = {fit['p']:.1e} · {fit['n']:,} values from {fit['k']} peptides",
            7.8, INK_SECONDARY, "start")
-    col = assign(ORDER)
-    kx = 20
-    for dg in ORDER:
-        c.add(f'<circle cx="{kx + 3:.1f}" cy="76" r="3.2" fill="{col[dg]}"/>')
-        c.text(kx + 10, 79.5, display(dg), 7.6, INK_SECONDARY, "start")
-        kx += 64
+    c.add(f'<path d="{diamond(23, 76, 4)}" fill="{INK}"/>')
+    c.text(32, 79.5, "model fit", 7.6, INK_SECONDARY, "start")
     step = 1 if hi - lo < 8 else 2
     t = int(lo) - 1
     while t <= hi:
@@ -441,12 +442,25 @@ def model_plot(fit, gene, iso, canon, out, font, case="LBD", control="Control"):
     for key, frac in xs.items():
         cx = ml + pw * frac
         pts = groups[key]
-        inside = [((p, d, s), y) for p, d, s, y in pts if lo <= y <= hi]
-        for (_p, d, _s), off, yy in swarm(inside, Y, 2.4 * (hi - lo) / ph, pw * 0.17):
-            c.add(f'<circle cx="{cx + off:.1f}" cy="{yy:.1f}" r="1.5" '
-                  f'fill="{col[d]}" fill-opacity="0.55"/>')
-        c.line(cx - pw * 0.085, Y(level[key]), cx + pw * 0.085, Y(level[key]),
-               stroke=INK, sw=2.4)
+        v = [y for *_r, y in pts]
+        if len(v) >= 3:
+            q1, q2, q3, wl, wh = _quartiles(v)
+
+            def Yc(val):
+                return Y(min(max(val, lo), hi))
+            bw = pw * 0.12
+            for a_, b_ in ((wh, q3), (q1, wl)):
+                c.line(cx, Yc(a_), cx, Yc(b_), stroke=INK_SECONDARY, sw=1.0)
+            for wy in (wl, wh):
+                if lo <= wy <= hi:
+                    c.line(cx - bw * 0.25, Y(wy), cx + bw * 0.25, Y(wy),
+                           stroke=INK_SECONDARY, sw=1.0)
+            c.rect(cx - bw / 2, Yc(q3), bw, Yc(q1) - Yc(q3),
+                   fill=UNION if key[0] else AXIS, stroke=INK_SECONDARY, sw=1.0,
+                   fo=0.25 if key[0] else 0.35)
+            if lo <= q2 <= hi:
+                c.line(cx - bw / 2, Y(q2), cx + bw / 2, Y(q2), stroke=INK, sw=1.6)
+        c.add(f'<path d="{diamond(cx, Y(level[key]), 4.5)}" fill="{INK}"/>')
         c.text(cx, mt + ph + 14, case if key[1] else control, 8.0, INK_SECONDARY, "middle")
         c.text(cx, mt + ph + 26, f"{len(pts):,} values", 7.0, INK_MUTED, "middle")
         c.text(cx, mt + ph + 37, f"{len({s for _p, _d, s, _y in pts})} patients", 7.0,
