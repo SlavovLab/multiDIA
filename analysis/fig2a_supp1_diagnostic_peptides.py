@@ -370,6 +370,32 @@ def peptide_model_fit(can_members, iso_members, idx, med, cond, case, control):
             "p": float(2 * stats.t.sf(abs(beta[1] / se), dof)), "n": n, "k": k}
 
 
+def diff_of_diffs(can_members, iso_members, idx, med, cond, case, control):
+    """(isoform LBD - control) minus (canonical LBD - control), one point per peptide per patient.
+
+    Each peptide is centred on its control mean; each form's change is a Welch-style
+    difference of means, and the two standard errors add. -> (delta, p, points, peptides).
+    """
+    from scipy import stats
+    parts, eff, peps, n = [], [], set(), 0
+    for sign, members in ((1.0, iso_members), (-1.0, can_members)):
+        vals = precursor_values(members, idx, med, cond, control)
+        a = [v for _p, s, _d, v in vals if cond.get(s) == case]
+        b = [v for _p, s, _d, v in vals if cond.get(s) == control]
+        if len(a) < 2 or len(b) < 2:
+            return float("nan"), float("nan"), 0, 0
+        eff.append(sign * (statistics.mean(a) - statistics.mean(b)))
+        parts += [(statistics.variance(a), len(a)), (statistics.variance(b), len(b))]
+        peps |= {(p, d) for p, _s, d, _v in vals}
+        n += len(a) + len(b)
+    se2 = sum(v / k for v, k in parts)
+    if se2 <= 0:
+        return float("nan"), float("nan"), n, len(peps)
+    df = se2 ** 2 / sum((v / k) ** 2 / (k - 1) for v, k in parts)
+    delta = sum(eff)
+    return delta, float(2 * stats.t.sf(abs(delta) / math.sqrt(se2), df)), n, len(peps)
+
+
 def model_plot(fit, gene, iso, canon, out, font, case="LBD", control="Control"):
     """One isoform's per-peptide model: every measurement minus its peptide's fitted baseline."""
     groups = {(f, c): [] for f in (0.0, 1.0) for c in (0.0, 1.0)}
@@ -444,6 +470,9 @@ def peptide_model(can_members, iso_members, idx, med, cond, case, control):
     return f["interaction"], f["p"], f["n"], f["k"]
 
 
+TESTS = {"peptide-model": peptide_model, "diff-of-diffs": diff_of_diffs}
+
+
 def testable(st, can, min_pep, box_patients=0):
     """Whether an isoform column enters the screen."""
     if st is None:
@@ -474,8 +503,8 @@ def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
                         p_unit)
             if st and p_unit == "vs-canonical" and can:
                 apply_vs_canonical(can, st)
-            if st and p_unit == "peptide-model" and can:
-                st["mean"], st["p"], _n, _k = peptide_model(base[1], mem, idx, med, cond,
+            if st and p_unit in TESTS and can:
+                st["mean"], st["p"], _n, _k = TESTS[p_unit](base[1], mem, idx, med, cond,
                                                             case, control)
                 st["_members"] = (base[1], mem)
             if st and p_unit == "lbd-points" and can:
@@ -513,7 +542,7 @@ def screen(idx, med, bygene, seqs, genes, cond, case, control, min_group,
                 r["robust"] = True
                 for drop in sorted(cond):
                     c2 = {k: v for k, v in cond.items() if k != drop}
-                    b, p, _n, _k = peptide_model(cm, im, idx, med, c2, case, control)
+                    b, p, _n, _k = TESTS[p_unit](cm, im, idx, med, c2, case, control)
                     worst = max(worst, p if p == p else 1.0)
                     if not (p == p and p < q_cut and b * r["log2fc"] > 0):
                         r["robust"] = False
@@ -1075,7 +1104,7 @@ def main(argv=None):
                     help="isoform columns per gene, best-supported first")
     ap.add_argument("--p-unit", dest="p_unit", default="patients",
                     choices=("patients", "patient-ratio", "peptides",
-                             "vs-canonical", "lbd-points", "peptide-model"),
+                             "vs-canonical", "lbd-points", "peptide-model", "diff-of-diffs"),
                     help="replication unit for the p-value and the quoted effect")
     ap.add_argument("--hue", action="store_true",
                     help="colour each point by the protease that produced it")
@@ -1190,7 +1219,8 @@ def main(argv=None):
                     xlab=("Δ log2 vs run median, LBD (isoform − canonical)"
                           if args.p_unit == "lbd-points" and not args.centre
                           else "Δ log2 LBD / Control (isoform − canonical)"
-                          if args.p_unit in ("vs-canonical", "lbd-points", "peptide-model")
+                          if args.p_unit in ("vs-canonical", "lbd-points", "peptide-model",
+                                             "diff-of-diffs")
                           else "log2 LBD / Control"))
         return 0
 
