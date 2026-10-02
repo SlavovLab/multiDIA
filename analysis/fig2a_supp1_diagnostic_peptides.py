@@ -125,6 +125,37 @@ def common_medians(idx, med):
     return out
 
 
+def impute_absent(idx, med, cond, case, control, floor_q=0.01):
+    """Fill the other group for peptides detected in only one, with each run's detection floor.
+
+    The floor is the `floor_q` quantile of the run's peptide quantities. Only runs that
+    passed the gate (keys of `med`) are filled. -> (new idx, peptides filled).
+    """
+    per_run = collections.defaultdict(list)
+    for (g, d), peps in idx.items():
+        for q in peps.values():
+            for s, v in q.items():
+                if v > 0:
+                    per_run[(s, d)].append(v)
+    floor = {k: sorted(v)[int(floor_q * (len(v) - 1))] for k, v in per_run.items()}
+    runs = collections.defaultdict(set)
+    for s, d in med:
+        runs[d].add(s)
+    out, n = collections.defaultdict(dict), 0
+    for (g, d), peps in idx.items():
+        for p, q in peps.items():
+            got = {cond.get(s) for s, v in q.items() if v > 0} & {case, control}
+            q2 = dict(q)
+            if len(got) == 1:
+                missing = control if case in got else case
+                for s in runs[d]:
+                    if cond.get(s) == missing and s not in q2 and (s, d) in floor:
+                        q2[s] = floor[(s, d)]
+                n += 1
+            out[(g, d)][p] = q2
+    return out, n
+
+
 def diagnostic(gene, groups, seqs, genes, idx, fasta_isoforms=False):
     """Split a gene's quantified peptides into canonical and isoform-diagnostic.
 
@@ -1082,6 +1113,8 @@ def main(argv=None):
                     help="per-peptide model plot for each isoform, written into --out as a folder")
     ap.add_argument("--lopo", action="store_true",
                     help="--p-unit peptide-model: a hit must survive leaving out any one patient")
+    ap.add_argument("--impute-absent", dest="impute_absent", action="store_true",
+                    help="peptides seen in one group only: fill the other with each run's detection floor")
     ap.add_argument("--common-median", dest="common_median", action="store_true",
                     help="normalise each run by the median of peptides every run of its digest quantified")
     ap.add_argument("--fasta-isoforms", dest="fasta_isoforms", action="store_true",
@@ -1164,6 +1197,9 @@ def main(argv=None):
                                     else "peptide")
     if args.common_median:
         med = common_medians(idx, med)
+    if args.impute_absent:
+        idx, n = impute_absent(idx, med, cond, args.case, args.control)
+        print(f"  imputed the absent group for {n:,} peptides detected in one group only")
     if args.no_run_median:
         # Spectronaut's cross-run normalisation already applied; keep only the run gate
         med = {k: 0.0 for k in med}
