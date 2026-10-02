@@ -45,7 +45,7 @@ def combined_groups():
 
 
 # Whole figures laid out in columns rather than one stack
-COLUMNS = {"fig2.svg": ["abc", "d"]}
+COLUMNS = {"fig2.svg": ["abd", "c"]}
 COLUMN_GAP = 24.0
 
 

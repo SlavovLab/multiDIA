@@ -148,7 +148,7 @@ def compose_row(paths, out, gap=0.0, height=None, font=None, keep_letter=None,
 
 
 def compose(paths, out, gap=0.0, width=None, font=None, keep_letter=None,
-            letter=None, key=None, natural=False, reletter=False):
+            letter=None, key=None, natural=False, reletter=False, pad_top=0.0):
     """Stack panels. -> (width, height)."""
     if reletter and (letter is not None or keep_letter is not None):
         sys.exit("--reletter keeps every panel's letter; it cannot be combined "
@@ -175,7 +175,7 @@ def compose(paths, out, gap=0.0, width=None, font=None, keep_letter=None,
         target = width or max(p[3] for p in panels)
         scaled = [(body, target / w, h * target / w, font or ff)
                   for body, w, h, _ow, ff in panels]
-    H = sum(s[2] for s in scaled) + gap * (len(scaled) - 1)
+    H = pad_top + sum(s[2] for s in scaled) + gap * (len(scaled) - 1)
 
     fonts = {s[3] for s in scaled if s[3]}
     if len(fonts) > 1:
@@ -184,7 +184,7 @@ def compose(paths, out, gap=0.0, width=None, font=None, keep_letter=None,
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{target:.0f}" '
              f'height="{H:.0f}" viewBox="0 0 {target:.0f} {H:.0f}">',
              f'<rect width="{target:.0f}" height="{H:.0f}" fill="#ffffff"/>']
-    y, tops = 0.0, []
+    y, tops = pad_top, []
     for (body, k, h, ff) in scaled:
         tops.append(y)
         # single-quoted: the font stack itself contains double quotes
@@ -233,6 +233,8 @@ def main(argv=None):
                     help="index of the only panel that keeps its letter")
     ap.add_argument("--natural", action="store_true",
                     help="keep each panel at its own drawn size")
+    ap.add_argument("--pad-top", type=float, default=0.0,
+                    help="blank strip above the panels, in output units")
     ap.add_argument("--reletter", action="store_true",
                     help="redraw each panel's letter at one size and position")
     args = ap.parse_args(argv)
@@ -246,7 +248,7 @@ def main(argv=None):
     else:
         compose(args.svgs, args.out, args.gap, args.width,
                 keep_letter=args.keep_letter, letter=args.letter, key=key,
-                natural=args.natural, reletter=args.reletter)
+                natural=args.natural, reletter=args.reletter, pad_top=args.pad_top)
     return 0
 
 

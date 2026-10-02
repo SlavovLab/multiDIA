@@ -28,16 +28,17 @@ $P analysis/fig1cd_coverage.py "$S" --fasta $F --beeswarm --by-sample --sample-r
     --letter d --out figures/fig1d.svg
 
 # Figure 2
-$P analysis/fig2a_supp1_diagnostic_peptides.py "$S" --fasta $F --metadata $M --screen --p-unit peptide-model \
-    --common-median --fasta-isoforms --min-group 1 --min-pep 1 --min-digests 1 --box-patients 3 --lopo \
-    --top 0 --letter "" --volcano "$T/volcano.svg"
-$P analysis/lib_compose.py "$T/volcano.svg" --letter a --out figures/fig2a.svg
 $P analysis/fig2b_isoform_strip.py "$S" --fasta $F --protein Q7L099 --isoform Q7L099-3 --label RUFY3 \
     --letters --browser --no-residues --flank-res 2400 --margin 100 --bar-height 22 --no-ruler \
     --gap-numbers --no-mechanism --out "$T/strip.svg"
-$P analysis/lib_compose.py "$T/strip.svg" --letter b --key Glu-C,Lys-C,Trypsin --out figures/fig2b.svg
-$P analysis/fig2cd_isoform_coverage.py --junctions --letter c --out figures/fig2c.svg
-$P analysis/fig2cd_isoform_coverage.py pd "$S" --grid-dots --letter d --out figures/fig2d.svg
+$P analysis/lib_compose.py "$T/strip.svg" --letter a --key Glu-C,Lys-C,Trypsin --out figures/fig2a.svg
+$P analysis/fig2a_supp1_diagnostic_peptides.py "$S" --fasta $F --metadata $M --common-median --fasta-isoforms \
+    --model-plots MAP4:P27816-3,RTN1:Q16799-3,LRRFIP1:Q32MZ4-4,IL1RAP:Q9NPH3-5 --out "$T/models"
+$P analysis/lib_compose.py "$T/models/MAP4.svg" "$T/models/RTN1.svg" --row --out "$T/row1.svg"
+$P analysis/lib_compose.py "$T/models/LRRFIP1.svg" "$T/models/IL1RAP.svg" --row --out "$T/row2.svg"
+$P analysis/lib_compose.py "$T/row1.svg" "$T/row2.svg" --width 1215 --pad-top 30 --letter b --out figures/fig2b.svg
+$P analysis/fig2cd_isoform_coverage.py pd "$S" --grid-dots --letter c --out figures/fig2c.svg
+$P analysis/fig2cd_isoform_coverage.py --junctions --letter d --out figures/fig2d.svg
 
 # Figure 3
 $P analysis/fig3a_phospho_sites.py panel --sites derived/mods/sites_phospho_complete.tsv --fasta $F \
@@ -57,12 +58,11 @@ $P analysis/fig3bc_phospho_atlas.py protein data/search/GluC-60min-Phospho.parqu
 $P analysis/lib_compose.py "$T/pd.svg" "$T/mapt.svg" --row --out "$T/row.svg"
 $P analysis/lib_compose.py "$T/row.svg" --width 1215 --letter c --out figures/fig3c.svg
 
-# Supplementary Figure 1: the per-peptide model of each Fig. 2a hit
-$P analysis/fig2a_supp1_diagnostic_peptides.py "$S" --fasta $F --metadata $M --common-median --fasta-isoforms \
-    --model-plots MAP4:P27816-3,RTN1:Q16799-3,LRRFIP1:Q32MZ4-4,IL1RAP:Q9NPH3-5 --out "$T/models"
-$P analysis/lib_compose.py "$T/models/MAP4.svg" "$T/models/RTN1.svg" --row --out "$T/row1.svg"
-$P analysis/lib_compose.py "$T/models/LRRFIP1.svg" "$T/models/IL1RAP.svg" --row --out "$T/row2.svg"
-$P analysis/lib_compose.py "$T/row1.svg" "$T/row2.svg" --width 1215 --out figures/supp1_isoform_models.svg
+# Supplementary Figure 1: isoform-specific differential abundance, the Fig. 2b isoforms in red
+$P analysis/fig2a_supp1_diagnostic_peptides.py "$S" --fasta $F --metadata $M --screen --p-unit peptide-model \
+    --common-median --fasta-isoforms --min-group 1 --min-pep 1 --min-digests 1 --box-patients 3 --lopo \
+    --top 0 --letter "" --volcano "$T/volcano.svg"
+$P analysis/lib_compose.py "$T/volcano.svg" --out figures/supp1_isoform_volcano.svg
 
 # Whole figures and PNGs, then the checks
 $P analysis/audit.py --sync
