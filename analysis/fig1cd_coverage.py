@@ -15,7 +15,7 @@ from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from lib_svg import Canvas, swarm                                  # noqa: E402
+from lib_svg import Canvas, swarm, text_width                      # noqa: E402
 from lib_fasta import read_fasta                                   # noqa: E402
 from lib_palette import (AXIS, FONT, GRID, INK, INK_MUTED, assign,  # noqa: E402
                          display, TEXT_BOOST)
@@ -23,7 +23,7 @@ from prep_counts import (PRECURSOR_Q, PROTEIN_Q, detect_protease,   # noqa: E402
                          parse_float, read_rows, resolve_columns)
 from fig1b_depth import fmt_compact as compact                     # noqa: E402
 
-WIDTH, HEIGHT, TEXT_SCALE = 1215.0, 430.0, 1.7
+WIDTH, HEIGHT, TEXT_SCALE = 595.0, 490.0, 2.12
 
 
 def collect(paths, sample_regex=None, split_samples=False):
@@ -198,9 +198,9 @@ def draw_beeswarm(prot, out, letter):
         sys.exit("no protein is measured by every series")
     colour = assign(names)
     sz = {"letter": 13.0 * ts, "tick": 9.5 * ts, "axis": 11.0 * ts,
-          "cat": 10.5 * ts, "n": 8.8 * ts}
+          "cat": 10.5 * ts, "n": 9.5 * ts}
     ml, mr = 34.0 + 46.0 * ts, 34.0
-    mt, mb = 26.0 + 30.0 * ts, 26.0 + 26.0 * ts
+    mt, mb = 18.0 + 21.0 * ts, 26.0 + 26.0 * ts
     pw, ph = W - ml - mr, H - mt - mb
     c = Canvas(W, H, FONT)
     cw = pw / len(names)
@@ -220,7 +220,7 @@ def draw_beeswarm(prot, out, letter):
         if not vals:
             continue
         cx = ml + (k + 0.5) * cw
-        band = cw * 0.62
+        band = cw * 0.56
         dots = [f'<circle cx="{cx + off:.1f}" cy="{yv:.2f}" r="1.05"/>'
                 for _g, off, yv in swarm(((g, r[nm]) for g, r in prot.items() if nm in r),
                                          Y, bin_h, band)]
@@ -234,18 +234,23 @@ def draw_beeswarm(prot, out, letter):
         q1, q2, q3 = q(.25), q(.5), q(.75)
         iqr = q3 - q1
         inside = [v for v in vals if q1 - 1.5 * iqr <= v <= q3 + 1.5 * iqr]
-        bw = cw * 0.30
+        bw = cw * 0.26
         c.line(cx, Y(min(inside)), cx, Y(max(inside)), stroke=INK, sw=1.2)
         c.rect(cx - bw / 2, Y(q3), bw, Y(q1) - Y(q3), fill="#ffffff", fo=0.0,
                stroke=INK, sw=1.2, rx=0)
         c.line(cx - bw / 2, Y(q2), cx + bw / 2, Y(q2), stroke=INK, sw=2.4)
         # white backing: the label sits over the swarm
-        lab, fsz = f"{med(vals):.0%}", sz["n"] * c.fs
-        lx, lw = cx + bw / 2 + 5, 0.56 * fsz * len(lab) + 6
+        lab, fsz = f"{med(vals):.0%}", sz["n"] * c.fs * TEXT_BOOST
+        lx, lw = cx + bw / 2 + 4, text_width(lab, fsz, True) + 6
         c.rect(lx - 3, Y(q2) - 0.62 * fsz, lw, 1.24 * fsz, fill="#ffffff",
                fo=0.85, rx=2)
         c.text(lx, Y(q2) + 0.36 * fsz, lab, sz["n"], INK, "start", "600")
-        c.text(cx, mt + ph + 16 * ts, display(nm), sz["cat"], INK, "middle")
+        # a label wider than its column wraps at its spaces
+        lab = display(nm)
+        lines = lab.split() if text_width(lab, sz["cat"] * TEXT_BOOST) > 0.9 * cw else [lab]
+        for j, ln in enumerate(lines):
+            c.text(cx, mt + ph + 16 * ts + j * 1.15 * sz["cat"] * TEXT_BOOST, ln, sz["cat"],
+                   INK, "middle")
     c.line(ml, mt + ph, ml + pw, mt + ph, stroke=AXIS, sw=1)
     c.text(ml, mt - 14 * ts,
            f"n = {len(prot):,} protein groups",
@@ -266,12 +271,15 @@ def draw_rank(series, out, letter, curves=None):
     """series: {name: [coverage fractions, descending]}"""
     W, H, ts = WIDTH, HEIGHT, TEXT_SCALE
     c = Canvas(W, H, FONT)
-    sz = {"letter": 13.0 * ts, "tick": 9.5 * ts, "name": 10.0 * ts,
-          "sub": 8.5 * ts, "axis": 11.0 * ts}
+    sz = {"letter": 13.0 * ts, "tick": 9.5 * ts, "name": 10.5 * ts,
+          "sub": 9.5 * ts, "axis": 11.0 * ts}
     tb = ts * TEXT_BOOST
-    ml = 34.0 + 46.0 * tb
-    mr = 34.0
-    mt, mb = 30.0 + 14.0 * tb, 20.0 + 22.0 * tb
+    row = 1.08 * sz["name"] * TEXT_BOOST
+    ylab = wrap2("Fraction of sequence covered")
+    pitch = 1.15 * sz["axis"] * TEXT_BOOST
+    ml = 34.0 + 46.0 * ts + 0.5 * pitch * (len(ylab) - 1)
+    mr = 18.0
+    mt, mb = 32.0 + 4 * row, 20.0 + 22.0 * tb
     pw, ph = W - ml - mr, H - mt - mb
     order = [n for n in ("All", "Trypsin", "LysC", "GluC") if n in series] + \
             [n for n in series if n not in ("All", "Trypsin", "LysC", "GluC")]
@@ -293,7 +301,7 @@ def draw_rank(series, out, letter, curves=None):
     for t in nice_ticks(xmax):
         if t <= xmax:
             c.line(X(t), mt + ph, X(t), mt + ph + 4, stroke=AXIS, sw=1)
-            c.text(X(t), mt + ph + 12 * ts, compact(t, exact=True), sz["tick"],
+            c.text(X(t), mt + ph + 13 * ts, compact(t, exact=True), sz["tick"],
                    INK_MUTED, "middle")
     c.line(ml, mt + ph, ml + pw, mt + ph, stroke=AXIS, sw=1)
 
@@ -306,31 +314,46 @@ def draw_rank(series, out, letter, curves=None):
         pts = [(X(i), Y(vals[i])) for i in range(0, len(vals), step)]
         pts.append((X(len(vals) - 1), Y(vals[-1])))
         d = "M " + " L ".join(f"{x:.1f} {y:.2f}" for x, y in pts)
-        c.add(f'<path d="{d}" fill="none" stroke="{colour[name]}" stroke-width="2.6"'
+        c.add(f'<path d="{d}" fill="none" stroke="{colour[name]}" stroke-width="3"'
               f' stroke-linejoin="round" stroke-linecap="round"/>')
 
-    ly = mt + 10 * ts
-    lx = ml + pw - (150.0 + 26.0 * ts) * TEXT_BOOST
+    # legend above the plot: one row per series, right-aligned to the plot
+    subs = {}
     for name in order:
         v = series[name]
-        c.line(lx, ly - 4, lx + 20 * ts, ly - 4, stroke=colour[name], sw=2.4)
-        tx = lx + 26 * ts
-        c.text(tx, ly + 2, display(name), sz["name"], INK, "start", "600")
         if curves is not None:
             half = [sum(1 for x in u if x >= 0.5) for u in curves.get(name, [])]
-            sub = f"{compact(med(half))} at ≥ 50% · n = {len(half)}"
+            subs[name] = f"{compact(med(half))} at ≥ 50% · n = {len(half)}"
         else:
-            sub = f"{compact(sum(1 for x in v if x >= 0.5))} at ≥ 50%"
-        c.text(tx, ly + 10 + 8 * ts, sub, sz["sub"], INK_MUTED, "start")
-        ly += 20 * ts + 16
+            subs[name] = f"{compact(sum(1 for x in v if x >= 0.5))} at ≥ 50%"
+    name_w = max(text_width(display(n), sz["name"] * TEXT_BOOST, True) for n in order)
+    sub_w = max(text_width(t, sz["sub"] * TEXT_BOOST) for t in subs.values())
+    lx = ml + pw - (18 * ts + name_w + 30 + sub_w)
+    ly = 32.0
+    for name in order:
+        sy = ly - 0.35 * sz["name"] * TEXT_BOOST
+        c.line(lx, sy, lx + 14 * ts, sy, stroke=colour[name], sw=3)
+        tx = lx + 18 * ts
+        c.text(tx, ly, display(name), sz["name"], INK, "start", "600")
+        c.text(tx + name_w + 30, ly, subs[name], sz["sub"], INK_MUTED, "start")
+        ly += row
 
-    c.text(ml + pw / 2, H - 12 * ts, "Protein group rank", sz["axis"], INK, "middle")
+    c.text(ml + pw / 2, H - 9 * ts, "Protein group rank", sz["axis"], INK, "middle")
     yc = mt + ph / 2
-    c.add(f'<g transform="translate({18 + 10 * ts:.1f} {yc:.1f}) rotate(-90)">'
-          f'<text x="0" y="0" font-size="{sz["axis"]:.1f}" text-anchor="middle" '
-          f'fill="{INK}">Fraction of sequence covered</text></g>')
+    c.add(f'<g transform="translate({18 + 10 * ts - 5 * (len(ylab) - 1):.1f} {yc:.1f}) '
+          f'rotate(-90)">' + "".join(
+              f'<text x="0" y="{j * pitch:.1f}" font-size="{sz["axis"]:.1f}" '
+              f'text-anchor="middle" fill="{INK}">{t}</text>' for j, t in enumerate(ylab))
+          + "</g>")
     write(c, out)
     return W, H
+
+
+def wrap2(label):
+    """Two lines, split at the space nearest the middle."""
+    cut = min((i for i, ch in enumerate(label) if ch == " "),
+              key=lambda i: abs(i - len(label) / 2), default=None)
+    return [label] if cut is None else [label[:cut], label[cut + 1:]]
 
 
 def write(c, out):

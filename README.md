@@ -44,5 +44,5 @@ With the environment from `pyproject.toml` (`uv sync`), from the repository root
 ```bash
 ./build.sh                                  # derived/ and every figure, then the checks
 .venv/bin/python analysis/test_units.py     # unit tests, no data needed
-.venv/bin/python analysis/audit.py          # whole figures and PNGs current, one font
+.venv/bin/python analysis/audit.py          # whole figures and PNGs current, type >= 10 pt at 6.5 in wide, one font
 ```

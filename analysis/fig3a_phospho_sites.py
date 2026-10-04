@@ -7,15 +7,17 @@
 import argparse
 import collections
 import csv
+import math
 import os
 import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import lib_svg                                              # noqa: E402
 from lib_svg import Canvas                                  # noqa: E402
-from lib_palette import (AXIS, FONT, GRID, INK, INK_SECONDARY, UNION, assign,
-                         display, ink_on, TEXT_BOOST)                           # noqa: E402
+from lib_palette import (AXIS, FIG_W, FONT, GRID, INK, INK_SECONDARY, UNION, assign,
+                         display, ink_on, pt_scale, TEXT_BOOST)                 # noqa: E402
 
 ORDER = ["GluC", "LysC", "Trypsin"]
 NCAP = 5                  # peptide-count classes: 1..4, 5+
@@ -28,7 +30,7 @@ def pep_shade(k):
 
 def text_width(txt, size, fsc):
     """Estimated drawn width of `txt` in canvas units, after TEXT_BOOST."""
-    return 0.55 * size * fsc * TEXT_BOOST * len(txt)
+    return lib_svg.text_width(txt, size * fsc * TEXT_BOOST)
 
 
 # Modified sequence: _[Nterm]X[mod]YZ_ -- N-terminal mods precede the first residue.
@@ -85,18 +87,27 @@ BY_DIGEST = ["Trypsin", "LysC", "GluC", None]       # None is All proteases
 
 def log_height(v, decades, ph):
     """Bar height for `v` on a log axis from 1 to 10**decades drawn `ph` tall."""
-    import math
     return 0.0 if v <= 1 else min(math.log10(v) / decades, 1.0) * ph
 
 
-def draw_grouped(c, groups, decades, x0, x_end, ml, mt, ph, bw, gap):
+def wrap(txt, size, fsc, width):
+    """-> `txt` as one line, or split at its middle space when wider than `width`."""
+    if text_width(txt, size, fsc) <= width or " " not in txt:
+        return [txt]
+    cut = min((i for i, ch in enumerate(txt) if ch == " "),
+              key=lambda i: abs(2 * i - len(txt)))
+    return [txt[:cut], txt[cut + 1:]]
+
+
+def draw_grouped(c, groups, decades, x0, x_end, ml, mt, ph, bw, gap, fsc):
     """Grouped bars on a log axis: one group per digest, one bar per peptide class."""
+    u = fsc * TEXT_BOOST
     y0 = mt + ph
     for e in range(decades + 1):
         y = y0 - log_height(10 ** e, decades, ph) if e else y0
-        c.line(ml, y, x_end, y, GRID if e else AXIS, 1)
-        c.text(ml - 8, y + 3.5, f"{10 ** e:,}", 9, INK_SECONDARY, "end")
-    c.text(x0 + 30, (mt + y0) / 2, "Number of phosphosites", 9.6, INK_SECONDARY,
+        c.line(ml, y, x_end, y, GRID if e else AXIS, 1.2)
+        c.text(ml - 8, y + 3.6 * u, f"{10 ** e:,}", 10, INK_SECONDARY, "end")
+    c.text(x0 + 8.5 * u, (mt + y0) / 2, "Number of phosphosites", 11, INK_SECONDARY,
            "middle", rot=-90)
 
     slot = (x_end - ml) / len(groups)
@@ -108,33 +119,29 @@ def draw_grouped(c, groups, decades, x0, x_end, ml, mt, ph, bw, gap):
             h = log_height(v, decades, ph)
             if h:
                 c.rect(x, y0 - h, bw, h, UNION, fo=pep_shade(k))
-            c.text(x + bw / 2 + 3.5, y0 - h - 4, f"{v:,}", 7.6, INK_SECONDARY,
+            c.text(x + bw / 2 + 3.6 * u, y0 - h - 4, f"{v:,}", 10, INK_SECONDARY,
                    "start", "600", rot=-90)
             x += bw + gap
-        c.text(ml + slot * (i + 0.5), y0 + 18, display(d) if d else "All proteases",
-               10, INK, "middle")
+        lab = display(d) if d else "All proteases"
+        for j, part in enumerate(wrap(lab, 11, fsc, slot - 6)):
+            c.text(ml + slot * (i + 0.5), y0 + 6 + 8.5 * u + j * 12.5 * u, part,
+                   11, INK, "middle")
         print(f"    {display(d) if d else 'All':<8} "
               + " ".join(f"{k}:{cnt.get(k, 0)}" for k in range(1, NCAP + 1)))
 
 
-def grouped_key_width(fsc):
-    """-> the width `grouped_key` draws."""
-    labs = [f"{k}+" if k == NCAP else f"{k}" for k in range(1, NCAP + 1)]
-    return (text_width("distinct peptides containing the site", 9, fsc) + 10
-            + sum(14 + text_width(lab, 9, fsc) + 16 for lab in labs) - 16)
-
-
 def grouped_key(c, x, y, fsc):
-    """The 1-5+ class key on one line, starting at `x`."""
-    title = "distinct peptides containing the site"
-    kx = x + text_width(title, 9, fsc) + 10
-    c.text(kx - 8, y, title, 9, INK_SECONDARY, "end")    # hugs the first box
+    """The 1-5+ class key: its title, then the boxes on the next line; -> its bottom."""
+    u = fsc * TEXT_BOOST
+    c.text(x, y, "distinct peptides containing the site", 11, INK_SECONDARY)
+    y += 13 * u
+    box = 8 * u
     for k in range(1, NCAP + 1):
         lab = f"{k}+" if k == NCAP else f"{k}"
-        c.rect(kx, y - 9, 10, 10, UNION, fo=pep_shade(k))
-        c.text(kx + 14, y, lab, 9, INK_SECONDARY)
-        kx += 14 + text_width(lab, 9, fsc) + 16
-    return kx
+        c.rect(x, y - box + 0.4 * u, box, box, UNION, fo=pep_shade(k))
+        c.text(x + box + 4, y, lab, 11, INK_SECONDARY)
+        x += box + 4 + text_width(lab, 11, fsc) + 6 * u
+    return y + 3 * u
 
 
 def venn_regions(sel, sets):
@@ -150,7 +157,6 @@ def venn_regions(sel, sets):
 
 def venn_layout(regions, sets, R):
     """-> (centres, radii): circle areas match the totals, overlaps fitted."""
-    import math
     import numpy as np
     from scipy.optimize import brentq, minimize
     tots = [sum(v for k, v in regions.items() if d in k) for d in sets]
@@ -234,6 +240,7 @@ def venn_label_points(centres, radii, box=(0.0, 0.0), step=1.0):
 
 
 VENN = ["Trypsin", "LysC", "GluC"]
+LABEL_GAP = 12.0          # circle edge to the Glu-C label
 
 
 def draw_venn(c, regions, centres, radii, names, tots, fsc):
@@ -252,33 +259,32 @@ def draw_venn(c, regions, centres, radii, names, tots, fsc):
             for j in range(3):
                 rgb[j] = rgb[j] * (1 - fill_o) + int(h[1 + 2 * j:3 + 2 * j], 16) * fill_o
         return "#" + "".join(f"{round(v):02x}" for v in rgb)
-    line = 10 * fsc * TEXT_BOOST
+    u = fsc * TEXT_BOOST
+    line = 12.5 * u
     for members in venn_label_points(centres, radii):
         n = regions[frozenset(VENN[i] for i in members)]
-        for size in (10, 9.5, 9, 8.5, 8, 7.5, 7):    # the largest that fits
-            box = (text_width(f"{n:,}", size, fsc) + 2, 0.72 * size * fsc * TEXT_BOOST)
+        for size in (11, 10.5, 10):    # the largest that fits
+            box = (text_width(f"{n:,}", size, fsc) + 2, 0.72 * size * u)
             x, y, fits = venn_label_points(centres, radii, box, step=0.5)[members]
             if fits:
                 break
         else:
             sys.exit(f"Venn: {n:,} does not fit its region; enlarge the circles")
         assert ink_on(composite(members)) == INK
-        c.text(x, y + 0.35 * size * fsc * TEXT_BOOST, f"{n:,}", size, INK,
-               "middle", "600")
+        c.text(x, y + 0.35 * size * u, f"{n:,}", size, INK, "middle", "600")
+    top = min(cy - r for (_x, cy), r in zip(centres[:2], radii[:2]))
     for i, ((cx, cy), r, name, tot) in enumerate(zip(centres, radii, names, tots)):
         if i == 2:
-            x, anchor = cx + r + 12, "start"
-            span = [x + t / 10 * text_width(name, 10, fsc) for t in range(11)]
+            x, anchor = cx + r + LABEL_GAP, "start"
+            span = [x + t / 10 * text_width(name, 11, fsc) for t in range(11)]
             under = max((oy + (ro * ro - (sx - ox_) ** 2) ** 0.5
                          for (ox_, oy), ro in zip(centres[:2], radii[:2])
                          for sx in span if abs(sx - ox_) < ro), default=cy)
             y = max(cy, under + 0.8 * line)
         else:
-            left = i == 0
-            x = cx - r - 12 if left else cx + r + 12
-            anchor, y = ("end" if left else "start"), cy - r * 0.35
-        c.text(x, y, name, 10, INK, anchor, "600")
-        c.text(x, y + line, f"{tot:,}", 10, INK_SECONDARY, anchor)
+            x, anchor, y = cx, "middle", top - 0.35 * line - line
+        c.text(x, y, name, 11, INK, anchor, "600")
+        c.text(x, y + line, f"{tot:,}", 11, INK_SECONDARY, anchor)
 
 
 def venn_extent(centres, radii):
@@ -305,34 +311,44 @@ def panel_venn_grouped(rows, mod, out, letter=""):
     total = sum(regions.values())
     groups = [(d, peptide_classes(sel, d)) for d in BY_DIGEST]
     decades = len(str(int(max(max(cnt.values()) for _d, cnt in groups))))
-    fsc = 1.45
+    W = 1010.0
+    fsc = pt_scale(W, FIG_W)
+    u = fsc * TEXT_BOOST
 
     def wide(txt, size):
         return text_width(txt, size, fsc)
-    W = 1010.0
     names = [display(d) for d in VENN]
     tots = [sum(v for k, v in regions.items() if d in k) for d in VENN]
-    lab_w = max(wide(t, 10) for t in names + [f"{v:,}" for v in tots])
-    centres, radii = venn_at(regions, 105.0, 12 + lab_w + 14, 90.0)
+    y_sub = 27 + 13.5 * u
+    centres, radii = venn_at(regions, 118.0, 20.0, y_sub + 14 * u + 2 * 12.5 * u)
     x1, y1 = venn_extent(centres, radii)[2:]
-    wv = x1 + 14 + lab_w + 12
-    mt, ph = 84.0, 230.0
-    x0 = wv
-    ml = x0 + 36 + wide(f"{10 ** decades:,}", 9) + 10
+    gluc_right = (centres[2][0] + radii[2] + LABEL_GAP
+                  + max(wide(names[2], 11), wide(f"{tots[2]:,}", 11)))
+    x0 = max(x1, gluc_right) + 26
+    ml = x0 + 13 * u + wide(f"{10 ** decades:,}", 10) + 8
     x_end = W - 20
     slot = (x_end - ml) / len(groups)
-    gap = 2.0
+    gap = 3.0
     bw = round((0.84 * slot - (NCAP - 1) * gap) / NCAP, 1)
-    H = round(max(y1 + 18, mt + ph + 46), 1)
-    c = Canvas(W, H, FONT, font_scale=fsc, out_w=1215.0)
+    lines = max(len(wrap(display(d) if d else "All proteases", 11, fsc, slot - 6))
+                for d in BY_DIGEST)
+    H = round(y1 + 24, 1)
+    base = H - 20 - 8.5 * u - (lines - 1) * 12.5 * u - 6
+    key_bottom = y_sub + 16 * u
+    # the tallest value label stays under the key
+    ph = min([base - key_bottom - 3.6 * u - 6]
+             + [(base - key_bottom - 10 - wide(f"{v:,}", 10)) * decades / math.log10(v)
+                for _d, cnt in groups for v in cnt.values() if v > 1])
+    mt = base - ph
+    c = Canvas(W, H, FONT, font_scale=fsc, out_w=FIG_W)
     if letter:
         c.text(20, 30, letter, 13, INK, "start", "600")
-    c.text(48, 30, "Number of phosphosites detected", 11.5, INK, "start", "600")
-    c.text(48, 54, f"n = {total:,} phosphosites", 9.6, INK_SECONDARY, "start")
-    grouped_key(c, min(x0 + 10, x_end - grouped_key_width(fsc)), 54.0, fsc)
+    c.text(48, 27, "Number of phosphosites detected", 12, INK, "start", "600")
+    c.text(48, y_sub, f"n = {total:,} phosphosites", 11, INK_SECONDARY, "start")
+    grouped_key(c, x0, y_sub, fsc)
     draw_venn(c, regions, centres, radii, names, tots, fsc)
-    draw_grouped(c, groups, decades, x0, x_end, ml, mt, ph, bw=bw, gap=gap)
-    print(f"    Venn {wv:.0f} units wide; bars {bw} units, total {total:,}")
+    draw_grouped(c, groups, decades, x0, x_end, ml, mt, ph, bw, gap, fsc)
+    print(f"    Venn {x0:.0f} units wide; bars {bw} units, total {total:,}")
     os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
     with open(out, "w") as fh:
         fh.write(c.out())

@@ -14,9 +14,9 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from lib_svg import Canvas                                  # noqa: E402
+from lib_svg import Canvas, text_width                      # noqa: E402
 from lib_palette import (AXIS, FONT, GRID, INK, INK_MUTED, INK_SECONDARY,  # noqa: E402
-                         TEXT_BOOST, assign, display)
+                         TEXT_BOOST, assign, display, pt_scale)
 
 ORDER = ["GluC", "LysC", "Trypsin"]
 UNION = "union"
@@ -177,29 +177,32 @@ def curves(rows):
 SEQ = "#c9c8c1"      # a sequence in the schematics; its changed stretch is INK
 
 
-def schematic(c, x, y, w, kind, pep):
-    """Canonical over isoform, with the peptide that proves the isoform."""
+def schematic(c, x, y, w, kind, pep, u):
+    """Canonical over isoform, with the peptide that proves the isoform; `u` units per pt."""
     a, b = x + w * 0.38, x + w * 0.62          # the changed stretch
-    rows = (("canonical", y), ("isoform", y + 18))
+    bh, step = 3.2 * u, 12 * u
+    rows = (("canonical", y), ("isoform", y + step))
     for name, yy in rows:
-        c.text(x - 6, yy + 6, name, 7.8, INK, "end")
-        c.rect(x, yy, a - x, 7, fill=SEQ, rx=1)
-        c.rect(b, yy, x + w - b, 7, fill=SEQ, rx=1)
+        c.text(x - 6, yy + bh / 2 + 3.5 * u, name, 10, INK, "end")
+        c.rect(x, yy, a - x, bh, fill=SEQ, rx=1)
+        c.rect(b, yy, x + w - b, bh, fill=SEQ, rx=1)
         has = (name == "isoform") == (kind == "own")
         if has:
-            c.rect(a, yy, b - a, 7, fill=INK, rx=0)
+            c.rect(a, yy, b - a, bh, fill=INK, rx=0)
         else:
-            c.line(a, yy + 3.5, b, yy + 3.5, stroke=INK, sw=1.2)
-    py = y + 32
+            c.line(a, yy + bh / 2, b, yy + bh / 2, stroke=INK, sw=1.2)
+    py = y + step + bh + 2.2 * u
+    ph = 1.8 * u
     if kind == "own":
-        c.rect(a + (b - a) * 0.2, py, (b - a) * 0.6, 4, fill=pep, rx=1)
+        c.rect(a + (b - a) * 0.2, py, (b - a) * 0.6, ph, fill=pep, rx=1)
     else:
-        c.rect(a - w * 0.1, py, w * 0.1, 4, fill=pep, rx=1)
-        c.line(a, py + 2, b, py + 2, stroke=pep, sw=1.0)
-        c.rect(b, py, w * 0.1, 4, fill=pep, rx=1)
+        c.rect(a - w * 0.1, py, w * 0.1, ph, fill=pep, rx=1)
+        c.line(a, py + ph / 2, b, py + ph / 2, stroke=pep, sw=1.0)
+        c.rect(b, py, w * 0.1, ph, fill=pep, rx=1)
+    return py + ph
 
 
-def panel(rows, out, letter=""):
+def panel(rows, out, letter="", width=1215.0):
     """Isoforms against how much of their discriminating region is covered, beside junction bars."""
     seen, cur = curves(rows)
     jn = {d: sum(1 for r in rows if r["n_junc"] and r[f"jcov_{d}"])
@@ -207,14 +210,20 @@ def panel(rows, out, letter=""):
     colour = assign(list(ORDER) + ["All"])
     colour[UNION] = colour["All"]
 
-    W = 1010.0
-    ml = 90.0
-    mt = 112.0
-    ph = 208.0
-    pw = W - ml - 300.0
-    bx0, bx1 = ml + pw + 40.0, W - 10.0
-    H = mt + ph + 52
-    c = Canvas(W, H, FONT, font_scale=1.45, out_w=1215.0)
+    W = width
+    c0 = Canvas(W, 10, FONT, font_scale=pt_scale(W, W), out_w=W)
+    u = c0.fs * TEXT_BOOST                     # units per pt
+    ml = 46 * u
+    bw = 92 * u                                # the junction bars' block
+    bx1 = W - 4
+    bx0 = bx1 - bw
+    pw = bx0 - 18 * u - ml
+    head = 30.0                                # first header baseline
+    sch = head + 13 * u + 7 * u                # schematics' top
+    mt = sch + 25 * u
+    ph = 94 * u
+    H = mt + ph + 44 * u
+    c = Canvas(W, H, FONT, font_scale=c0.fs, out_w=W)
 
     if letter:
         c.text(20, 30, letter, 13, INK, "start", "600")
@@ -230,13 +239,13 @@ def panel(rows, out, letter=""):
     for t in range(0, top + 1, 250):
         c.line(ml, Y(t), ml + pw, Y(t), stroke=GRID, sw=1)
         c.line(bx0, Y(t), bx1, Y(t), stroke=GRID, sw=1)
-        c.text(ml - 8, Y(t) + 3, f"{t:,}", 8.4, INK_MUTED, "end")
-    for t in (1, 25, 50, 75, 100):
-        c.text(X(t), mt + ph + 17, f"{t}%", 8.8, INK_MUTED, "middle")
-    c.text(26, mt + ph / 2, "non-canonical isoforms", 9.6, INK_SECONDARY, "middle", rot=-90)
-    c.text(ml + pw / 2, mt + ph + 36,
-           "of the discriminating region covered",
-           9.2, INK_SECONDARY, "middle")
+        c.text(ml - 6, Y(t) + 3.5 * u, f"{t:,}", 10, INK_MUTED, "end")
+    for t in (1, 50, 100):
+        c.text(X(t), mt + ph + 12 * u, f"{t}%", 10, INK_MUTED, "middle")
+    c.text(2 + 8 * u, mt + ph / 2, "non-canonical isoforms", 11, INK_SECONDARY, "middle",
+           rot=-90)
+    for i, line in enumerate(("of the discriminating", "region covered")):
+        c.text(ml + pw / 2, mt + ph + (26 + 12.5 * i) * u, line, 11, INK_SECONDARY, "middle")
 
     for key in ORDER + [UNION]:
         pts = " ".join(f"{X(t + 1):.1f},{Y(v):.1f}"
@@ -247,21 +256,22 @@ def panel(rows, out, letter=""):
 
     # junction bars share the curves' y axis
     slot = (bx1 - bx0) / (len(ORDER) + 1)
-    sw_ = 170.0
-    lab_w = 0.55 * 7.8 * c.fs * TEXT_BOOST * len("canonical") + 6
-    for cx_, title, kind in (
-            (ml + pw / 2, "Discriminating-region peptides", "own"),
-            ((bx0 + bx1) / 2, "Junction-spanning peptides", "junction")):
-        c.text(cx_, 38, title, 9.2, INK, "middle", "600")
-        schematic(c, cx_ - (sw_ - lab_w) / 2, 56, sw_, kind, colour[UNION])
-    c.text(ml + pw - 6, mt + 16, f"n = {len(seen):,}", 9.2, INK, "end")
+    lab_w = text_width("canonical", 10 * u) + 6
+    for x0, x1, title, kind in (
+            (ml, ml + pw, ("Discriminating-region", "peptides"), "own"),
+            (bx0, bx1, ("Junction-spanning", "peptides"), "junction")):
+        for i, line in enumerate(title):
+            c.text((x0 + x1) / 2, head + 12.5 * u * i, line, 10.5, INK, "middle", "600")
+        sw_ = min(x1 - x0 - lab_w, 60 * u)
+        schematic(c, (x0 + x1) / 2 - (sw_ - lab_w) / 2, sch, sw_, kind, colour[UNION], u)
+    c.text(ml + pw - 6, mt + 12 * u, f"n = {len(seen):,}", 10, INK, "end")
     for i, key in enumerate(ORDER + [UNION]):
         bx, v = bx0 + slot * i + slot * 0.18, jn[key]
         c.rect(bx, Y(v), slot * 0.64, Y(0) - Y(v), fill=colour[key],
                fo=0.9, rx=1.5)
-        c.text(bx + slot * 0.32, Y(v) - 5, f"{v:,}", 8.4, INK, "middle")
-        c.text(bx + slot * 0.32, mt + ph + 17,
-               "All" if key == UNION else display(key), 8.4, INK, "middle")
+        c.text(bx + slot * 0.32, Y(v) - 2 * u, f"{v:,}", 10, INK, "middle")
+        lx, ly = bx + slot * 0.32 + 3 * u, mt + ph + 8 * u
+        c.text(lx, ly, "All" if key == UNION else display(key), 10, INK, "end", rot=-45)
     c.line(bx0, mt + ph, bx1, mt + ph, stroke=AXIS, sw=1)
 
     c.line(ml, mt + ph, ml + pw, mt + ph, stroke=AXIS, sw=1)
@@ -332,103 +342,99 @@ def pd_grid_dots(steps, out, letter=""):
     right.sort(key=lambda t: (-t[5][-1], t[0], t[1]))
     covered = {t[1] for t in left} | {t[1] for t in right}
     colour = assign(list(ORDER) + ["All"])
-    cols = ["GluC", "LysC", "Trypsin", "All"]
-    fs = 1.45
+    fs = pt_scale(1.0, 1.0)
+    u = fs * TEXT_BOOST                        # units per pt
 
-    def wide(txt, size):
-        return 0.56 * size * fs * TEXT_BOOST * len(txt)
-    cw, gap_all = 58.0, 8.0
-
-    def col_x(i):
-        return g0 + i * cw + (gap_all if cols[i] == "All" else 0)
+    def wide(txt, size, bold=False):
+        return text_width(txt, size * u, bold)
     n_j = sum(len(t[6]) for t in right)
     lx = 26.0
-    gene_w = max(1.15 * wide(t[0], 9.4) for t in left + right)
-    acc_w = max(wide(t[1], 8.4) for t in left + right)
-    dl_w = max(wide(f"Δ{a_}–{b_}", 8.0) for t in right for a_, b_, _n in t[6])
-    g0 = lx + gene_w + 8 + acc_w + 10 + dl_w + 12
-    W = round(col_x(3) + cw + 20, 1)
+    gene_w = max(wide(t[0], 10, True) for t in left + right)
+    acc_w = max(wide(t[1], 10) for t in left + right)
+    dl_w = max(wide(f"Δ{a_}–{b_}", 10) for t in right for a_, b_, _n in t[6])
+    g0 = lx + gene_w + 3 * u + acc_w + 4 * u + dl_w + 5 * u
+    order = ["Trypsin", "LysC", "GluC"]
+    n_max = max(sum(n[d] for d in order) for t in right for _a, _b, n in t[6])
+    W = round(g0 + 42 * u + wide(str(n_max), 10) + 10, 1)
 
-    rh, jh, iso_gap = 18.0, 15.0, 3.0
-    mt = 96.0                                  # residue block's first row
-    jt = mt + rh * len(left) + 90              # junction block's first row
-    H = round(jt + jh * n_j + iso_gap * (len(right) - 1) + 24, 1)
+    rh, jh, iso_gap = 10.2 * u, 10.2 * u, 1.2 * u
+    mt = 30 + 26 * u                           # residue block's first row
+    jt = mt + rh * len(left) + 56 * u          # junction block's first row
+    H = round(jt + jh * n_j + iso_gap * (len(right) - 1) + 15 * u, 1)
 
-    c = Canvas(W, H, FONT, font_scale=fs, out_w=1215.0 * W / 1010.0)
+    c = Canvas(W, H, FONT, font_scale=fs, out_w=W)
     if letter:
         c.text(20, 30, letter, 13, INK, "start", "600")
-    c.text(48, 30, "PD-implicated isoforms", 11.5, INK, "start", "600")
+    c.text(62, 32, "PD-implicated isoforms", 12, INK, "start", "600")
 
     # Residues: trypsin from 0, then what Lys-C and Glu-C add.
-    c.text(lx, mt - 34, f"Discriminating residues · {len(left)} isoforms", 9.8, INK,
+    c.text(lx, mt - 10 * u, f"Discriminating residues · {len(left)} isoforms", 11, INK,
            "start", "600")
     n_aa = max(t[2] for t in left)
-    end_w = max(wide(f"{round(t[4][-1] * t[2])}/{t[2]} aa", 8.4) for t in left)
-    bx0 = lx + gene_w + 8 + acc_w + 12
-    bx1 = W - 20 - end_w - 8
+    end_w = max(wide(f"{round(t[4][-1] * t[2])}/{t[2]} aa", 10) for t in left)
+    bx0 = lx + gene_w + 3 * u + acc_w + 5 * u
+    bx1 = W - 6 - end_w - 3 * u
 
     def BX(v):
         return bx0 + v / n_aa * (bx1 - bx0)
     seg = [colour["Trypsin"], colour["LysC"], colour["GluC"]]
     step = next(s_ for s_ in (1, 2, 5, 10, 20, 25, 50, 100, 200, 500)
-                if n_aa / s_ <= 4)
+                if n_aa / s_ <= 3)
     for q in range(0, n_aa + 1, step):
         c.line(BX(q), mt - 4, BX(q), mt + rh * len(left), stroke=GRID, sw=1.0)
-        c.text(BX(q), mt + rh * len(left) + 14, str(q), 8.0, INK_SECONDARY,
+        c.text(BX(q), mt + rh * len(left) + 10 * u, str(q), 10, INK_SECONDARY,
                "middle")
-    c.text((bx0 + bx1) / 2, mt + rh * len(left) + 34,
-           "discriminating residues (aa); grey = not covered", 8.6,
-           INK_SECONDARY, "middle")
+    for i, line in enumerate(("discriminating residues (aa);", "grey = not covered")):
+        c.text((bx0 + bx1) / 2, mt + rh * len(left) + (22 + 11 * i) * u, line, 10,
+               INK_SECONDARY, "middle")
     for r, t in enumerate(left):
         y = mt + r * rh + rh / 2
-        c.text(lx, y + 4, t[0], 9.4, INK, "start", "600")
-        c.text(lx + gene_w + 8, y + 4, t[1], 8.4, INK_SECONDARY, "start")
+        c.text(lx, y + 3.5 * u, t[0], 10, INK, "start", "600")
+        c.text(lx + gene_w + 3 * u, y + 3.5 * u, t[1], 10, INK_SECONDARY, "start")
         edges = [0.0] + [v * t[2] for v in t[4]]     # trypsin, + Lys-C, + Glu-C
         tip = " → ".join(f"{round(v * t[2])} aa" for v in t[4])
         c.add(f'<g><title>{t[0]} {t[1]}: trypsin, + Lys-C, + Glu-C: {tip} '
               f'of {t[2]} aa</title>')
-        c.rect(BX(0), y - 5, BX(t[2]) - BX(0), 10, AXIS)
+        c.rect(BX(0), y - 3.4 * u, BX(t[2]) - BX(0), 6.8 * u, AXIS)
         for k in range(3):
             if edges[k + 1] > edges[k] + 1e-9:
-                c.rect(BX(edges[k]), y - 5, BX(edges[k + 1]) - BX(edges[k]), 10,
-                       seg[k])
+                c.rect(BX(edges[k]), y - 3.4 * u, BX(edges[k + 1]) - BX(edges[k]),
+                       6.8 * u, seg[k])
         c.add('</g>')
-        c.text(BX(t[2]) + 6, y + 4, f"{round(t[4][-1] * t[2])}/{t[2]} aa", 8.4,
+        c.text(BX(t[2]) + 3 * u, y + 3.5 * u, f"{round(t[4][-1] * t[2])}/{t[2]} aa", 10,
                INK, "start")
 
     # Junctions: spanning peptides from trypsin, then Lys-C, then Glu-C.
-    c.text(lx, jt - 34, f"Deletion junctions · {n_j} in {len(right)} isoforms",
-           9.8, INK, "start", "600")
-    order = ["Trypsin", "LysC", "GluC"]
-    n_max = max(sum(n[d] for d in order) for t in right for _a, _b, n in t[6])
+    c.text(lx, jt - 10 * u, f"Deletion junctions · {n_j} in {len(right)} isoforms",
+           11, INK, "start", "600")
     jb0 = g0
-    jb1 = W - 20 - wide(str(n_max), 8.4) - 8
+    jb1 = W - 6 - wide(str(n_max), 10) - 3 * u
 
     def JX(v):
         return jb0 + v / max(n_max, 1) * (jb1 - jb0)
     y_end = jt + jh * n_j + iso_gap * (len(right) - 1)
     for q in range(n_max + 1):
         c.line(JX(q), jt - 4, JX(q), y_end, stroke=GRID, sw=1.0)
-        c.text(JX(q), y_end + 14, str(q), 8.0, INK_SECONDARY, "middle")
+        c.text(JX(q), y_end + 10 * u, str(q), 10, INK_SECONDARY, "middle")
     y = jt
     for t in right:
         y0 = y
         for ji, (a_, b_, n) in enumerate(t[6]):
             cy = y + jh / 2
             if ji == 0:
-                c.text(lx, cy + 4, t[0], 9.4, INK, "start", "600")
-                c.text(lx + gene_w + 8, cy + 4, t[1], 8.4, INK_SECONDARY, "start")
-            c.text(g0 - 12, cy + 4, f"Δ{a_}–{b_}", 8.0, INK_SECONDARY, "end")
+                c.text(lx, cy + 3.5 * u, t[0], 10, INK, "start", "600")
+                c.text(lx + gene_w + 3 * u, cy + 3.5 * u, t[1], 10, INK_SECONDARY, "start")
+            c.text(g0 - 5 * u, cy + 3.5 * u, f"Δ{a_}–{b_}", 10, INK_SECONDARY, "end")
             total = sum(n[d] for d in order)
             c.add(f'<g><title>{t[0]} {t[1]} Δ{a_}–{b_}: ' + ", ".join(
                 f"{display(d)} {n[d]}" for d in order) + '</title>')
             x = 0
             for d in order:
                 if n[d]:
-                    c.rect(JX(x), cy - 4.5, JX(x + n[d]) - JX(x), 9, colour[d])
+                    c.rect(JX(x), cy - 3.2 * u, JX(x + n[d]) - JX(x), 6.4 * u, colour[d])
                     x += n[d]
             c.add('</g>')
-            c.text(JX(total) + 6, cy + 4, str(total), 8.4,
+            c.text(JX(total) + 3 * u, cy + 3.5 * u, str(total), 10,
                    INK if total else INK_SECONDARY, "start")
             y += jh
         if len(t[6]) > 1:                      # a bracket down the isoform's rows
@@ -460,11 +466,12 @@ def main(argv=None):
     ap.add_argument("--fasta", default="data/uniprot_sprot_2024-01-01_HUMAN_ISOFORMS.fasta")
     ap.add_argument("--tsv", default="derived/da_iso/isoform_disc_coverage.tsv")
     ap.add_argument("--letter", default="")
+    ap.add_argument("--width", type=float, default=1215.0, help="panel width")
     ap.add_argument("--out", default="coverage.svg")
     args = ap.parse_args(argv)
 
     if args.mode == "panel":
-        panel(load(args.tsv), args.out, args.letter)
+        panel(load(args.tsv), args.out, args.letter, args.width)
         return 0
     paths = sorted(p for pat in args.reports for p in glob.glob(pat))
     if not paths:

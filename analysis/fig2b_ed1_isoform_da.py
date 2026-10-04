@@ -14,9 +14,9 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from lib_svg import Canvas                                  # noqa: E402
+from lib_svg import Canvas, text_width                      # noqa: E402
 from lib_palette import (AXIS, DIVERGING_HIGH, FONT, GRID, INK, INK_MUTED,
-                     INK_SECONDARY, TEXT_BOOST, UNION, assign)     # noqa: E402
+                     INK_SECONDARY, TEXT_BOOST, UNION, assign, pt_scale)     # noqa: E402
 from lib_report import ORDER, open_reports, read_metadata, sample_of   # noqa: E402
 from lib_fasta import gene_map, read_fasta                  # noqa: E402
 
@@ -256,12 +256,8 @@ def _quartiles(v):
     return q1, q2, q3, lo, hi
 
 
-def model_plot(fit, gene, iso, canon, out, radius=None, fit_only=False, case="LBD",
-               control="Control"):
-    """Beeswarm per form of each case value minus its peptide's control mean; `fit_only` -> the radius."""
-    import numpy as np
-    from lib_svg import beeswarm
-    b2 = fit["interaction"]
+def _groups(fit):
+    """-> ({form: [(peptide, digest, patient, case minus control mean)]}, {form: modelled level})."""
     lv = fit["levels"]
     level = {f: lv[(f, 1.0)] - lv[(f, 0.0)] for f in (0.0, 1.0)}
     groups = {f: [] for f in (0.0, 1.0)}
@@ -270,78 +266,109 @@ def model_plot(fit, gene, iso, canon, out, radius=None, fit_only=False, case="LB
         if ctl:
             m = statistics.mean(ctl)
             groups[f] += [(p, d, s, y - m) for s, y, c in v if c]
-    xs = {0.0: 0.27, 1.0: 0.63}
-    W, H, ml, mt, ph = FIG_PANEL_W, 434.0, 64.0, 108.0, 260.0
-    c = Canvas(W, H, FONT, font_scale=1.45, out_w=1215)
-    vals = sorted(y for g in groups.values() for *_r, y in g)
-    lo = min(vals[int(0.01 * len(vals))], -0.5, *level.values()) - 0.2
-    hi = max(vals[int(0.99 * len(vals)) - 1], 0.5, *level.values()) + 0.2
+    return groups, level
 
-    def Y(v):
-        return mt + ph * (hi - v) / (hi - lo)
 
-    pw = W - ml - 24
-    half = pw * 0.16
-    accs = iso.split(";")
-    iso_lab = accs[0] + "".join("/-" + a.rsplit("-", 1)[1] for a in accs[1:])
-    q = fit.get("q", float("nan"))
-    qtext = ((f"q = {q:.2g}" if q >= 0.001 else f"q = {q:.1e}") if q == q
-             else f"p = {fit['p']:.1e}")
-    mid = ml + pw / 2
-    c.text(mid, 36, gene, 18, INK, "middle", "600")
-    c.text(mid - 10, 70, f"Δ = {b2:+.2f} ± {fit['se']:.2f}", 14, UNION, "end", "600")
-    c.text(mid + 10, 70, qtext, 14, INK_SECONDARY, "start")
+def model_plots(plots, out, width=1215.0, case="LBD", control="Control"):
+    """Beeswarm per form of each case value minus its peptide's control mean, one plot per isoform, stacked."""
+    import numpy as np
+    from lib_svg import beeswarm
+    W = width
+    c0 = Canvas(W, 10, FONT, font_scale=pt_scale(W, W), out_w=W)
+    u = c0.fs * TEXT_BOOST                     # units per pt
+    ml, mr, ph = 31 * u, 10.0, 190.0
+    head, foot, gap = 19 * u, 26 * u, 4 * u
+    pw = W - ml - mr
+    half = pw * 0.14
+    xs = {0.0: 0.24, 1.0: 0.62}
+    H = len(plots) * (head + ph + foot) + (len(plots) - 1) * gap
+    c = Canvas(W, H, FONT, font_scale=c0.fs, out_w=W)
     col = assign(ORDER)
-    step = 0.5 if hi - lo < 4 else 1 if hi - lo < 8 else 2
-    t = math.floor(lo)
-    while t <= hi:
-        if t >= lo:
-            c.line(ml, Y(t), ml + pw, Y(t), stroke=AXIS if t == 0 else GRID,
-                   sw=1.2 if t == 0 else 0.8)
-            c.text(ml - 6, Y(t) + 3, (f"{t:+g}" if t else "0"), 7.6, INK_MUTED, "end")
-        t += step
-    c.rect(ml, mt, pw, ph, stroke=AXIS, sw=0.8)
-    c.text(16, mt + ph / 2, f"log2 {case} / {control}, per peptide", 8.0, INK_SECONDARY,
-           "middle", rot=-90)
-    for rad in ((radius,) if radius else (3.8, 3.4, 3.0, 2.7, 2.4, 2.1, 1.8, 1.6, 1.4, 1.2)):
-        offs = {f: beeswarm([Y(y) for *_r, y in g if lo <= y <= hi], rad)
+    laid = []
+    for fit, gene, iso, canon in plots:
+        groups, level = _groups(fit)
+        vals = sorted(y for g in groups.values() for *_r, y in g)
+        lo = min(vals[int(0.01 * len(vals))], -0.5, *level.values()) - 0.2
+        hi = max(vals[int(0.99 * len(vals)) - 1], 0.5, *level.values()) + 0.2
+        laid.append((fit, gene, iso, canon, groups, level, lo, hi))
+
+    def swarms(rad, groups, Y, lo, hi):
+        return {f: beeswarm([Y(y) for *_r, y in g if lo <= y <= hi], rad)
                 for f, g in groups.items()}
-        if all(max(map(abs, o), default=0) <= half for o in offs.values()):
-            break
-    if fit_only:
-        return rad
-    for f, frac in xs.items():
-        cx = ml + pw * frac
-        inside = [(d, y) for _p, d, _s, y in groups[f] if lo <= y <= hi]
-        v = np.array([y for _d, y in inside])
-        for o, (d, y) in zip(offs[f], inside):
-            c.add(f'<circle cx="{cx + o:.1f}" cy="{Y(y):.1f}" r="{rad}" fill="{col[d]}" '
-                  f'fill-opacity="0.8"/>')
-        if len(v) >= 3:
-            # an unfilled box over the points: quartiles, median, whiskers
-            bw = half * 0.13
-            q1, q2, q3, wl, wh = _quartiles(list(v))
-            c.add(f'<rect x="{cx - bw:.1f}" y="{Y(q3):.1f}" width="{2 * bw:.1f}" '
-                  f'height="{Y(q1) - Y(q3):.1f}" fill="none" stroke="{INK}" stroke-width="1.2"/>')
-            for w0, w1 in ((wh, q3), (q1, wl)):
-                c.line(cx, Y(w0), cx, Y(w1), stroke=INK, sw=1.0)
-            c.line(cx - bw, Y(q2), cx + bw, Y(q2), stroke=INK, sw=2.0)
-        c.add(f'<path d="{diamond(cx, Y(level[f]), 5.5)}" fill="{INK}" '
-              f'stroke="white" stroke-width="1"/>')
-        c.text(cx, mt + ph + 16, f"{'isoform' if f else 'canonical'} "
-               f"{iso_lab if f else canon}", 8.6, INK, "middle", "600")
-    y0, y1 = Y(level[0.0]), Y(level[1.0])
-    edge = max(max(map(abs, offs[1.0]), default=0) + rad, half * 0.13)
-    bx = ml + pw * xs[1.0] + edge + 14
-    tip = 4 if y1 > y0 else -4
-    c.line(bx, y0, bx, y1 - tip, stroke=UNION, sw=1.8)
-    c.add(f'<path d="M {bx - 4:.1f} {y1 - tip:.1f} L {bx + 4:.1f} {y1 - tip:.1f} '
-          f'L {bx:.1f} {y1:.1f} Z" fill="{UNION}"/>')
-    c.text(bx + 10, (y0 + y1) / 2 + 5, f"Δ {b2:+.2f}", 15, UNION, "start", "600")
+
+    def fits(rad):
+        for _f, _g, _i, _c, groups, _l, lo, hi in laid:
+            Y = lambda v, lo=lo, hi=hi: ph * (hi - v) / (hi - lo)
+            if any(max(map(abs, o), default=0) > half
+                   for o in swarms(rad, groups, Y, lo, hi).values()):
+                return False
+        return True
+    # one point size across the plots: the largest every group fits at
+    rad = next((r for r in (3.8, 3.4, 3.0, 2.7, 2.4, 2.1, 1.8, 1.6, 1.4, 1.2) if fits(r)), 1.2)
+    print(f"  swarm radius {rad}")
+    for n, (fit, gene, iso, canon, groups, level, lo, hi) in enumerate(laid):
+        top = n * (head + ph + foot + gap)
+        mt = top + head
+
+        def Y(v, lo=lo, hi=hi, mt=mt):
+            return mt + ph * (hi - v) / (hi - lo)
+        b2 = fit["interaction"]
+        accs = iso.split(";")
+        iso_lab = accs[0] + "".join("/-" + a.rsplit("-", 1)[1] for a in accs[1:])
+        q = fit.get("q", float("nan"))
+        qtext = ((f"q = {q:.2g}" if q >= 0.001 else f"q = {q:.1e}") if q == q
+                 else f"p = {fit['p']:.1e}")
+        base = mt - 7 * u
+        c.text(ml, base, gene, 12, INK, "start", "600")
+        x = ml + text_width(gene, 12 * u, True) + 10 * u
+        dtext = f"Δ = {b2:+.2f} ± {fit['se']:.2f}"
+        c.text(x, base, dtext, 10, UNION, "start", "600")
+        c.text(x + text_width(dtext, 10 * u, True) + 10 * u, base, qtext, 10, INK_SECONDARY, "start")
+        step = 0.5 if hi - lo < 3 else 1 if hi - lo < 8 else 2
+        t = math.floor(lo)
+        while t <= hi:
+            if t >= lo:
+                c.line(ml, Y(t), ml + pw, Y(t), stroke=AXIS if t == 0 else GRID,
+                       sw=1.2 if t == 0 else 0.8)
+                c.text(ml - 6, Y(t) + 3.5 * u, (f"{t:+g}" if t else "0"), 10, INK_MUTED, "end")
+            t += step
+        c.rect(ml, mt, pw, ph, stroke=AXIS, sw=0.8)
+        offs = swarms(rad, groups, Y, lo, hi)
+        for f, frac in xs.items():
+            cx = ml + pw * frac
+            inside = [(d, y) for _p, d, _s, y in groups[f] if lo <= y <= hi]
+            v = np.array([y for _d, y in inside])
+            for o, (d, y) in zip(offs[f], inside):
+                c.add(f'<circle cx="{cx + o:.1f}" cy="{Y(y):.1f}" r="{rad}" fill="{col[d]}" '
+                      f'fill-opacity="0.8"/>')
+            if len(v) >= 3:
+                # an unfilled box over the points: quartiles, median, whiskers
+                bw = half * 0.16
+                q1, q2, q3, wl, wh = _quartiles(list(v))
+                c.add(f'<rect x="{cx - bw:.1f}" y="{Y(q3):.1f}" width="{2 * bw:.1f}" '
+                      f'height="{Y(q1) - Y(q3):.1f}" fill="none" stroke="{INK}" stroke-width="1.2"/>')
+                for w0, w1 in ((wh, q3), (q1, wl)):
+                    c.line(cx, Y(w0), cx, Y(w1), stroke=INK, sw=1.0)
+                c.line(cx - bw, Y(q2), cx + bw, Y(q2), stroke=INK, sw=2.0)
+            c.add(f'<path d="{diamond(cx, Y(level[f]), 5.5)}" fill="{INK}" '
+                  f'stroke="white" stroke-width="1"/>')
+            c.text(cx, mt + ph + 11 * u, "isoform" if f else "canonical", 10, INK, "middle")
+            c.text(cx, mt + ph + 22.5 * u, iso_lab if f else canon, 10, INK, "middle")
+        y0, y1 = Y(level[0.0]), Y(level[1.0])
+        edge = max(max(map(abs, offs[1.0]), default=0) + rad, half * 0.16)
+        bx = ml + pw * xs[1.0] + edge + 12
+        tip = 4 if y1 > y0 else -4
+        c.line(bx, y0, bx, y1 - tip, stroke=UNION, sw=1.8)
+        c.add(f'<path d="M {bx - 4:.1f} {y1 - tip:.1f} L {bx + 4:.1f} {y1 - tip:.1f} '
+              f'L {bx:.1f} {y1:.1f} Z" fill="{UNION}"/>')
+        c.text(bx + 8, (y0 + y1) / 2 + 3.5 * u, f"Δ {b2:+.2f}", 11, UNION, "start", "600")
+        print(f"  {gene} {iso}: Δ {b2:+.2f}, p {fit['p']:.1e}, q {q:.1e}")
+    c.text(2 + 8 * u, H / 2, f"log2 {case} / {control}, per peptide", 11, INK_SECONDARY,
+           "middle", rot=-90)
     os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
     with open(out, "w") as fh:
         fh.write(c.out())
-    print(f"  wrote {out}  ({gene} {iso}: Δ {b2:+.2f}, p {fit['p']:.1e}, q {q:.1e})")
+    print(f"  wrote {out}  ({W:.0f}x{H:.0f})")
 
 
 def volcano(rows, out, letter="", q_cut=0.05):
@@ -350,9 +377,10 @@ def volcano(rows, out, letter="", q_cut=0.05):
     hit = [r for r in ok if r["q"] <= q_cut]
     red = DIVERGING_HIGH[2]
     W = FIG_PANEL_W
-    ml, mr, mt, ph = 62.0, 30.0, 74.0, 250.0
-    H = mt + ph + 46
-    c = Canvas(W, H, FONT, font_scale=1.45, out_w=1215.0)
+    ml, mr, mt, ph = 84.0, 30.0, 84.0, 250.0
+    H = mt + ph + 70
+    c = Canvas(W, H, FONT, font_scale=pt_scale(W, 1215.0), out_w=1215.0)
+    u = c.fs * TEXT_BOOST                  # canvas units per pt
     pw = W - ml - mr
     xm = max(abs(r["log2fc"]) for r in ok) * 1.08
     ym = max(-math.log10(r["p"]) for r in ok) * 1.08
@@ -364,33 +392,33 @@ def volcano(rows, out, letter="", q_cut=0.05):
         return mt + ph - v / ym * ph
 
     c.text(20, 30, letter, 13, INK, "start", "600")
-    c.text(ml, 30, "Isoform-specific differential abundance", 11.5, INK, "start", "600")
-    c.text(ml, 46, f"n = {len(ok):,} isoforms · {len(hit)} with q ≤ {q_cut:g}",
-           8.4, INK_MUTED, "start")
+    c.text(ml, 32, "Isoform-specific differential abundance", 12, INK, "start", "600")
+    c.text(ml, 32 + 12 * u, f"n = {len(ok):,} isoforms · {len(hit)} with q ≤ {q_cut:g}",
+           10, INK_MUTED, "start")
     step = 2.0 if ym > 8 else 1.0
     t = 0.0
     while t <= ym:
         c.line(ml, Y(t), ml + pw, Y(t), stroke=GRID, sw=1.0, so=0.9)
-        c.text(ml - 6, Y(t) + 3, f"{t:g}", 8.0, INK_MUTED, "end")
+        c.text(ml - 8, Y(t) + 3.5 * u, f"{t:g}", 10, INK_MUTED, "end")
         t += step
     xs = 0.5 if xm < 2.5 else 1.0
     t = -math.floor(xm / xs) * xs
     while t <= xm:
-        c.text(X(t), mt + ph + 14, f"{t:+g}" if t else "0", 8.0, INK_MUTED,
+        c.text(X(t), mt + ph + 4 + 8 * u, f"{t:+g}" if t else "0", 10, INK_MUTED,
                "middle")
         t += xs
     c.line(X(0), mt, X(0), mt + ph, stroke=AXIS, sw=1.0)
     c.rect(ml, mt, pw, ph, fill="none", stroke=AXIS, sw=0.8, rx=0)
-    c.text(ml + pw / 2, mt + ph + 32, "Δ log2 LBD / Control (isoform − canonical)", 9.4,
+    c.text(ml + pw / 2, mt + ph + 6 + 20 * u, "Δ log2 LBD / Control (isoform − canonical)", 11,
            INK_SECONDARY, "middle")
-    c.text(18, mt + ph / 2, "−log10 p", 9.4, INK_SECONDARY, "middle", rot=-90)
+    c.text(10 + 8 * u, mt + ph / 2, "−log10 p", 11, INK_SECONDARY, "middle", rot=-90)
     for r in sorted(ok, key=lambda r: r["q"] <= q_cut):
         on = r["q"] <= q_cut
         c.add(f'<circle cx="{X(r["log2fc"]):.1f}" '
               f'cy="{Y(-math.log10(r["p"])):.1f}" r="{3.4 if on else 2.4}" '
               f'fill="{red if on else INK_MUTED}" '
               f'fill-opacity="{0.9 if on else 0.35}"/>')
-    fsz = 8.2 * c.fs * TEXT_BOOST      # the size the label is drawn at
+    fsz = 10.5 * u                     # the size the label is drawn at
     pts = [(X(r["log2fc"]), Y(-math.log10(r["p"]))) for r in hit]
     boxes = []
     names = [r["gene"] for r in hit]
@@ -410,9 +438,9 @@ def volcano(rows, out, letter="", q_cut=0.05):
     # strongest first, each label in the first free slot: outward, then inward, nearest row first
     for i, r in sorted(enumerate(hit), key=lambda t: t[1]["p"]):
         px, py = pts[i]
-        tw = 0.72 * fsz * len(lab[id(r)])   # bold caps at TEXT_BOOST
+        tw = text_width(lab[id(r)], fsz, True)
         out_ = 1 if r["log2fc"] >= 0 else -1
-        for dy in (0, -12, 12, -24, 24):
+        for dy in (0, -1.1 * fsz, 1.1 * fsz, -2.2 * fsz, 2.2 * fsz):
             done = False
             for side in (out_, -out_):
                 x0 = px + 8 if side > 0 else px - 8 - tw
@@ -420,7 +448,7 @@ def volcano(rows, out, letter="", q_cut=0.05):
                 y0 = py + dy - fsz * 0.45
                 if free(x0, y0, x0 + tw, y0 + fsz, i):
                     boxes.append((x0, y0, x0 + tw, y0 + fsz))
-                    c.text(x0, py + dy + fsz * 0.3, lab[id(r)], 8.2, INK,
+                    c.text(x0, py + dy + fsz * 0.3, lab[id(r)], 10.5, INK,
                            "start", "600")
                     done = True
                     break
@@ -444,8 +472,9 @@ def main(argv=None):
     ap.add_argument("--metadata", required=True)
     ap.add_argument("--volcano", metavar="SVG", help="volcano of every screened isoform")
     ap.add_argument("--model-plots", dest="model_plots", metavar="GENE:ISO,...",
-                    help="model plot per isoform, written into --out as GENE.svg")
-    ap.add_argument("--out", help="folder for --model-plots")
+                    help="model plots, one per isoform, stacked into --out")
+    ap.add_argument("--out", help="SVG for --model-plots")
+    ap.add_argument("--width", type=float, default=1215.0, help="--model-plots width")
     args = ap.parse_args(argv)
     if not args.volcano and not args.model_plots:
         ap.error("--volcano or --model-plots")
@@ -464,7 +493,6 @@ def main(argv=None):
     if args.volcano:
         volcano(rows, args.volcano)
     if args.model_plots:
-        os.makedirs(args.out, exist_ok=True)
         qs = {(r["gene"], r["isoform"]): r["q"] for r in rows}
         plots = []
         for item in args.model_plots.split(","):
@@ -472,12 +500,8 @@ def main(argv=None):
             base, diag = diagnostic(gene, bygene[gene], seqs, genes, idx)
             fit = dd_fit(base[1], diag[tuple(iso.split(";"))], idx, med, cond)
             fit["q"] = qs.get((gene, ";".join(sorted(iso.split(";")))), float("nan"))
-            plots.append((fit, gene, iso, base[0], os.path.join(args.out, f"{gene}.svg")))
-        # one point size across the plots: the largest every group fits at
-        rad = min(model_plot(*pl, fit_only=True) for pl in plots)
-        print(f"  swarm radius {rad}")
-        for pl in plots:
-            model_plot(*pl, radius=rad)
+            plots.append((fit, gene, iso, base[0]))
+        model_plots(plots, args.out, args.width)
     return 0
 
 

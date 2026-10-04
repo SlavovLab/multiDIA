@@ -16,7 +16,7 @@ from lib_palette import (AXIS, FONT, GRID, INK, INK_MUTED, STRIP_FILL, SURFACE,
                      assign, TEXT_BOOST)
 from lib_svg import esc
 
-TEXT_SCALE = 1.7
+TEXT_SCALE = 2.12
 
 UNIT_LABELS = {
     "precursors": "Precursors",
@@ -165,14 +165,14 @@ def main(argv=None):
 
     ts = TEXT_SCALE * TEXT_BOOST
     sz = {"letter": 13.0 * ts, "strip": 11.5 * ts, "ytick": 9.5 * ts,
-          "median": 9.5 * ts, "outlier": 8.5 * ts, "xcat": 10.5 * ts,
+          "median": 9.5 * ts, "outlier": 9.5 * ts, "xcat": 10.5 * ts,
           "axis": 11.0 * ts}
 
-    ml, mr, mt = 34.0 + 50.0 * ts, 16.0, 14.0
+    ml, mr, mt = 34.0 + 42.0 * ts, 16.0, 14.0
     mb = (16.0 + 50.0 * ts) if args.xticks else 22.0
-    strip_h = 26.0 * ts
+    strip_h = 18.0 * ts
     gap_in, gap_out = 14.0, 40.0 + 22.0 * ts
-    letter_h = 20.0 * ts if args.letter else 0.0
+    letter_h = 0.0
 
     n_panels = sum(len(g) for g in groups)
     gaps = gap_in * sum(max(len(g) - 1, 0) for g in groups) \
@@ -207,7 +207,7 @@ def main(argv=None):
     ]
 
     if args.letter:
-        out.append(f'<text x="{ml - 46 * ts:.1f}" y="{mt + 13 * ts:.1f}" '
+        out.append(f'<text x="{ml - 46 * ts:.1f}" y="{mt + 12 * ts:.1f}" '
                    f'font-size="{sz["letter"]:.1f}" '
                    f'font-weight="600" fill="{INK}">{esc(args.letter)}</text>')
 

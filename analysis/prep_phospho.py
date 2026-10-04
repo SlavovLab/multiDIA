@@ -16,7 +16,6 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from fig3a_phospho_sites import parse_mods                  # noqa: E402
-from lib_palette import INK, INK_MUTED                      # noqa: E402
 from lib_report import sample_of                            # noqa: E402
 from lib_fasta import read_fasta                            # noqa: E402
 
@@ -174,12 +173,6 @@ def complete_patients(runs):
         if r["kept"] == "1" and r["sample"]:
             have[r["sample"]].add(r["digest"])
     return sorted(s for s, d in have.items() if set(ORDER) <= d)
-
-
-def header(c, x, y, title, sub=None):
-    c.text(x, y, title, 11.5, INK, "start", "600")
-    if sub:
-        c.text(x, y + 15, sub, 9, INK_MUTED, "start")
 
 
 def save(c, outdir, name):

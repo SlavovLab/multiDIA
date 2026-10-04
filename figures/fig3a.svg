@@ -1,88 +1,89 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1215" height="433" viewBox="0 0 1010.0 360.0" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
-<rect width="1010.0" height="360.0" fill="#ffffff"/>
-<text x="20.0" y="30.0" font-size="24.51" fill="#0b0b0b" text-anchor="start" font-weight="600">a</text>
-<text x="48.0" y="30.0" font-size="21.68" fill="#0b0b0b" text-anchor="start" font-weight="600">Number of phosphosites detected</text>
-<text x="48.0" y="54.0" font-size="18.10" fill="#1f1e1c" text-anchor="start">n = 3,649 phosphosites</text>
-<text x="792.0" y="54.0" font-size="16.96" fill="#1f1e1c" text-anchor="end">distinct peptides containing the site</text>
-<rect x="800.0" y="45.0" width="10.0" height="10.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.28800000000000003"/>
-<text x="814.0" y="54.0" font-size="16.96" fill="#1f1e1c" text-anchor="start">1</text>
-<rect x="839.3" y="45.0" width="10.0" height="10.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.396"/>
-<text x="853.3" y="54.0" font-size="16.96" fill="#1f1e1c" text-anchor="start">2</text>
-<rect x="878.7" y="45.0" width="10.0" height="10.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.504"/>
-<text x="892.7" y="54.0" font-size="16.96" fill="#1f1e1c" text-anchor="start">3</text>
-<rect x="918.0" y="45.0" width="10.0" height="10.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.6120000000000001"/>
-<text x="932.0" y="54.0" font-size="16.96" fill="#1f1e1c" text-anchor="start">4</text>
-<rect x="957.3" y="45.0" width="10.0" height="10.0" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.72"/>
-<text x="971.3" y="54.0" font-size="16.96" fill="#1f1e1c" text-anchor="start">5+</text>
-<circle cx="203.6" cy="195.0" r="105.0" fill="#1baf7a" fill-opacity="0.16" stroke="#1baf7a" stroke-width="1.8"/>
-<circle cx="322.3" cy="195.0" r="90.9" fill="#2a78d6" fill-opacity="0.16" stroke="#2a78d6" stroke-width="1.8"/>
-<circle cx="275.2" cy="289.5" r="45.8" fill="#eb6834" fill-opacity="0.16" stroke="#eb6834" stroke-width="1.8"/>
-<text x="165.1" y="199.1" font-size="18.85" fill="#0b0b0b" text-anchor="middle" font-weight="600">1,646</text>
-<text x="361.1" y="201.6" font-size="18.85" fill="#0b0b0b" text-anchor="middle" font-weight="600">1,087</text>
-<text x="278.1" y="312.6" font-size="18.85" fill="#0b0b0b" text-anchor="middle" font-weight="600">263</text>
-<text x="270.1" y="201.6" font-size="18.85" fill="#0b0b0b" text-anchor="middle" font-weight="600">485</text>
-<text x="249.6" y="279.1" font-size="18.85" fill="#0b0b0b" text-anchor="middle" font-weight="600">42</text>
-<text x="298.1" y="274.1" font-size="18.85" fill="#0b0b0b" text-anchor="middle" font-weight="600">32</text>
-<text x="273.1" y="261.6" font-size="18.85" fill="#0b0b0b" text-anchor="middle" font-weight="600">94</text>
-<text x="86.6" y="158.2" font-size="18.85" fill="#0b0b0b" text-anchor="end" font-weight="600">Trypsin</text>
-<text x="86.6" y="177.1" font-size="18.85" fill="#1f1e1c" text-anchor="end">2,267</text>
-<text x="425.2" y="163.2" font-size="18.85" fill="#0b0b0b" text-anchor="start" font-weight="600">Lys-C</text>
-<text x="425.2" y="182.0" font-size="18.85" fill="#1f1e1c" text-anchor="start">1,698</text>
-<text x="333.0" y="300.3" font-size="18.85" fill="#0b0b0b" text-anchor="start" font-weight="600">Glu-C</text>
-<text x="333.0" y="319.2" font-size="18.85" fill="#1f1e1c" text-anchor="start">431</text>
-<line x1="613.8" y1="314.0" x2="990.0" y2="314.0" stroke="#c3c2b7" stroke-width="1"/>
-<text x="605.8" y="317.5" font-size="16.96" fill="#1f1e1c" text-anchor="end">1</text>
-<line x1="613.8" y1="256.5" x2="990.0" y2="256.5" stroke="#e1e0d9" stroke-width="1"/>
-<text x="605.8" y="260.0" font-size="16.96" fill="#1f1e1c" text-anchor="end">10</text>
-<line x1="613.8" y1="199.0" x2="990.0" y2="199.0" stroke="#e1e0d9" stroke-width="1"/>
-<text x="605.8" y="202.5" font-size="16.96" fill="#1f1e1c" text-anchor="end">100</text>
-<line x1="613.8" y1="141.5" x2="990.0" y2="141.5" stroke="#e1e0d9" stroke-width="1"/>
-<text x="605.8" y="145.0" font-size="16.96" fill="#1f1e1c" text-anchor="end">1,000</text>
-<line x1="613.8" y1="84.0" x2="990.0" y2="84.0" stroke="#e1e0d9" stroke-width="1"/>
-<text x="605.8" y="87.5" font-size="16.96" fill="#1f1e1c" text-anchor="end">10,000</text>
-<text x="541.8" y="199.0" font-size="18.10" fill="#1f1e1c" text-anchor="middle" transform="rotate(-90.0 541.8 199.0)">Number of phosphosites</text>
-<rect x="621.3" y="122.8" width="14.2" height="191.2" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.28800000000000003"/>
-<text x="631.9" y="118.8" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 631.9 118.8)">2,114</text>
-<rect x="637.5" y="193.8" width="14.2" height="120.2" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.396"/>
-<text x="648.1" y="189.8" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 648.1 189.8)">123</text>
-<rect x="653.7" y="235.7" width="14.2" height="78.3" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.504"/>
-<text x="664.3" y="231.7" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 664.3 231.7)">23</text>
-<rect x="669.9" y="286.6" width="14.2" height="27.4" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.6120000000000001"/>
-<text x="680.5" y="282.6" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 680.5 282.6)">3</text>
-<rect x="686.1" y="279.4" width="14.2" height="34.6" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.72"/>
-<text x="696.7" y="275.4" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 696.7 275.4)">4</text>
-<text x="660.8" y="332.0" font-size="18.85" fill="#0b0b0b" text-anchor="middle">Trypsin</text>
-<rect x="715.4" y="129.8" width="14.2" height="184.2" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.28800000000000003"/>
-<text x="726.0" y="125.8" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 726.0 125.8)">1,599</text>
-<rect x="731.6" y="204.6" width="14.2" height="109.4" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.396"/>
-<text x="742.2" y="200.6" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 742.2 200.6)">80</text>
-<rect x="747.8" y="254.1" width="14.2" height="59.9" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.504"/>
-<text x="758.4" y="250.1" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 758.4 250.1)">11</text>
-<rect x="764.0" y="286.6" width="14.2" height="27.4" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.6120000000000001"/>
-<text x="774.6" y="282.6" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 774.6 282.6)">3</text>
-<rect x="780.2" y="273.8" width="14.2" height="40.2" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.72"/>
-<text x="790.8" y="269.8" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 790.8 269.8)">5</text>
-<text x="754.9" y="332.0" font-size="18.85" fill="#0b0b0b" text-anchor="middle">Lys-C</text>
-<rect x="809.4" y="165.2" width="14.2" height="148.8" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.28800000000000003"/>
-<text x="820.0" y="161.2" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 820.0 161.2)">387</text>
-<rect x="825.6" y="225.9" width="14.2" height="88.1" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.396"/>
-<text x="836.2" y="221.9" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 836.2 221.9)">34</text>
-<rect x="841.8" y="269.3" width="14.2" height="44.7" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.504"/>
-<text x="852.4" y="265.3" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 852.4 265.3)">6</text>
-<rect x="858.0" y="296.7" width="14.2" height="17.3" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.6120000000000001"/>
-<text x="868.6" y="292.7" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 868.6 292.7)">2</text>
-<rect x="874.2" y="296.7" width="14.2" height="17.3" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.72"/>
-<text x="884.8" y="292.7" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 884.8 292.7)">2</text>
-<text x="848.9" y="332.0" font-size="18.85" fill="#0b0b0b" text-anchor="middle">Glu-C</text>
-<rect x="903.5" y="112.9" width="14.2" height="201.1" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.28800000000000003"/>
-<text x="914.1" y="108.9" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 914.1 108.9)">3,140</text>
-<rect x="919.7" y="166.3" width="14.2" height="147.7" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.396"/>
-<text x="930.3" y="162.3" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 930.3 162.3)">370</text>
-<rect x="935.9" y="201.9" width="14.2" height="112.1" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.504"/>
-<text x="946.5" y="197.9" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 946.5 197.9)">89</text>
-<rect x="952.1" y="230.8" width="14.2" height="83.2" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.6120000000000001"/>
-<text x="962.7" y="226.8" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 962.7 226.8)">28</text>
-<rect x="968.3" y="236.8" width="14.2" height="77.2" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.72"/>
-<text x="978.9" y="232.8" font-size="14.33" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 978.9 232.8)">22</text>
-<text x="943.0" y="332.0" font-size="18.85" fill="#0b0b0b" text-anchor="middle">All proteases</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1215" height="529" viewBox="0 0 1010.0 439.9" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
+<rect width="1010.0" height="439.9" fill="#ffffff"/>
+<text x="20.0" y="30.0" font-size="28.05" fill="#0b0b0b" text-anchor="start" font-weight="600">a</text>
+<text x="48.0" y="27.0" font-size="25.90" fill="#0b0b0b" text-anchor="start" font-weight="600">Number of phosphosites detected</text>
+<text x="48.0" y="56.1" font-size="23.74" fill="#1f1e1c" text-anchor="start">n = 3,649 phosphosites</text>
+<text x="399.6" y="56.1" font-size="23.74" fill="#1f1e1c" text-anchor="start">distinct peptides containing the site</text>
+<rect x="399.6" y="67.8" width="17.3" height="17.3" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.28800000000000003"/>
+<text x="420.9" y="84.2" font-size="23.74" fill="#1f1e1c" text-anchor="start">1</text>
+<rect x="447.6" y="67.8" width="17.3" height="17.3" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.396"/>
+<text x="468.8" y="84.2" font-size="23.74" fill="#1f1e1c" text-anchor="start">2</text>
+<rect x="495.6" y="67.8" width="17.3" height="17.3" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.504"/>
+<text x="516.8" y="84.2" font-size="23.74" fill="#1f1e1c" text-anchor="start">3</text>
+<rect x="543.5" y="67.8" width="17.3" height="17.3" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.6120000000000001"/>
+<text x="564.8" y="84.2" font-size="23.74" fill="#1f1e1c" text-anchor="start">4</text>
+<rect x="591.5" y="67.8" width="17.3" height="17.3" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.72"/>
+<text x="612.8" y="84.2" font-size="23.74" fill="#1f1e1c" text-anchor="start">5+</text>
+<circle cx="138.0" cy="258.3" r="118.0" fill="#1baf7a" fill-opacity="0.16" stroke="#1baf7a" stroke-width="1.8"/>
+<circle cx="271.5" cy="258.3" r="102.1" fill="#2a78d6" fill-opacity="0.16" stroke="#2a78d6" stroke-width="1.8"/>
+<circle cx="218.5" cy="364.5" r="51.5" fill="#eb6834" fill-opacity="0.16" stroke="#eb6834" stroke-width="1.8"/>
+<text x="94.5" y="266.6" font-size="23.74" fill="#0b0b0b" text-anchor="middle" font-weight="600">1,646</text>
+<text x="314.5" y="260.1" font-size="23.74" fill="#0b0b0b" text-anchor="middle" font-weight="600">1,087</text>
+<text x="221.5" y="391.6" font-size="23.74" fill="#0b0b0b" text-anchor="middle" font-weight="600">263</text>
+<text x="212.5" y="266.6" font-size="23.74" fill="#0b0b0b" text-anchor="middle" font-weight="600">485</text>
+<text x="190.0" y="353.6" font-size="23.74" fill="#0b0b0b" text-anchor="middle" font-weight="600">42</text>
+<text x="244.5" y="350.1" font-size="23.74" fill="#0b0b0b" text-anchor="middle" font-weight="600">32</text>
+<text x="215.5" y="332.2" font-size="22.66" fill="#0b0b0b" text-anchor="middle" font-weight="600">94</text>
+<text x="138.0" y="103.9" font-size="23.74" fill="#0b0b0b" text-anchor="middle" font-weight="600">Trypsin</text>
+<text x="138.0" y="130.9" font-size="23.74" fill="#1f1e1c" text-anchor="middle">2,267</text>
+<text x="271.5" y="103.9" font-size="23.74" fill="#0b0b0b" text-anchor="middle" font-weight="600">Lys-C</text>
+<text x="271.5" y="130.9" font-size="23.74" fill="#1f1e1c" text-anchor="middle">1,698</text>
+<text x="282.0" y="381.5" font-size="23.74" fill="#0b0b0b" text-anchor="start" font-weight="600">Glu-C</text>
+<text x="282.0" y="408.4" font-size="23.74" fill="#1f1e1c" text-anchor="start">431</text>
+<line x1="504.3" y1="368.6" x2="990.0" y2="368.6" stroke="#c3c2b7" stroke-width="1.2"/>
+<text x="496.3" y="376.3" font-size="21.58" fill="#1f1e1c" text-anchor="end">1</text>
+<line x1="504.3" y1="308.0" x2="990.0" y2="308.0" stroke="#e1e0d9" stroke-width="1.2"/>
+<text x="496.3" y="315.8" font-size="21.58" fill="#1f1e1c" text-anchor="end">10</text>
+<line x1="504.3" y1="247.4" x2="990.0" y2="247.4" stroke="#e1e0d9" stroke-width="1.2"/>
+<text x="496.3" y="255.2" font-size="21.58" fill="#1f1e1c" text-anchor="end">100</text>
+<line x1="504.3" y1="186.9" x2="990.0" y2="186.9" stroke="#e1e0d9" stroke-width="1.2"/>
+<text x="496.3" y="194.6" font-size="21.58" fill="#1f1e1c" text-anchor="end">1,000</text>
+<line x1="504.3" y1="126.3" x2="990.0" y2="126.3" stroke="#e1e0d9" stroke-width="1.2"/>
+<text x="496.3" y="134.1" font-size="21.58" fill="#1f1e1c" text-anchor="end">10,000</text>
+<text x="417.9" y="247.4" font-size="23.74" fill="#1f1e1c" text-anchor="middle" transform="rotate(-90.0 417.9 247.4)">Number of phosphosites</text>
+<rect x="514.0" y="167.2" width="18.0" height="201.4" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.28800000000000003"/>
+<text x="530.8" y="163.2" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 530.8 163.2)">2,114</text>
+<rect x="535.0" y="242.0" width="18.0" height="126.6" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.396"/>
+<text x="551.8" y="238.0" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 551.8 238.0)">123</text>
+<rect x="556.0" y="286.1" width="18.0" height="82.5" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.504"/>
+<text x="572.8" y="282.1" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 572.8 282.1)">23</text>
+<rect x="577.0" y="339.7" width="18.0" height="28.9" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.6120000000000001"/>
+<text x="593.8" y="335.7" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 593.8 335.7)">3</text>
+<rect x="598.0" y="332.1" width="18.0" height="36.5" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.72"/>
+<text x="614.8" y="328.1" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 614.8 328.1)">4</text>
+<text x="565.0" y="392.9" font-size="23.74" fill="#0b0b0b" text-anchor="middle">Trypsin</text>
+<rect x="635.4" y="174.5" width="18.0" height="194.1" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.28800000000000003"/>
+<text x="652.2" y="170.5" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 652.2 170.5)">1,599</text>
+<rect x="656.4" y="253.3" width="18.0" height="115.3" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.396"/>
+<text x="673.2" y="249.3" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 673.2 249.3)">80</text>
+<rect x="677.4" y="305.5" width="18.0" height="63.1" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.504"/>
+<text x="694.2" y="301.5" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 694.2 301.5)">11</text>
+<rect x="698.4" y="339.7" width="18.0" height="28.9" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.6120000000000001"/>
+<text x="715.2" y="335.7" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 715.2 335.7)">3</text>
+<rect x="719.4" y="326.2" width="18.0" height="42.3" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.72"/>
+<text x="736.2" y="322.2" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 736.2 322.2)">5</text>
+<text x="686.4" y="392.9" font-size="23.74" fill="#0b0b0b" text-anchor="middle">Lys-C</text>
+<rect x="756.9" y="211.8" width="18.0" height="156.7" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.28800000000000003"/>
+<text x="773.6" y="207.8" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 773.6 207.8)">387</text>
+<rect x="777.9" y="275.8" width="18.0" height="92.8" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.396"/>
+<text x="794.6" y="271.8" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 794.6 271.8)">34</text>
+<rect x="798.9" y="321.4" width="18.0" height="47.1" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.504"/>
+<text x="815.6" y="317.4" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 815.6 317.4)">6</text>
+<rect x="819.9" y="350.3" width="18.0" height="18.2" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.6120000000000001"/>
+<text x="836.6" y="346.3" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 836.6 346.3)">2</text>
+<rect x="840.9" y="350.3" width="18.0" height="18.2" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.72"/>
+<text x="857.6" y="346.3" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 857.6 346.3)">2</text>
+<text x="807.9" y="392.9" font-size="23.74" fill="#0b0b0b" text-anchor="middle">Glu-C</text>
+<rect x="878.3" y="156.8" width="18.0" height="211.8" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.28800000000000003"/>
+<text x="895.1" y="152.8" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 895.1 152.8)">3,140</text>
+<rect x="899.3" y="213.0" width="18.0" height="155.6" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.396"/>
+<text x="916.1" y="209.0" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 916.1 209.0)">370</text>
+<rect x="920.3" y="250.5" width="18.0" height="118.1" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.504"/>
+<text x="937.1" y="246.5" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 937.1 246.5)">89</text>
+<rect x="941.3" y="280.9" width="18.0" height="87.7" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.6120000000000001"/>
+<text x="958.1" y="276.9" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 958.1 276.9)">28</text>
+<rect x="962.3" y="287.3" width="18.0" height="81.3" fill="#4a3aa7" stroke="none" stroke-width="1.0" fill-opacity="0.72"/>
+<text x="979.1" y="283.3" font-size="21.58" fill="#1f1e1c" text-anchor="start" font-weight="600" transform="rotate(-90.0 979.1 283.3)">22</text>
+<text x="929.3" y="392.9" font-size="23.74" fill="#0b0b0b" text-anchor="middle">All</text>
+<text x="929.3" y="419.9" font-size="23.74" fill="#0b0b0b" text-anchor="middle">proteases</text>
 </svg>

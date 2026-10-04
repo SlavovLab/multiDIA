@@ -5,6 +5,31 @@ import collections
 from lib_palette import INK, INK_MUTED, SURFACE, TEXT_BOOST, boost_type
 
 
+_NARROW = set("iljfrtI,.·:;'/()[]")
+_WIDE = set("mwMW%")
+
+
+def text_width(s, size, bold=False):
+    """Estimated advance width of `s` at font-size `size`, in the same units."""
+    em = 0.0
+    for ch in str(s):
+        if ch == " ":
+            em += 0.3
+        elif ch in _NARROW:
+            em += 0.28
+        elif ch in _WIDE:
+            em += 0.82
+        elif ch.isupper():
+            em += 0.63
+        elif ch.isdigit():
+            em += 0.58
+        elif ch.islower():
+            em += 0.49
+        else:
+            em += 0.56
+    return em * size * (1.04 if bold else 1.0)
+
+
 def esc(s):
     return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 

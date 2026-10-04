@@ -40,23 +40,26 @@ def take_letter(body, path):
     return body[:m.start()] + body[m.end():], m.group(2)
 
 
+LETTER_PT = 13.0
+
+
 def stamp_letter(letter, x, y, font):
     """The one letter a composite draws, in output units, at its panel's corner."""
-    from lib_palette import TEXT_BOOST
-    return (f'<text x="{x:g}" y="{y:g}" font-size="{18.9 * TEXT_BOOST:.2f}" fill="#0b0b0b" '
+    from lib_palette import pt
+    return (f'<text x="{x:g}" y="{y:g}" font-size="{pt(LETTER_PT):.2f}" fill="#0b0b0b" '
             f"text-anchor='start' font-weight='600' "
             f"font-family='{font}'>{letter}</text>")
 
 
-def key_row(names, right, y, font, size=14.0):
+def key_row(names, right, y, font, size_pt=11.0):
     """-> SVG for a colour key, right-aligned to end at `right`."""
-    from lib_palette import INK_SECONDARY, TEXT_BOOST, assign
-    size *= TEXT_BOOST                    # as every panel's own type is
+    from lib_palette import INK_SECONDARY, assign, pt
+    size = pt(size_pt)
     pairs = [n.split("=", 1) if "=" in n else (n, n) for n in names]
     names = [lab for lab, _ in pairs]
     by_cat = assign([cat for _, cat in pairs])
     colour = {lab: by_cat[cat] for lab, cat in pairs}
-    sw, gap, pad = 12.0, 6.0, 22.0
+    sw, gap, pad = 0.75 * size, 0.35 * size, 1.2 * size
     widths = [sw + gap + size * 0.56 * len(n) for n in names]
     total = sum(widths) + pad * (len(names) - 1)
     if total > right - 8:

@@ -54,6 +54,22 @@ def boost_type(svg):
 # Common drawing width, so composed panels share one type scale.
 PANEL_W = 720.0
 
+# A whole figure is FIG_W units wide and prints at the PRINT_W_PT-wide text block,
+# where no text may be smaller than MIN_PT.
+FIG_W = 1215.0
+PRINT_W_PT = 468.0
+MIN_PT = 10.0
+
+
+def pt(points):
+    """-> the size in whole-figure units that prints at `points`."""
+    return points * FIG_W / PRINT_W_PT
+
+
+def pt_scale(w, out_w):
+    """-> the Canvas font_scale at which a w-wide panel shown out_w wide takes sizes in pt."""
+    return pt(1.0) * w / (out_w * TEXT_BOOST)
+
 
 DISPLAY = {"gluc": "Glu-C", "lysc": "Lys-C", "trypsin": "Trypsin",
            "aspn": "Asp-N", "lysn": "Lys-N", "chymotrypsin": "Chymotrypsin",

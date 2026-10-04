@@ -11,12 +11,15 @@ import os
 import sys
 
 from lib_fasta import read_fasta
-from lib_svg import Canvas
+from lib_svg import Canvas, text_width
 from lib_palette import (AXIS, FONT, GRID, INK, INK_MUTED, STRIP_FILL, UNION,
                          UNION_LABEL, TEXT_BOOST, assign)
 
-BOX_LINES = [("Post-mortem brain", 10.5), ("6 LBD · 6 control", 9.2),
-             ("100 ng", 9.2), ("SP3 clean-up", 9.2)]
+BOX_HEAD = ["Post-mortem", "brain"]
+BOX_LINES = ["6 LBD · 6 control", "100 ng", "SP3 clean-up"]
+
+# font sizes before font_scale: titles, labels, small type
+TITLE, LABEL, SMALL = 10.5, 9.6, 8.8
 
 # (display name, residues cleaved C-terminal to)
 SPECIFICITY = [("Glu-C", "E"), ("Lys-C", "K"), ("Trypsin", "KR")]
@@ -104,90 +107,112 @@ def main(argv=None):
     masks = {name: coverage_mask(peptides[name], n) for name in names}
     depth = [sum(masks[k][i] for k in masks) for i in range(n)]
 
-    W, H = 1010, 360
-    band2 = 30.0            # offset of the bottom band
-    c = Canvas(W, H, FONT, font_scale=1.25, out_w=1215.0)
+    W, fs, m = 1010.0, 1.9, 12.0
+    k_type = fs * TEXT_BOOST                      # drawn units per font unit
 
-    if args.letter:
-        c.text(22, 32, args.letter, 13, INK, "start", "600")
+    def tw(s, size, bold=False):
+        """Estimated drawn width of `s` at font size `size`."""
+        return text_width(s, size * k_type, bold)
+
+    def mid(size):
+        """Baseline offset that centres capitals on a line."""
+        return 0.35 * size * k_type
 
     # band 1: sample -> three digests -> shared stages -> union
-    lanes = [92.0, 136.0, 180.0]
+    stage_top, stage_h = 12.0, 60.0
+    chip_h, pitch = 58.0, 66.0
+    lanes = [stage_top + stage_h + 10.0 + chip_h / 2 + i * pitch for i in range(3)]
     mid_y = lanes[1]
-    # sample box sized to its widest line
-    k_type = c.fs * TEXT_BOOST                    # drawn units per font unit
-    need = max(len(t) * sz * 0.53 * k_type for t, sz in BOX_LINES)
-    sx0 = 40.0
-    sx1 = sx0 + max(112.0, need + 16.0)
-    c.rect(sx0, 76, sx1 - sx0, 120, fill=STRIP_FILL, stroke=AXIS, sw=1.1, rx=7)
-    scx = (sx0 + sx1) / 2
-    head, head_sz = BOX_LINES[0]
-    c.text(scx, 104, head, head_sz, INK, "middle", "600")
-    for k, (line, sz) in enumerate(BOX_LINES[1:]):
-        c.text(scx, 128 + k * sz * k_type * 1.2, line, sz, INK_MUTED, "middle")
+    subs = [(nm, "after " + ", ".join(res)) for nm, res in SPECIFICITY]
+    sx0 = m
+    sx1 = sx0 + max([tw(t, TITLE, True) for t in BOX_HEAD]
+                    + [tw(t, SMALL) for t in BOX_LINES]) + 24.0
+    px0 = sx1 + 24.0
+    px1 = px0 + max(max(tw(nm, 11, True), tw(sub, SMALL)) for nm, sub in subs) + 20.0
+    stage_x = [px1 + 10.0]                        # dia-PASEF | directDIA | end
+    stages = [("dia-PASEF", args.acquisition), ("directDIA", "Spectronaut · 1% FDR")]
+    for title, sub in stages:
+        stage_x.append(stage_x[-1] + max(tw(title, TITLE, True), tw(sub, SMALL)) + 28.0)
+    ux0, ux1 = stage_x[2] + 24.0, W - m
 
-    px0 = max(196.0, sx1 + 28.0)
-    px1 = px0 + 100.0
-    stage_x = [356.0, 552.0, 716.0]          # dia-PASEF | directDIA | end
-    ux0, ux1 = 752.0, 980.0
+    # band 2 sits in a translated group; y below is relative to its top
+    band2 = lanes[2] + chip_h / 2 + 14.0
+    ruler_y, row_h, bar_h = 38.0, 27.0, 15.0
+    top = ruler_y + 6.0
+    H = band2 + top + 4 * row_h + 14.0
+    c = Canvas(W, H, FONT, font_scale=fs, out_w=1215.0)
+
+    if args.letter:
+        c.text(22, 42, args.letter, 11.4, INK, "start", "600")
+
+    lh = [TITLE * k_type * 1.12] * len(BOX_HEAD) + [SMALL * k_type * 1.2] * len(BOX_LINES)
+    bh = sum(lh) + 22.0
+    c.rect(sx0, mid_y - bh / 2, sx1 - sx0, bh, fill=STRIP_FILL, stroke=AXIS, sw=1.1, rx=7)
+    scx = (sx0 + sx1) / 2
+    y = mid_y - bh / 2 + 11.0
+    for k, line in enumerate(BOX_HEAD + BOX_LINES):
+        y += lh[k]
+        bold = k < len(BOX_HEAD)
+        c.text(scx, y - 0.25 * lh[k], line, TITLE if bold else SMALL,
+               INK if bold else INK_MUTED, "middle", "600" if bold else None)
 
     # shared stages, labelled once above the lanes
-    c.rect(stage_x[0], 26, stage_x[2] - stage_x[0], 42, fill=STRIP_FILL,
+    c.rect(stage_x[0], stage_top, stage_x[2] - stage_x[0], stage_h, fill=STRIP_FILL,
            stroke=AXIS, sw=1.0, rx=4)
-    c.line(stage_x[1], 26, stage_x[1], 68, stroke=AXIS, sw=1.0)
-    for (a, b), title, sub in ((stage_x[:2], "dia-PASEF", args.acquisition),
-                               (stage_x[1:], "directDIA", "Spectronaut · 1% FDR")):
-        c.text((a + b) / 2, 45, title, 10, INK, "middle", "600")
-        c.text((a + b) / 2, 62, sub, 8.4, INK_MUTED, "middle")
+    c.line(stage_x[1], stage_top, stage_x[1], stage_top + stage_h, stroke=AXIS, sw=1.0)
+    for (a, b), (title, sub) in zip((stage_x[:2], stage_x[1:]), stages):
+        c.text((a + b) / 2, stage_top + 25, title, TITLE, INK, "middle", "600")
+        c.text((a + b) / 2, stage_top + 50, sub, SMALL, INK_MUTED, "middle")
 
-    for i, (name, residues) in enumerate(SPECIFICITY):
+    for i, (name, sub) in enumerate(subs):
         y = lanes[i]
         col = colour[name]
-        c.arrow(sx1, mid_y, px0, y, xmid=(sx1 + px0) / 2)
-        c.chip(px0, y - 19, px1 - px0, 38, name,
-               "after " + ", ".join(residues), colour=col)
-        c.line(px1, y, stage_x[2], y, stroke=col, sw=2.2)
+        c.arrow(sx1, mid_y, px0, y, xmid=(sx1 + px0) / 2, sw=1.8, head=6.0)
+        c.chip(px0, y - chip_h / 2, px1 - px0, chip_h, name, sub, colour=col)
+        c.line(px1, y, stage_x[2], y, stroke=col, sw=2.8)
         for sx in stage_x:
-            c.line(sx, y - 4, sx, y + 4, stroke=col, sw=2.2)
-        c.arrow(stage_x[2], y, ux0, mid_y, xmid=740)
+            c.line(sx, y - 6, sx, y + 6, stroke=col, sw=2.8)
+        c.arrow(stage_x[2], y, ux0, mid_y, xmid=(stage_x[2] + ux0) / 2, sw=1.8, head=6.0)
 
-    bh = 44.0
-    c.rect(ux0, mid_y - bh / 2, ux1 - ux0, bh, fill=UNION, fo=0.10, stroke=UNION,
+    c.rect(ux0, mid_y - chip_h / 2, ux1 - ux0, chip_h, fill=UNION, fo=0.10, stroke=UNION,
            sw=1.6, rx=7)
-    c.text((ux0 + ux1) / 2, mid_y + 4, "All proteases", 11, INK, "middle", "600")
+    c.text((ux0 + ux1) / 2, mid_y + mid(TITLE), "All proteases", TITLE, INK, "middle",
+           "600")
 
     # band 2: the protein's observed coverage by protease, and pooled
     c.add(f'<g transform="translate(0 {band2:g})">')
-    c.line(44, 196, W - 30, 196, stroke=GRID, sw=1)
+    c.line(m, 0, W - m, 0, stroke=GRID, sw=1)
 
-    bx0, bx1 = 116.0, W - 74.0
-    pitch = (bx1 - bx0) / n
-
-    def X(res):
-        return bx0 + res * pitch
-
-    ruler_y = 224.0
-    c.text(26, ruler_y - 8,
-           f"{args.label} · {seq_name}" if args.label else seq_name,
-           9.5, INK, "start", "600")
+    head = f"{args.label} · {seq_name}" if args.label else seq_name
     tick = 10 if n <= 100 else (20 if n <= 260 else (50 if n <= 600 else 100))
-    for r in range(tick, n + 1, tick):
-        c.line(X(r), ruler_y - 5, X(r), ruler_y - 1, stroke=AXIS, sw=1)
-        c.text(X(r), ruler_y - 8, str(r), 8.2, INK_MUTED, "middle")
-    c.text(bx1 + 8, ruler_y - 8, "observed", 8.2, INK_MUTED, "start")
-
-    block_h, gap_h = 12.0, 10.0
-    top = ruler_y + 10
     lanes2 = [(name, colour[name], masks[name]) for name in names]
     lanes2.append((UNION_LABEL, UNION, depth))
+    bx1 = W - m - tw("observed", SMALL) - 20.0
+    # the first ruler label clears the header
+    p = min(tick / n, 0.5)
+    clear = m + tw(head, LABEL, True) + 24.0 + tw(str(tick), SMALL) / 2
+    bx0 = max(m + max(tw(nm, LABEL) for nm, _c, _m in lanes2) + 34.0,
+              (clear - bx1 * p) / (1 - p))
+    step = (bx1 - bx0) / n
+
+    def X(res):
+        return bx0 + res * step
+
+    c.text(m, ruler_y - 8, head, LABEL, INK, "start", "600")
+    for r in range(tick, n + 1, tick):
+        c.line(X(r), ruler_y - 5, X(r), ruler_y - 1, stroke=AXIS, sw=1)
+        c.text(X(r), ruler_y - 8, str(r), SMALL, INK_MUTED, "middle")
+    c.text(bx1 + 12, ruler_y - 8, "observed", SMALL, INK_MUTED, "start")
+
     for i, (name, col, mask) in enumerate(lanes2):
-        by = top + i * (block_h + gap_h)
-        c.rect(bx0 - 13, by + 7, 9, 9, fill=col, rx=2)
-        c.text(bx0 - 19, by + 15, name, 9.5, INK, "end")
+        cy = top + (i + 0.5) * row_h
+        c.rect(bx0 - 18, cy - 6, 12, 12, fill=col, rx=2)
+        c.text(bx0 - 24, cy + mid(LABEL), name, LABEL, INK, "end")
         for s, e in runs(mask):
-            c.rect(X(s), by + 6, max(X(e) - X(s), 1.0), 12, fill=col, fo=0.85, rx=2)
-        c.text(bx1 + 8, by + 15, f"{sum(1 for v in mask if v) / n:.0%}", 9.5, INK, "start",
-               "600" if name == UNION_LABEL else None)
+            c.rect(X(s), cy - bar_h / 2, max(X(e) - X(s), 1.0), bar_h, fill=col, fo=0.85,
+                   rx=2)
+        c.text(bx1 + 12, cy + mid(LABEL), f"{sum(1 for v in mask if v) / n:.0%}", LABEL,
+               INK, "start", "600" if name == UNION_LABEL else None)
 
     c.add("</g>")
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)

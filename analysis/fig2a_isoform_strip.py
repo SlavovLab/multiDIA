@@ -14,8 +14,8 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from lib_svg import Canvas                                  # noqa: E402
-from lib_palette import (FONT, INK, INK_MUTED, INK_SECONDARY, TEXT_BOOST,  # noqa: E402
-                         assign)
+from lib_palette import (FONT, INK, INK_MUTED, TEXT_BOOST,  # noqa: E402
+                         assign, pt_scale)
 
 ORDER = ["GluC", "LysC", "Trypsin"]
 ISO = re.compile(r"-\d+$")
@@ -118,7 +118,7 @@ def pack_hits(hits, mapper=lambda j: j):
 
 
 def aligned_panel(base, iso_acc, cseq, iseq, can_peps, iso_peps, out, label=None,
-                  min_equal=MIN_EQUAL, margin=146.0, bar_height=22.0):
+                  min_equal=MIN_EQUAL, margin=146.0, bar_height=22.0, width=1215.0):
     """Both forms in one frame, each change laid out canonical-then-isoform; absent = thin line."""
     colour = assign(ORDER)
     ev = events(cseq, iseq, min_equal)
@@ -139,8 +139,8 @@ def aligned_panel(base, iso_acc, cseq, iseq, can_peps, iso_peps, out, label=None
             segs.append(("change", u, u + (ce - cs) + (ie - is_), cs, ce, is_, ie))
             u += (ce - cs) + (ie - is_)
         c0, i0 = ce, ie
-    W, bar_h = 1010.0, bar_height
-    ml, mr = margin, 30.0
+    W, bar_h = width, bar_height
+    ml, mr = margin, 22.0
     k = (W - ml - mr) / u
 
     def X(v):
@@ -173,16 +173,17 @@ def aligned_panel(base, iso_acc, cseq, iseq, can_peps, iso_peps, out, label=None
 
     can_rows, can_n = hits(cseq, iseq, can_peps, cmap)
     iso_rows, iso_n = hits(iseq, cseq, iso_peps, imap)
-    pep_h, pitch = 4.0, 6.0
-    yc = 62.0
-    yi = yc + bar_h + 12 + max(can_n, 1) * pitch + 14
-    H = yi + bar_h + 12 + max(iso_n, 1) * pitch + 14
-    c = Canvas(W, H, FONT, font_scale=1.4, out_w=1215.0)
-    c.text(58.0, 28, label or base, 12, INK, "start", "600")
+    pep_h, pitch = 5.0, 7.0
+    upt = pt_scale(W, W) * TEXT_BOOST                # units per pt
+    yc = 52.0
+    yi = yc + max(bar_h + 6 + max(can_n, 1) * pitch, 25 * upt) + 18
+    H = yi + max(bar_h + 6 + max(iso_n, 1) * pitch, 25 * upt) + 12
+    c = Canvas(W, H, FONT, font_scale=pt_scale(W, W), out_w=W)
+    c.text(58.0, 32, label or base, 12, INK, "start", "600")
     for name, seq, y, m, rows in ((base, cseq, yc, cmap, can_rows),
                                   (iso_acc, iseq, yi, imap, iso_rows)):
-        c.text(ml - 10, y + 9, name, 9.5, INK, "end", "600")
-        c.text(ml - 10, y + 9 + 9.5 * c.fs * TEXT_BOOST * 0.95, f"{len(seq)} aa", 8, INK_MUTED, "end")
+        c.text(ml - 10, y + 8 * upt, name, 10, INK, "end", "600")
+        c.text(ml - 10, y + 19.5 * upt, f"{len(seq)} aa", 10, INK_MUTED, "end")
         own = runs([m[r] for r in range(len(seq))])
         c.rect(X(own[0][0]), y + bar_h / 2 - 1.0, (own[-1][1] - own[0][0]) * k, 2.0,
                fill=INK, stroke="none", rx=0)
@@ -217,6 +218,7 @@ def main(argv=None):
                     help="left margin before the bars")
     ap.add_argument("--bar-height", dest="bar_height", type=float, default=22.0,
                     help="bar thickness")
+    ap.add_argument("--width", type=float, default=1215.0, help="panel width")
     ap.add_argument("--out", default="strip.svg")
     args = ap.parse_args(argv)
 
@@ -237,7 +239,7 @@ def main(argv=None):
             pooled[d] |= v
     aligned_panel(args.protein, args.isoform, seqs[args.protein], seqs[args.isoform],
                   pooled, pooled, args.out, args.label, args.min_equal, args.margin,
-                  args.bar_height)
+                  args.bar_height, args.width)
     return 0
 
 

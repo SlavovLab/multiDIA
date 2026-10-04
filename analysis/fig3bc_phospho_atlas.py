@@ -16,10 +16,10 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from lib_svg import Canvas, esc                             # noqa: E402
-from fig3a_phospho_sites import parse_mods                                   # noqa: E402
-from lib_palette import (AXIS, DIVERGING_HIGH, DIVERGING_MID, FONT, INK,
+from fig3a_phospho_sites import parse_mods, text_width                       # noqa: E402
+from lib_palette import (AXIS, DIVERGING_HIGH, DIVERGING_MID, FIG_W, FONT, INK,
                      INK_MUTED, INK_SECONDARY, PANEL_W, STRIP_FILL,
-                     display, TEXT_BOOST)                                      # noqa: E402
+                     display, pt_scale, TEXT_BOOST)                            # noqa: E402
 import prep_phospho as ph                                               # noqa: E402
 
 ORDER = ph.ORDER
@@ -27,7 +27,17 @@ NONE_FILL = "#000000"       # not detected
 BREAKS = (3.0, 10.0, 20.0, 30.0)
 STEPS = [DIVERGING_MID] + DIVERGING_HIGH
 FIXED = "Carbamidomethyl"   # fixed modification, not an observation
-TITLE_X = 36.0
+TITLE_X, TITLE_Y = 34.0, 19.5
+
+
+def canvas(w, h):
+    """A w-wide panel printed at the full figure width, sizes in pt."""
+    return Canvas(w, h, FONT, font_scale=pt_scale(w, FIG_W), out_w=FIG_W)
+
+
+def title(c, txt):
+    """The panel title, on the stamped letter's baseline."""
+    c.text(TITLE_X, TITLE_Y, txt, 12, INK, "start", "600")
 
 
 def score(pep):
@@ -57,31 +67,36 @@ def cell(c, x, y, w, h, pep, tip):
     c.add('</g>')
 
 
-def legend(c, x, y, size=10, gap=10.0):
-    """Draw the PEP key; returns its right edge."""
-    c.text(x, y - 5, "−log10 PEP (best precursor)", 9, INK_SECONDARY)
+def legend(c, x, y, max_w, gap=10.0):
+    """Draw the PEP key, wrapping entries to `max_w`; returns its bottom."""
+    u = c.fs * TEXT_BOOST
+    box = 8 * u
+    c.text(x, y, "−log10 PEP (best precursor)", 11, INK_SECONDARY)
     entries = list(zip(STEPS, bin_labels())) + [(NONE_FILL, "not detected")]
-    cx, cy, right = x, y, x
+    cx, cy = x, y + 7 * u
     for fill_, lab in entries:
-        adv = size + 3 + 0.55 * 8.5 * TEXT_BOOST * len(lab) + gap
-        c.rect(cx, cy, size, size, fill_)
-        c.text(cx + size + 3, cy + size - 1.5, lab, 8.5, INK_SECONDARY)
-        right = max(right, cx + adv)
+        adv = box + 4 + text_width(lab, 11, c.fs) + gap
+        if cx > x and cx + adv - gap > x + max_w:
+            cx, cy = x, cy + 13 * u
+        c.rect(cx, cy, box, box, fill_)
+        c.text(cx + box + 4, cy + box - 0.4 * u, lab, 11, INK_SECONDARY)
         cx += adv
-    return right
+    return cy + box
 
 
-def cell_key(c, x, y, size=14):
-    """Draw the digest order of a box's cells, labelled on their left; returns its right edge."""
-    c.text(x, y + size - 3.5, "Cell order", 9, INK_SECONDARY)
-    x += 0.5 * 9 * TEXT_BOOST * len("Cell order") + 6
+def cell_key(c, x, y):
+    """Draw the digest order of a box's cells, labelled on their left; returns its bottom."""
+    u = c.fs * TEXT_BOOST
+    size = 12 * u
+    c.text(x, y + size - 3.6 * u, "Cell order", 11, INK_SECONDARY)
+    x += text_width("Cell order", 11, c.fs) + 6 * u
     names = [display(d) for d in ORDER]
-    w = 0.55 * 8.5 * TEXT_BOOST * max(map(len, names)) + 8
+    w = max(text_width(n, 10, c.fs) for n in names) + 8 * u
     for j, name in enumerate(names):
-        c.rect(x + j * w, y, w - 1, size, "#ffffff", INK_MUTED, 0.8)
-        c.text(x + j * w + (w - 1) / 2, y + size - 4, name, 8.5, INK_SECONDARY,
+        c.rect(x + j * w, y, w - 1, size, "#ffffff", INK_MUTED, 1.0)
+        c.text(x + j * w + (w - 1) / 2, y + size - 3.6 * u, name, 10, INK_SECONDARY,
                "middle")
-    return x + len(names) * w
+    return y + size
 
 
 def cohort(scan_dir):
@@ -132,32 +147,43 @@ def heatmap_all(S, cells, out):
     """Every site as a column, rows by digest."""
     order = sorted(S, key=lambda i: sort_key(cells[i]))
     first = [next(d for d in SORT if d in cells[i]) for i in order]
-    W, H = PANEL_W, 192
-    x0, x1 = 70.0, W - 14
-    y_map, row_h = 62.0, 40.0
-    c = Canvas(W, H, FONT)
+    W = PANEL_W
+    fs = pt_scale(W, FIG_W)
+    u = fs * TEXT_BOOST
+    x0 = 14 + max(text_width(display(d), 11, fs) for d in SORT) + 8
+    x1 = W - 14
+    y_map, row_h = 13 + 8.5 * u + 9, 24.0
+    c = canvas(W, y_map + 3 * row_h + 8)
     n = len(order)
     dx = (x1 - x0) / n
     # blocks named by the first digest that detects a site
     names = {"Trypsin": "Trypsin", "LysC": "Lys-C",
              "GluC": "Glu-C"}
-    k = 0
+    blocks, k = [], 0
     while k < n:
         j = k
         while j + 1 < n and first[j + 1] == first[k]:
             j += 1
-        xa, xb = x0 + k * dx, x0 + (j + 1) * dx
-        c.line(xa + 0.5, y_map - 8, xb - 0.5, y_map - 8, INK_SECONDARY, 1.0)
-        for xe in (xa + 0.5, xb - 0.5):
-            c.line(xe, y_map - 8, xe, y_map - 4, INK_SECONDARY, 1.0)
-        narrow = xb - xa < 120
-        c.text(xb if narrow else (xa + xb) / 2, y_map - 12,
-               f"{names[first[k]]} · {j - k + 1:,}", 9, INK_SECONDARY,
-               "end" if narrow else "middle")
+        blocks.append((x0 + k * dx, x0 + (j + 1) * dx,
+                       f"{names[first[k]]} · {j - k + 1:,}"))
         k = j + 1
+    right = x1
+    for xa, xb, txt in reversed(blocks):
+        c.line(xa + 0.5, y_map - 8, xb - 0.5, y_map - 8, INK_SECONDARY, 1.2)
+        for xe in (xa + 0.5, xb - 0.5):
+            c.line(xe, y_map - 8, xe, y_map - 3, INK_SECONDARY, 1.2)
+        # centred, unless that crosses the block's end or the next label
+        w = text_width(txt, 11, fs)
+        end = min(xb, right)
+        if (xa + xb) / 2 + w / 2 <= end:
+            c.text((xa + xb) / 2, y_map - 13, txt, 11, INK_SECONDARY, "middle")
+            right = (xa + xb) / 2 - w / 2 - 14
+        else:
+            c.text(end, y_map - 13, txt, 11, INK_SECONDARY, "end")
+            right = end - w - 14
     for r, dig in enumerate(SORT):
         y = y_map + r * row_h
-        c.text(x0 - 6, y + row_h / 2 + 3.5, display(dig), 10, INK, "end")
+        c.text(x0 - 8, y + row_h / 2 + 3.9 * u, display(dig), 11, INK, "end")
         # merge runs of one colour into one rect
         k = 0
         while k < n:
@@ -233,22 +259,24 @@ def heatmap_genes(rows, S, items, seqs, gn, out, width, height):
         if not mine:
             empty.append(it["label"])
 
-    x0, row_h = 70.0, 18.0
     W = width
-    cw = min(22.0, (W - x0 - 20) / max(len(cols), 1))
-    y_map = 44.0
+    fs = pt_scale(W, FIG_W)
+    u = fs * TEXT_BOOST
+    x0 = 14 + max(text_width(display(d), 11, fs) for d in ORDER) + 8
+    row_h = 22.0
+    cw = min(30.0, (W - x0 - 20) / max(len(cols), 1))
+    y_map = TITLE_Y + 16
     y_lab = y_map + 3 * row_h + 6
-    lab_h = max(0.55 * 8.5 * TEXT_BOOST * len(m["label"]) for m in cols) \
-        * math.sin(math.radians(60))
-    y_key = y_lab + lab_h + 26
-    H = max(y_key + 10 + 8, height)
-    c = Canvas(W, H, FONT)
-    ph.header(c, TITLE_X, 20, "Phosphosites on PD-implicated proteins")
+    lab_h = max(text_width(m["label"], 10, fs) for m in cols) * math.sin(math.radians(60))
+    x_key = x0 + len(cols) * cw + 40
+    H = max(y_lab + lab_h + 6, height)
+    c = canvas(W, H)
+    title(c, "Phosphosites on PD-implicated proteins")
     print(f"  {len(cols)} sites on {len(items) - len(empty)} of {len(items)} "
           f"items; no phosphosite on: {', '.join(empty) or 'none'}")
     for r, dig in enumerate(ORDER):
         y = y_map + r * row_h
-        c.text(x0 - 6, y + row_h / 2 + 3.5, display(dig), 10, INK, "end")
+        c.text(x0 - 8, y + row_h / 2 + 3.9 * u, display(dig), 11, INK, "end")
         for j, m in enumerate(cols):
             pep, n = m["cells"].get(dig, (None, 0))
             tip = (f"{m['label']} · {display(dig)} · " +
@@ -258,13 +286,13 @@ def heatmap_genes(rows, S, items, seqs, gn, out, width, height):
     prev = None
     for j, m in enumerate(cols):
         xc = x0 + j * cw + cw / 2
-        c.text(xc + 3, y_lab, m["label"], 8.5, INK_SECONDARY, "end", rot=-60)
+        c.text(xc + 3 * u, y_lab, m["label"], 10, INK_SECONDARY, "end", rot=-60)
         if prev is not None and m["name"] != prev:
             c.line(x0 + j * cw, y_map - 4, x0 + j * cw, y_map + 3 * row_h + 2,
-                   AXIS, 1.0)
+                   AXIS, 1.2)
         prev = m["name"]
-    right = legend(c, 20, y_key, gap=9.0)
-    assert right - 9.0 <= W, "PD heatmap key wider than the panel"
+    bottom = legend(c, x_key, y_map + 0.75 * 11 * u, W - 14 - x_key)
+    assert bottom <= H, "PD heatmap key taller than the panel"
     ph.save(c, os.path.dirname(out) or ".", os.path.basename(out))
 
 
@@ -458,32 +486,34 @@ def protein(args):
             if d in mods[(pos, aa, m)] else f"{d}:-" for d in ORDER))
 
     W = args.width
+    fs = pt_scale(W, FIG_W)
+    u = fs * TEXT_BOOST
     lo, hi = 20.0, W - 20.0
     px = lambda r: lo + (r - 0.5) / len(seq) * (hi - lo)           # noqa: E731
     cs = args.cell
     box_w = 3 * cs + args.pad
     placed = layout(marks, px, lo, hi, box_w, tiers=1)
-    reach = 44.0
+    reach = 38.0
     # alternate labels are staggered by one line
-    line = args.label_size * TEXT_BOOST * 1.2
-    key_h = 14.0                             # the cell-order key under the title
-    y_bar = 48 + key_h + 14 + reach + line
-    bar_h = 22.0
-    bottom = y_bar + bar_h + reach + cs + 9 + line + 6
+    line = 1.15 * args.label_size * u
+    cap = 0.72 * args.label_size * u
+    y_key = TITLE_Y + 9                      # the cell-order key under the title
+    y_bar = y_key + 12 * u + 8 + cap + line + 3 + reach
+    bar_h = 26.0
+    bottom = y_bar + bar_h + reach + cs + 3 + cap + line + 0.25 * args.label_size * u + 4
     H = max(bottom, args.height)
     nth = {-1: 0, 1: 0}
-    c = Canvas(W, H, FONT)
-    ph.header(c, TITLE_X, 20, f"{gene} ({args.isoform}, {len(seq)} aa): modified "
-              f"residues")
-    c.rect(lo, y_bar, hi - lo, bar_h, "#ffffff", AXIS, 1.0)
+    c = canvas(W, H)
+    title(c, f"{gene} ({args.isoform}, {len(seq)} aa): modified residues")
+    c.rect(lo, y_bar, hi - lo, bar_h, "#ffffff", AXIS, 1.2)
     for name, a, b, _ in sorted(feats, key=lambda f: f[1]):
         c.rect(px(a - 0.5 + 0.5), y_bar, px(b + 0.5) - px(a), bar_h,
-               STRIP_FILL, INK_SECONDARY, 0.8)
+               STRIP_FILL, INK_SECONDARY, 1.0)
         mid = (px(a) + px(b)) / 2
-        c.text(mid, y_bar + bar_h / 2 + 3.5, name, 9, INK, "middle")
-    for r in [1] + list(range(100, len(seq), 100)) + [len(seq)]:
-        c.line(px(r), y_bar + bar_h, px(r), y_bar + bar_h + 3, INK_MUTED, 0.8)
-        c.text(px(r), y_bar + bar_h + 12, str(r), 7.5, INK_MUTED, "middle")
+        c.text(mid, y_bar + bar_h / 2 + 0.36 * 11 * u, name, 11, INK, "middle")
+    ticks = [1] + list(range(100, len(seq), 100)) + [len(seq)]
+    for r in ticks:
+        c.line(px(r), y_bar + bar_h, px(r), y_bar + bar_h + 4, INK_MUTED, 1.0)
     for (pos, aa, m), side, _, x in placed:
         xs, xc = px(pos), x + box_w / 2
         stagger = line * (nth[side] % 2)
@@ -493,11 +523,11 @@ def protein(args):
             yk, yl = yb + cs + 1, yb - 3 - stagger
         else:
             ya, yb = y_bar + bar_h, y_bar + bar_h + reach
-            yk, yl = yb - 1, yb + cs + 9 + stagger
+            yk, yl = yb - 1, yb + cs + 3 + cap + stagger
         bend = ya + 5 * side
         c.add(f'<path d="M {xs:.1f} {ya:.1f} L {xs:.1f} {bend:.1f} '
               f'L {xc:.1f} {yk - 5 * side:.1f} L {xc:.1f} {yk:.1f}" '
-              f'fill="none" stroke="{INK_MUTED}" stroke-width="0.7"/>')
+              f'fill="none" stroke="{INK_MUTED}" stroke-width="1.0"/>')
         c.text(xc, yl, mod_label(m, aa, pos), args.label_size, INK, "middle")
         cells = mods[(pos, aa, m)]
         for j, d in enumerate(ORDER):
@@ -506,7 +536,12 @@ def protein(args):
                    (f"PEP {pep:.2g}, {n} patient{'s' * (n != 1)}"
                     if pep is not None else "not detected"))
             cell(c, x + args.pad / 2 + j * cs, yb, cs - 1, cs - 1, pep, tip)
-    cell_key(c, TITLE_X, 32)
+    # residue numbers over the leaders, on a white ground
+    for r in ticks:
+        w = text_width(str(r), 10, fs) + 2
+        c.rect(px(r) - w / 2, y_bar + bar_h + 5, w, 7.2 * u + 1, "#ffffff")
+        c.text(px(r), y_bar + bar_h + 5 + 7.2 * u, str(r), 10, INK_MUTED, "middle")
+    cell_key(c, TITLE_X, y_key)
     ph.save(c, os.path.dirname(args.out) or ".", os.path.basename(args.out))
 
 
@@ -543,7 +578,7 @@ def main(argv=None):
     p.add_argument("--cell", type=float, default=10.0, help="cell size")
     p.add_argument("--pad", type=float, default=12.0,
                    help="room around a box's three cells")
-    p.add_argument("--label-size", type=float, default=8.5)
+    p.add_argument("--label-size", type=float, default=10.0, help="site labels, in pt")
     p.set_defaults(fn=protein)
     args = ap.parse_args(argv)
     args.fn(args)

@@ -259,7 +259,7 @@ def case_workflow(tmp):
     check("the union row is bars, not a strip", "covered by" in texts, False)
     union_bars = [r for r in root.iter(f"{ns}rect")
                   if r.get("fill") == palette.UNION
-                  and float(r.get("height")) == 12.0]
+                  and float(r.get("height")) == 15.0]
     check("union drawn as several bars with gaps", len(union_bars) >= 2, True)
     check("the union is named once", texts.count("All proteases"), 1)
     check("no stale union names", ("Union" in texts, "All three" in texts),
@@ -829,7 +829,7 @@ def case_aligned_strip(tmp):
           re.search(r'<rect x="80\.0" y="[\d.]+" width="[\d.]+" height="22\.0"',
                     svg) is not None, True)
     check("... and the title does not move with them",
-          re.search(r'<text x="58\.0" y="28\.0"[^>]*>GENE<', svg) is not None,
+          re.search(r'<text x="58\.0" y="32\.0"[^>]*>GENE<', svg) is not None,
           True)
     check("each form is labelled with its length",
           (f">{len(can)} aa<" in svg, f">{len(tail)} aa<" in svg), (True, True))
@@ -972,8 +972,8 @@ def case_compose(tmp):
             for e in root5.iter() if e.tag.endswith("text")
             and e.text in ("a", "b")]
     check("reletter: one letter per panel, at one size and corner",
-          lets, [("a", "22", "32", f"{18.9 * __import__('lib_palette').TEXT_BOOST:.2f}"),
-                 ("b", "22", "132", f"{18.9 * __import__('lib_palette').TEXT_BOOST:.2f}")])
+          lets, [("a", "22", "32", f"{__import__('lib_palette').pt(compose.LETTER_PT):.2f}"),
+                 ("b", "22", "132", f"{__import__('lib_palette').pt(compose.LETTER_PT):.2f}")])
     check("reletter: the letters are outside the panels' scaled groups",
           all(ch.text not in ("a", "b") for g in root5 if g.tag.endswith("g")
               for ch in g.iter()), True)
@@ -1045,7 +1045,7 @@ def case_isoform_da(tmp):
 
     ns = "{http://www.w3.org/2000/svg}"
     mp = os.path.join(tmp, "model.svg")
-    dp.model_plot(f, "G1", "P1-2", "P1", mp)
+    dp.model_plots([(f, "G1", "P1-2", "P1")], mp)
     check("the model plot draws each case value once",
           len(list(ET.parse(mp).getroot().iter(f"{ns}circle"))), 6)
 
@@ -1062,6 +1062,31 @@ def case_isoform_da(tmp):
           {f"G{i}" for i in range(1, 7)} & texts, {"G2", "G3", "G4", "G5", "G6"})
     check("a Tukey whisker stops at the last point inside 1.5 IQR",
           dp._quartiles([0.0, 1.0, 2.0, 3.0, 100.0])[4], 3.0)
+
+
+def case_print_type(tmp):
+    """Type size at print: every enclosing scale counts, and the figure prints PRINT_W_PT wide."""
+    sys.path.insert(0, HERE)
+    import audit
+    from lib_palette import PRINT_W_PT, pt
+    from lib_svg import text_width
+    svg = os.path.join(tmp, "type.svg")
+    w = 2 * PRINT_W_PT                          # 2 units per printed pt
+    with open(svg, "w") as fh:
+        fh.write(f'<svg xmlns="http://www.w3.org/2000/svg" width="{w:g}" height="100" '
+                 f'viewBox="0 0 {w:g} 100"><text font-size="20">root</text>'
+                 '<g transform="translate(5 5) scale(0.5)"><text font-size="20">half</text>'
+                 '<g transform="scale(3)"><text font-size="4">nested</text></g></g>'
+                 '<text font-size="30"> </text></svg>')
+    h, sizes = audit.printed_type(svg)
+    check("printed size follows every enclosing scale",
+          sorted((t, round(s_, 2)) for s_, t in sizes),
+          [("half", 5.0), ("nested", 3.0), ("root", 10.0)])
+    check("printed height is in points", h, 50.0)
+    check("pt() is the whole-figure size that prints at that many points",
+          round(pt(10) * PRINT_W_PT / 1215.0, 6), 10.0)
+    check("text_width is near a measured render (Trypsin: 2.95 em)",
+          2.8 < text_width("Trypsin", 1.0) < 3.2, True)
 
 
 def case_diagnostic_peptides(tmp):
@@ -1410,7 +1435,7 @@ def main():
                    case_coverage, case_events, case_diverging, case_compact,
                    case_text_bounds, case_display_names, case_median,
                    case_pack_hits, case_aligned_strip, case_sample_ids,
-                   case_compose, case_diagnostic_peptides, case_isoform_da,
+                   case_compose, case_print_type, case_diagnostic_peptides, case_isoform_da,
                    case_report, case_isoform_coverage, case_phospho):
             print(f"\n{fn.__name__}")
             fn(tmp)
