@@ -1,0 +1,289 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="629" height="1036" viewBox="0 0 523.0 861.0" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
+<rect width="523.0" height="861.0" fill="#ffffff"/>
+<text x="20.0" y="30.0" font-size="24.51" fill="#0b0b0b" text-anchor="start" font-weight="600">c</text>
+<text x="48.0" y="30.0" font-size="21.68" fill="#0b0b0b" text-anchor="start" font-weight="600">PD-implicated isoforms</text>
+<text x="26.0" y="62.0" font-size="18.47" fill="#0b0b0b" text-anchor="start" font-weight="600">Discriminating residues · 10 isoforms</text>
+<line x1="185.4" y1="92.0" x2="185.4" y2="276.0" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="185.4" y="290.0" font-size="15.08" fill="#1f1e1c" text-anchor="middle">0</text>
+<line x1="261.2" y1="92.0" x2="261.2" y2="276.0" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="261.2" y="290.0" font-size="15.08" fill="#1f1e1c" text-anchor="middle">20</text>
+<line x1="336.9" y1="92.0" x2="336.9" y2="276.0" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="336.9" y="290.0" font-size="15.08" fill="#1f1e1c" text-anchor="middle">40</text>
+<line x1="412.7" y1="92.0" x2="412.7" y2="276.0" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="412.7" y="290.0" font-size="15.08" fill="#1f1e1c" text-anchor="middle">60</text>
+<text x="304.7" y="310.0" font-size="16.21" fill="#1f1e1c" text-anchor="middle">discriminating residues (aa); grey = not covered</text>
+<text x="26.0" y="109.0" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">DNAJC6</text>
+<text x="102.5" y="109.0" font-size="15.83" fill="#1f1e1c" text-anchor="start">O75061-2</text>
+<g><title>DNAJC6 O75061-2: trypsin, + Lys-C, + Glu-C: 0 aa → 8 aa → 16 aa of 63 aa</title>
+<rect x="185.4" y="100.0" width="238.7" height="10.0" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="185.4" y="100.0" width="30.3" height="10.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+<rect x="215.7" y="100.0" width="30.3" height="10.0" fill="#eb6834" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="430.1" y="109.0" font-size="15.83" fill="#0b0b0b" text-anchor="start">16/63 aa</text>
+<text x="26.0" y="127.0" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">LAMP2</text>
+<text x="102.5" y="127.0" font-size="15.83" fill="#1f1e1c" text-anchor="start">P13473-2</text>
+<g><title>LAMP2 P13473-2: trypsin, + Lys-C, + Glu-C: 28 aa → 28 aa → 28 aa of 35 aa</title>
+<rect x="185.4" y="118.0" width="132.6" height="10.0" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="185.4" y="118.0" width="106.1" height="10.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="324.0" y="127.0" font-size="15.83" fill="#0b0b0b" text-anchor="start">28/35 aa</text>
+<text x="26.0" y="145.0" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">RDX</text>
+<text x="102.5" y="145.0" font-size="15.83" fill="#1f1e1c" text-anchor="start">P35241-2</text>
+<g><title>RDX P35241-2: trypsin, + Lys-C, + Glu-C: 1 aa → 1 aa → 1 aa of 21 aa</title>
+<rect x="185.4" y="136.0" width="79.6" height="10.0" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="185.4" y="136.0" width="3.8" height="10.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="271.0" y="145.0" font-size="15.83" fill="#0b0b0b" text-anchor="start">1/21 aa</text>
+<text x="26.0" y="163.0" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">RDX</text>
+<text x="102.5" y="163.0" font-size="15.83" fill="#1f1e1c" text-anchor="start">P35241-3</text>
+<g><title>RDX P35241-3: trypsin, + Lys-C, + Glu-C: 1 aa → 1 aa → 1 aa of 21 aa</title>
+<rect x="185.4" y="154.0" width="79.6" height="10.0" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="185.4" y="154.0" width="3.8" height="10.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="271.0" y="163.0" font-size="15.83" fill="#0b0b0b" text-anchor="start">1/21 aa</text>
+<text x="26.0" y="181.0" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">GSK3B</text>
+<text x="102.5" y="181.0" font-size="15.83" fill="#1f1e1c" text-anchor="start">P49841-2</text>
+<g><title>GSK3B P49841-2: trypsin, + Lys-C, + Glu-C: 13 aa → 13 aa → 13 aa of 13 aa</title>
+<rect x="185.4" y="172.0" width="49.2" height="10.0" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="185.4" y="172.0" width="49.2" height="10.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="240.7" y="181.0" font-size="15.83" fill="#0b0b0b" text-anchor="start">13/13 aa</text>
+<text x="26.0" y="199.0" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">FBXO7</text>
+<text x="102.5" y="199.0" font-size="15.83" fill="#1f1e1c" text-anchor="start">Q9Y3I1-2</text>
+<g><title>FBXO7 Q9Y3I1-2: trypsin, + Lys-C, + Glu-C: 0 aa → 0 aa → 11 aa of 11 aa</title>
+<rect x="185.4" y="190.0" width="41.7" height="10.0" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="185.4" y="190.0" width="41.7" height="10.0" fill="#eb6834" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="233.1" y="199.0" font-size="15.83" fill="#0b0b0b" text-anchor="start">11/11 aa</text>
+<text x="26.0" y="217.0" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">VPS13C</text>
+<text x="102.5" y="217.0" font-size="15.83" fill="#1f1e1c" text-anchor="start">Q709C8-2</text>
+<g><title>VPS13C Q709C8-2: trypsin, + Lys-C, + Glu-C: 7 aa → 7 aa → 7 aa of 7 aa</title>
+<rect x="185.4" y="208.0" width="26.5" height="10.0" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="185.4" y="208.0" width="26.5" height="10.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="217.9" y="217.0" font-size="15.83" fill="#0b0b0b" text-anchor="start">7/7 aa</text>
+<text x="26.0" y="235.0" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">VPS13C</text>
+<text x="102.5" y="235.0" font-size="15.83" fill="#1f1e1c" text-anchor="start">Q709C8-4</text>
+<g><title>VPS13C Q709C8-4: trypsin, + Lys-C, + Glu-C: 7 aa → 7 aa → 7 aa of 7 aa</title>
+<rect x="185.4" y="226.0" width="26.5" height="10.0" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="185.4" y="226.0" width="26.5" height="10.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="217.9" y="235.0" font-size="15.83" fill="#0b0b0b" text-anchor="start">7/7 aa</text>
+<text x="26.0" y="253.0" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">SYNJ1</text>
+<text x="102.5" y="253.0" font-size="15.83" fill="#1f1e1c" text-anchor="start">O43426-2</text>
+<g><title>SYNJ1 O43426-2: trypsin, + Lys-C, + Glu-C: 3 aa → 3 aa → 3 aa of 3 aa</title>
+<rect x="185.4" y="244.0" width="11.4" height="10.0" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="185.4" y="244.0" width="11.4" height="10.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="202.8" y="253.0" font-size="15.83" fill="#0b0b0b" text-anchor="start">3/3 aa</text>
+<text x="26.0" y="271.0" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">SYNJ1</text>
+<text x="102.5" y="271.0" font-size="15.83" fill="#1f1e1c" text-anchor="start">O43426-4</text>
+<g><title>SYNJ1 O43426-4: trypsin, + Lys-C, + Glu-C: 3 aa → 3 aa → 3 aa of 3 aa</title>
+<rect x="185.4" y="262.0" width="11.4" height="10.0" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="185.4" y="262.0" width="11.4" height="10.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="202.8" y="271.0" font-size="15.83" fill="#0b0b0b" text-anchor="start">3/3 aa</text>
+<text x="26.0" y="332.0" font-size="18.47" fill="#0b0b0b" text-anchor="start" font-weight="600">Deletion junctions · 29 in 13 isoforms</text>
+<line x1="263.0" y1="362.0" x2="263.0" y2="837.0" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="263.0" y="851.0" font-size="15.08" fill="#1f1e1c" text-anchor="middle">0</text>
+<line x1="307.6" y1="362.0" x2="307.6" y2="837.0" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="307.6" y="851.0" font-size="15.08" fill="#1f1e1c" text-anchor="middle">1</text>
+<line x1="352.2" y1="362.0" x2="352.2" y2="837.0" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="352.2" y="851.0" font-size="15.08" fill="#1f1e1c" text-anchor="middle">2</text>
+<line x1="396.9" y1="362.0" x2="396.9" y2="837.0" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="396.9" y="851.0" font-size="15.08" fill="#1f1e1c" text-anchor="middle">3</text>
+<line x1="441.5" y1="362.0" x2="441.5" y2="837.0" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="441.5" y="851.0" font-size="15.08" fill="#1f1e1c" text-anchor="middle">4</text>
+<line x1="486.1" y1="362.0" x2="486.1" y2="837.0" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="486.1" y="851.0" font-size="15.08" fill="#1f1e1c" text-anchor="middle">5</text>
+<text x="26.0" y="377.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">DNAJC6</text>
+<text x="102.5" y="377.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">O75061-3</text>
+<text x="251.0" y="377.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ2–14</text>
+<g><title>DNAJC6 O75061-3 Δ2–14: Trypsin 1, Lys-C 1, Glu-C 0</title>
+<rect x="263.0" y="369.0" width="44.6" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="307.6" y="369.0" width="44.6" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="358.2" y="377.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">2</text>
+<text x="26.0" y="395.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">DNAJC6</text>
+<text x="102.5" y="395.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">O75061-4</text>
+<text x="251.0" y="395.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ2–14</text>
+<g><title>DNAJC6 O75061-4 Δ2–14: Trypsin 1, Lys-C 1, Glu-C 0</title>
+<rect x="263.0" y="387.0" width="44.6" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="307.6" y="387.0" width="44.6" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="358.2" y="395.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">2</text>
+<text x="26.0" y="413.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">SNCA</text>
+<text x="102.5" y="413.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">P37840-3</text>
+<text x="251.0" y="413.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ41–54</text>
+<g><title>SNCA P37840-3 Δ41–54: Trypsin 0, Lys-C 1, Glu-C 0</title>
+<rect x="263.0" y="405.0" width="44.6" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="313.6" y="413.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">1</text>
+<text x="26.0" y="431.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">SYNJ1</text>
+<text x="102.5" y="431.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">O43426-5</text>
+<text x="251.0" y="431.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ504–511</text>
+<g><title>SYNJ1 O43426-5 Δ504–511: Trypsin 0, Lys-C 1, Glu-C 0</title>
+<rect x="263.0" y="423.0" width="44.6" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="313.6" y="431.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">1</text>
+<text x="26.0" y="449.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">TH</text>
+<text x="102.5" y="449.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">P07101-3</text>
+<text x="251.0" y="449.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ31–61</text>
+<g><title>TH P07101-3 Δ31–61: Trypsin 1, Lys-C 1, Glu-C 2</title>
+<rect x="263.0" y="441.0" width="44.6" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="307.6" y="441.0" width="44.6" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+<rect x="352.2" y="441.0" width="89.3" height="9.0" fill="#eb6834" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="447.5" y="449.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">4</text>
+<text x="26.0" y="467.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">MAPT</text>
+<text x="102.5" y="467.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">P10636-2</text>
+<text x="251.0" y="467.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ45–102</text>
+<g><title>MAPT P10636-2 Δ45–102: Trypsin 2, Lys-C 1, Glu-C 2</title>
+<rect x="263.0" y="459.0" width="89.3" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="352.2" y="459.0" width="44.6" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+<rect x="396.9" y="459.0" width="89.3" height="9.0" fill="#eb6834" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="492.1" y="467.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">5</text>
+<text x="251.0" y="482.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ125–375</text>
+<g><title>MAPT P10636-2 Δ125–375: Trypsin 3, Lys-C 2, Glu-C 0</title>
+<rect x="263.0" y="474.0" width="133.9" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="396.9" y="474.0" width="89.3" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="492.1" y="482.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">5</text>
+<text x="251.0" y="497.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ394–459</text>
+<g><title>MAPT P10636-2 Δ394–459: Trypsin 0, Lys-C 0, Glu-C 0</title>
+</g>
+<text x="269.0" y="497.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">0</text>
+<text x="251.0" y="512.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ592–622</text>
+<g><title>MAPT P10636-2 Δ592–622: Trypsin 1, Lys-C 0, Glu-C 0</title>
+<rect x="263.0" y="504.0" width="44.6" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="313.6" y="512.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">1</text>
+<line x1="18.0" y1="460.0" x2="18.0" y2="512.0" stroke="#2c2b28" stroke-width="1.0"/>
+<text x="26.0" y="530.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">MAPT</text>
+<text x="102.5" y="530.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">P10636-4</text>
+<text x="251.0" y="530.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ74–102</text>
+<g><title>MAPT P10636-4 Δ74–102: Trypsin 1, Lys-C 1, Glu-C 1</title>
+<rect x="263.0" y="522.0" width="44.6" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="307.6" y="522.0" width="44.6" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+<rect x="352.2" y="522.0" width="44.6" height="9.0" fill="#eb6834" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="402.9" y="530.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">3</text>
+<text x="251.0" y="545.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ125–375</text>
+<g><title>MAPT P10636-4 Δ125–375: Trypsin 2, Lys-C 2, Glu-C 0</title>
+<rect x="263.0" y="537.0" width="89.3" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="352.2" y="537.0" width="89.3" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="447.5" y="545.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">4</text>
+<text x="251.0" y="560.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ394–459</text>
+<g><title>MAPT P10636-4 Δ394–459: Trypsin 0, Lys-C 0, Glu-C 0</title>
+</g>
+<text x="269.0" y="560.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">0</text>
+<text x="251.0" y="575.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ592–622</text>
+<g><title>MAPT P10636-4 Δ592–622: Trypsin 1, Lys-C 0, Glu-C 0</title>
+<rect x="263.0" y="567.0" width="44.6" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="313.6" y="575.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">1</text>
+<line x1="18.0" y1="523.0" x2="18.0" y2="575.0" stroke="#2c2b28" stroke-width="1.0"/>
+<text x="26.0" y="593.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">MAPT</text>
+<text x="102.5" y="593.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">P10636-5</text>
+<text x="251.0" y="593.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ125–375</text>
+<g><title>MAPT P10636-5 Δ125–375: Trypsin 2, Lys-C 2, Glu-C 0</title>
+<rect x="263.0" y="585.0" width="89.3" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="352.2" y="585.0" width="89.3" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="447.5" y="593.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">4</text>
+<text x="251.0" y="608.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ394–459</text>
+<g><title>MAPT P10636-5 Δ394–459: Trypsin 0, Lys-C 0, Glu-C 0</title>
+</g>
+<text x="269.0" y="608.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">0</text>
+<text x="251.0" y="623.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ592–622</text>
+<g><title>MAPT P10636-5 Δ592–622: Trypsin 1, Lys-C 0, Glu-C 0</title>
+<rect x="263.0" y="615.0" width="44.6" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="313.6" y="623.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">1</text>
+<line x1="18.0" y1="586.0" x2="18.0" y2="623.0" stroke="#2c2b28" stroke-width="1.0"/>
+<text x="26.0" y="641.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">MAPT</text>
+<text x="102.5" y="641.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">P10636-6</text>
+<text x="251.0" y="641.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ45–102</text>
+<g><title>MAPT P10636-6 Δ45–102: Trypsin 2, Lys-C 1, Glu-C 2</title>
+<rect x="263.0" y="633.0" width="89.3" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="352.2" y="633.0" width="44.6" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+<rect x="396.9" y="633.0" width="89.3" height="9.0" fill="#eb6834" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="492.1" y="641.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">5</text>
+<text x="251.0" y="656.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ125–375</text>
+<g><title>MAPT P10636-6 Δ125–375: Trypsin 3, Lys-C 2, Glu-C 0</title>
+<rect x="263.0" y="648.0" width="133.9" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="396.9" y="648.0" width="89.3" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="492.1" y="656.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">5</text>
+<text x="251.0" y="671.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ394–459</text>
+<g><title>MAPT P10636-6 Δ394–459: Trypsin 0, Lys-C 0, Glu-C 0</title>
+</g>
+<text x="269.0" y="671.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">0</text>
+<line x1="18.0" y1="634.0" x2="18.0" y2="671.0" stroke="#2c2b28" stroke-width="1.0"/>
+<text x="26.0" y="689.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">MAPT</text>
+<text x="102.5" y="689.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">P10636-7</text>
+<text x="251.0" y="689.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ74–102</text>
+<g><title>MAPT P10636-7 Δ74–102: Trypsin 1, Lys-C 1, Glu-C 1</title>
+<rect x="263.0" y="681.0" width="44.6" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="307.6" y="681.0" width="44.6" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+<rect x="352.2" y="681.0" width="44.6" height="9.0" fill="#eb6834" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="402.9" y="689.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">3</text>
+<text x="251.0" y="704.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ125–375</text>
+<g><title>MAPT P10636-7 Δ125–375: Trypsin 2, Lys-C 2, Glu-C 0</title>
+<rect x="263.0" y="696.0" width="89.3" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="352.2" y="696.0" width="89.3" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="447.5" y="704.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">4</text>
+<text x="251.0" y="719.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ394–459</text>
+<g><title>MAPT P10636-7 Δ394–459: Trypsin 0, Lys-C 0, Glu-C 0</title>
+</g>
+<text x="269.0" y="719.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">0</text>
+<line x1="18.0" y1="682.0" x2="18.0" y2="719.0" stroke="#2c2b28" stroke-width="1.0"/>
+<text x="26.0" y="737.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">MAPT</text>
+<text x="102.5" y="737.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">P10636-8</text>
+<text x="251.0" y="737.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ125–375</text>
+<g><title>MAPT P10636-8 Δ125–375: Trypsin 2, Lys-C 2, Glu-C 0</title>
+<rect x="263.0" y="729.0" width="89.3" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="352.2" y="729.0" width="89.3" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="447.5" y="737.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">4</text>
+<text x="251.0" y="752.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ394–459</text>
+<g><title>MAPT P10636-8 Δ394–459: Trypsin 0, Lys-C 0, Glu-C 0</title>
+</g>
+<text x="269.0" y="752.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">0</text>
+<line x1="18.0" y1="730.0" x2="18.0" y2="752.0" stroke="#2c2b28" stroke-width="1.0"/>
+<text x="26.0" y="770.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">TH</text>
+<text x="102.5" y="770.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">P07101-6</text>
+<text x="251.0" y="770.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ31–61</text>
+<g><title>TH P07101-6 Δ31–61: Trypsin 1, Lys-C 1, Glu-C 2</title>
+<rect x="263.0" y="762.0" width="44.6" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="307.6" y="762.0" width="44.6" height="9.0" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+<rect x="352.2" y="762.0" width="89.3" height="9.0" fill="#eb6834" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="447.5" y="770.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">4</text>
+<text x="251.0" y="785.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ264–357</text>
+<g><title>TH P07101-6 Δ264–357: Trypsin 0, Lys-C 0, Glu-C 0</title>
+</g>
+<text x="269.0" y="785.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">0</text>
+<line x1="18.0" y1="763.0" x2="18.0" y2="785.0" stroke="#2c2b28" stroke-width="1.0"/>
+<text x="26.0" y="803.5" font-size="17.72" fill="#0b0b0b" text-anchor="start" font-weight="600">MAPT</text>
+<text x="102.5" y="803.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">P10636-3</text>
+<text x="251.0" y="803.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ125–375</text>
+<g><title>MAPT P10636-3 Δ125–375: Trypsin 0, Lys-C 0, Glu-C 0</title>
+</g>
+<text x="269.0" y="803.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">0</text>
+<text x="251.0" y="818.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ394–459</text>
+<g><title>MAPT P10636-3 Δ394–459: Trypsin 0, Lys-C 0, Glu-C 0</title>
+</g>
+<text x="269.0" y="818.5" font-size="15.83" fill="#1f1e1c" text-anchor="start">0</text>
+<text x="251.0" y="833.5" font-size="15.08" fill="#1f1e1c" text-anchor="end">Δ592–622</text>
+<g><title>MAPT P10636-3 Δ592–622: Trypsin 1, Lys-C 0, Glu-C 0</title>
+<rect x="263.0" y="825.0" width="44.6" height="9.0" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="313.6" y="833.5" font-size="15.83" fill="#0b0b0b" text-anchor="start">1</text>
+<line x1="18.0" y1="796.0" x2="18.0" y2="833.0" stroke="#2c2b28" stroke-width="1.0"/>
+</svg>
