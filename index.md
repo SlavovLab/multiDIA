@@ -5,6 +5,7 @@ nav_order: 1
 description: "multiDIA: multi-protease DIA proteomics of human Lewy body disease brain"
 permalink: /
 ---
+{% assign v = site.time | date: '%s' %}
 
 # **multiDIA**
 {: .fs-9 }
@@ -14,7 +15,7 @@ Multi-protease data-independent acquisition of human Lewy body disease brain
 
 [Figures]({{ site.baseurl }}/figures-page/){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [Reproduce]({{ site.baseurl }}/reproduce/){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 } [GitHub Repository](https://github.com/SlavovLab/multiDIA){: .btn .fs-5 .mb-4 .mb-md-0 }
 
-![Figure 1]({{ site.baseurl }}/figures/fig1.png){: width="90%" }
+![Figure 1]({{ site.baseurl }}/figures/fig1.png?v={{ v }}){: width="90%" }
 
 ## Aim
 
