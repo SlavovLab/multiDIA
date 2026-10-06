@@ -23,7 +23,7 @@ from lib_palette import (AXIS, DIVERGING_HIGH, DIVERGING_MID, FIG_W, FONT, INK,
 import prep_phospho as ph                                               # noqa: E402
 
 ORDER = ph.ORDER
-NONE_FILL = "#000000"       # not detected
+NONE_FILL = "#61646a"       # not detected
 BREAKS = (3.0, 10.0, 20.0, 30.0)
 STEPS = [DIVERGING_MID] + DIVERGING_HIGH
 FIXED = "Carbamidomethyl"   # fixed modification, not an observation
