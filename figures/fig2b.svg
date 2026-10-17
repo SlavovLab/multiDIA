@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="555" height="456" viewBox="0 0 554.6 456.4" font-family='system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif'>
+<rect width="554.6" height="456.4" fill="#ffffff"/>
+<text x="6.0" y="30.0" font-size="33.75" fill="#0b0b0b" text-anchor="start" font-weight="600">b</text>
+<text x="48.0" y="32.0" font-size="31.15" fill="#0b0b0b" text-anchor="start" font-weight="600">PD-associated proteoforms</text>
+<text x="12.0" y="71.5" font-size="28.56" fill="#0b0b0b" text-anchor="start" font-weight="600">Discriminating residues</text>
+<line x1="292.9" y1="93.5" x2="292.9" y2="256.4" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="292.9" y="282.3" font-size="25.96" fill="#1f1e1c" text-anchor="middle">0</text>
+<line x1="352.9" y1="93.5" x2="352.9" y2="256.4" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="352.9" y="282.3" font-size="25.96" fill="#1f1e1c" text-anchor="middle">25</text>
+<line x1="412.9" y1="93.5" x2="412.9" y2="256.4" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="412.9" y="282.3" font-size="25.96" fill="#1f1e1c" text-anchor="middle">50</text>
+<text x="12.0" y="119.8" font-size="25.96" fill="#0b0b0b" text-anchor="start" font-weight="600">DNAJC6</text>
+<text x="120.5" y="119.8" font-size="25.96" fill="#1f1e1c" text-anchor="start">O75061-2</text>
+<g><title>DNAJC6 O75061-2: trypsin, + Lys-C, + Glu-C: 0 aa → 8 aa → 16 aa of 63 aa</title>
+<rect x="292.9" y="101.9" width="151.2" height="17.7" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="292.9" y="101.9" width="19.2" height="17.7" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+<rect x="312.1" y="101.9" width="19.2" height="17.7" fill="#eb6834" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="451.9" y="119.8" font-size="25.96" fill="#0b0b0b" text-anchor="start">16/63 aa</text>
+<text x="12.0" y="146.3" font-size="25.96" fill="#0b0b0b" text-anchor="start" font-weight="600">LAMP2</text>
+<text x="120.5" y="146.3" font-size="25.96" fill="#1f1e1c" text-anchor="start">P13473-2</text>
+<g><title>LAMP2 P13473-2: trypsin, + Lys-C, + Glu-C: 28 aa → 28 aa → 28 aa of 35 aa</title>
+<rect x="292.9" y="128.4" width="84.0" height="17.7" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="292.9" y="128.4" width="67.2" height="17.7" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="384.7" y="146.3" font-size="25.96" fill="#0b0b0b" text-anchor="start">28/35 aa</text>
+<text x="12.0" y="172.8" font-size="25.96" fill="#0b0b0b" text-anchor="start" font-weight="600">GSK3B</text>
+<text x="120.5" y="172.8" font-size="25.96" fill="#1f1e1c" text-anchor="start">P49841-2</text>
+<g><title>GSK3B P49841-2: trypsin, + Lys-C, + Glu-C: 13 aa → 13 aa → 13 aa of 13 aa</title>
+<rect x="292.9" y="154.9" width="31.2" height="17.7" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="292.9" y="154.9" width="31.2" height="17.7" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="331.9" y="172.8" font-size="25.96" fill="#0b0b0b" text-anchor="start">13/13 aa</text>
+<text x="12.0" y="199.3" font-size="25.96" fill="#0b0b0b" text-anchor="start" font-weight="600">FBXO7</text>
+<text x="120.5" y="199.3" font-size="25.96" fill="#1f1e1c" text-anchor="start">Q9Y3I1-2</text>
+<g><title>FBXO7 Q9Y3I1-2: trypsin, + Lys-C, + Glu-C: 0 aa → 0 aa → 11 aa of 11 aa</title>
+<rect x="292.9" y="181.4" width="26.4" height="17.7" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="292.9" y="181.4" width="26.4" height="17.7" fill="#eb6834" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="327.1" y="199.3" font-size="25.96" fill="#0b0b0b" text-anchor="start">11/11 aa</text>
+<text x="12.0" y="225.7" font-size="25.96" fill="#0b0b0b" text-anchor="start" font-weight="600">VPS13C</text>
+<text x="120.5" y="225.7" font-size="25.96" fill="#1f1e1c" text-anchor="start">Q709C8-2/-4</text>
+<g><title>VPS13C Q709C8-2/-4: trypsin, + Lys-C, + Glu-C: 7 aa → 7 aa → 7 aa of 7 aa</title>
+<rect x="292.9" y="207.8" width="16.8" height="17.7" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="292.9" y="207.8" width="16.8" height="17.7" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="317.5" y="225.7" font-size="25.96" fill="#0b0b0b" text-anchor="start">7/7 aa</text>
+<text x="12.0" y="252.2" font-size="25.96" fill="#0b0b0b" text-anchor="start" font-weight="600">SYNJ1</text>
+<text x="120.5" y="252.2" font-size="25.96" fill="#1f1e1c" text-anchor="start">O43426-2/-4</text>
+<g><title>SYNJ1 O43426-2/-4: trypsin, + Lys-C, + Glu-C: 3 aa → 3 aa → 3 aa of 3 aa</title>
+<rect x="292.9" y="234.3" width="7.2" height="17.7" fill="#c3c2b7" stroke="none" stroke-width="1.0"/>
+<rect x="292.9" y="234.3" width="7.2" height="17.7" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="307.9" y="252.2" font-size="25.96" fill="#0b0b0b" text-anchor="start">3/3 aa</text>
+<text x="12.0" y="305.8" font-size="28.56" fill="#0b0b0b" text-anchor="start" font-weight="600">Deletion junctions</text>
+<line x1="424.5" y1="327.8" x2="424.5" y2="417.4" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="424.5" y="443.4" font-size="25.96" fill="#1f1e1c" text-anchor="middle">0</text>
+<line x1="450.8" y1="327.8" x2="450.8" y2="417.4" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="450.8" y="443.4" font-size="25.96" fill="#1f1e1c" text-anchor="middle">1</text>
+<line x1="477.1" y1="327.8" x2="477.1" y2="417.4" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="477.1" y="443.4" font-size="25.96" fill="#1f1e1c" text-anchor="middle">2</text>
+<line x1="503.4" y1="327.8" x2="503.4" y2="417.4" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="503.4" y="443.4" font-size="25.96" fill="#1f1e1c" text-anchor="middle">3</text>
+<line x1="529.8" y1="327.8" x2="529.8" y2="417.4" stroke="#e1e0d9" stroke-width="1.0"/>
+<text x="529.8" y="443.4" font-size="25.96" fill="#1f1e1c" text-anchor="middle">4</text>
+<text x="12.0" y="354.1" font-size="25.96" fill="#0b0b0b" text-anchor="start" font-weight="600">SNCA</text>
+<text x="120.5" y="354.1" font-size="25.96" fill="#1f1e1c" text-anchor="start">P37840-3</text>
+<text x="411.5" y="354.1" font-size="25.96" fill="#1f1e1c" text-anchor="end">Δ41–54</text>
+<g><title>SNCA P37840-3 Δ41–54: Trypsin 0, Lys-C 1, Glu-C 0</title>
+<rect x="424.5" y="336.7" width="26.3" height="16.6" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="458.6" y="354.1" font-size="25.96" fill="#0b0b0b" text-anchor="start">1</text>
+<text x="12.0" y="383.7" font-size="25.96" fill="#0b0b0b" text-anchor="start" font-weight="600">SYNJ1</text>
+<text x="120.5" y="383.7" font-size="25.96" fill="#1f1e1c" text-anchor="start">O43426-5</text>
+<text x="411.5" y="383.7" font-size="25.96" fill="#1f1e1c" text-anchor="end">Δ504–511</text>
+<g><title>SYNJ1 O43426-5 Δ504–511: Trypsin 0, Lys-C 1, Glu-C 0</title>
+<rect x="424.5" y="366.3" width="26.3" height="16.6" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="458.6" y="383.7" font-size="25.96" fill="#0b0b0b" text-anchor="start">1</text>
+<text x="12.0" y="413.3" font-size="25.96" fill="#0b0b0b" text-anchor="start" font-weight="600">TH</text>
+<text x="120.5" y="413.3" font-size="25.96" fill="#1f1e1c" text-anchor="start">P07101-3/-6</text>
+<text x="411.5" y="413.3" font-size="25.96" fill="#1f1e1c" text-anchor="end">Δ31–61</text>
+<g><title>TH P07101-3/-6 Δ31–61: Trypsin 1, Lys-C 1, Glu-C 2</title>
+<rect x="424.5" y="395.9" width="26.3" height="16.6" fill="#1baf7a" stroke="none" stroke-width="1.0"/>
+<rect x="450.8" y="395.9" width="26.3" height="16.6" fill="#2a78d6" stroke="none" stroke-width="1.0"/>
+<rect x="477.1" y="395.9" width="52.6" height="16.6" fill="#eb6834" stroke="none" stroke-width="1.0"/>
+</g>
+<text x="537.5" y="413.3" font-size="25.96" fill="#0b0b0b" text-anchor="start">4</text>
+</svg>

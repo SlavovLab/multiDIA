@@ -1,0 +1,221 @@
+{
+  "dropped": {
+    "protein q (precursor kept)": 8380
+  },
+  "identity": "blake2b-64 digests",
+  "precursor_q": 0.01,
+  "proteases": [
+    "GluC",
+    "LysC",
+    "Trypsin"
+  ],
+  "protein_q": 0.01,
+  "reports": [
+    {
+      "path": "data/search/GluC-60min-Phospho.parquet",
+      "rows": 800394
+    },
+    {
+      "path": "data/search/LysC-60min-Phospho.parquet",
+      "rows": 1193781
+    },
+    {
+      "path": "data/search/Trypsin-60min-Phospho.parquet",
+      "rows": 2565618
+    }
+  ],
+  "resolved_columns": {
+    "charge": "FG_Charge",
+    "condition": "R_Condition",
+    "decoy": "EG_IsDecoy",
+    "eg_qvalue": "EG_Qvalue",
+    "mod_seq": "EG_ModifiedSequence",
+    "pg_qvalue": "PG_QValue_(Run-Wise)",
+    "protein_group": "PG_ProteinGroups",
+    "replicate": "R_Replicate",
+    "run": "R_FileName",
+    "strip_seq": "PEP_StrippedSequence"
+  },
+  "rows_kept": 4559793,
+  "rows_read": 4559793,
+  "runs": {
+    "2026-03-04_CF_1488_G_new_A6_1_8020": {
+      "protease": "GluC",
+      "sample": "1488"
+    },
+    "2026-03-04_CF_1488_L_new_A6_1_8034": {
+      "protease": "LysC",
+      "sample": "1488"
+    },
+    "2026-03-04_CF_1488_T_new_A6_1_8007": {
+      "protease": "Trypsin",
+      "sample": "1488"
+    },
+    "2026-03-04_CF_1601_G_new_A6_1_8019": {
+      "protease": "GluC",
+      "sample": "1601"
+    },
+    "2026-03-04_CF_1601_L_new_A6_1_8033": {
+      "protease": "LysC",
+      "sample": "1601"
+    },
+    "2026-03-04_CF_1601_T_new_A6_1_8006": {
+      "protease": "Trypsin",
+      "sample": "1601"
+    },
+    "2026-03-04_CF_1825_G_new_A6_1_8017": {
+      "protease": "GluC",
+      "sample": "1825"
+    },
+    "2026-03-04_CF_1825_T_new_A6_1_8004": {
+      "protease": "Trypsin",
+      "sample": "1825"
+    },
+    "2026-03-04_CF_2172_G_new_A6_1_8012": {
+      "protease": "GluC",
+      "sample": "2172"
+    },
+    "2026-03-04_CF_2172_L_new_A6_1_8025": {
+      "protease": "LysC",
+      "sample": "2172"
+    },
+    "2026-03-04_CF_2172_T_new_A6_1_7999": {
+      "protease": "Trypsin",
+      "sample": "2172"
+    },
+    "2026-03-04_CF_2264_G_new_A6_1_8011": {
+      "protease": "GluC",
+      "sample": "2264"
+    },
+    "2026-03-04_CF_2264_L_new_A6_1_8024": {
+      "protease": "LysC",
+      "sample": "2264"
+    },
+    "2026-03-04_CF_2264_T_new_A6_1_7998": {
+      "protease": "Trypsin",
+      "sample": "2264"
+    },
+    "2026-03-04_CF_2306_G_new_A6_1_8018": {
+      "protease": "GluC",
+      "sample": "2306"
+    },
+    "2026-03-04_CF_2306_L_new_A6_1_8032": {
+      "protease": "LysC",
+      "sample": "2306"
+    },
+    "2026-03-04_CF_2306_T_new_A6_1_8005": {
+      "protease": "Trypsin",
+      "sample": "2306"
+    },
+    "2026-03-04_CF_2465_G_new_A6_1_8010": {
+      "protease": "GluC",
+      "sample": "2465"
+    },
+    "2026-03-04_CF_2465_L_new_A6_1_8023": {
+      "protease": "LysC",
+      "sample": "2465"
+    },
+    "2026-03-04_CF_2465_T_new_A6_1_7997": {
+      "protease": "Trypsin",
+      "sample": "2465"
+    },
+    "2026-03-04_CF_2470_G_new_A6_1_8016": {
+      "protease": "GluC",
+      "sample": "2470"
+    },
+    "2026-03-04_CF_2470_L_new_A6_1_8030": {
+      "protease": "LysC",
+      "sample": "2470"
+    },
+    "2026-03-04_CF_2470_T_new_A6_1_8003": {
+      "protease": "Trypsin",
+      "sample": "2470"
+    },
+    "2026-03-04_CF_2477_G_new_A6_1_8015": {
+      "protease": "GluC",
+      "sample": "2477"
+    },
+    "2026-03-04_CF_2477_L_new_A6_1_8029": {
+      "protease": "LysC",
+      "sample": "2477"
+    },
+    "2026-03-04_CF_2477_T_new_A6_1_8002": {
+      "protease": "Trypsin",
+      "sample": "2477"
+    },
+    "2026-03-04_CF_2522_G_new_A6_1_8009": {
+      "protease": "GluC",
+      "sample": "2522"
+    },
+    "2026-03-04_CF_2522_L_new_A6_1_8022": {
+      "protease": "LysC",
+      "sample": "2522"
+    },
+    "2026-03-04_CF_2671_G_new_A6_1_8014": {
+      "protease": "GluC",
+      "sample": "2671"
+    },
+    "2026-03-04_CF_2671_L_new_A6_1_8028": {
+      "protease": "LysC",
+      "sample": "2671"
+    },
+    "2026-03-04_CF_2671_T_new_A6_1_8001": {
+      "protease": "Trypsin",
+      "sample": "2671"
+    },
+    "2026-03-04_CF_2744_G_new_A6_1_8013": {
+      "protease": "GluC",
+      "sample": "2744"
+    },
+    "2026-03-04_CF_2744_L_new_A6_1_8026": {
+      "protease": "LysC",
+      "sample": "2744"
+    },
+    "2026-03-04_CF_2744_T_new_A6_1_8000": {
+      "protease": "Trypsin",
+      "sample": "2744"
+    },
+    "2026-08-27_CF_PD_2522T_G-A1_1_9301": {
+      "protease": "Trypsin",
+      "sample": "2522"
+    }
+  },
+  "samples": [
+    "1488",
+    "1601",
+    "1825",
+    "2172",
+    "2264",
+    "2306",
+    "2465",
+    "2470",
+    "2477",
+    "2522",
+    "2671",
+    "2744"
+  ],
+  "union_fdr_upper_bound": {
+    "peptides": {
+      "bound": 0.0111,
+      "per_search_q": 0.01
+    },
+    "precursors": {
+      "bound": 0.01102,
+      "per_search_q": 0.01
+    },
+    "protein_isoform_groups": {
+      "bound": 0.01736,
+      "per_search_q": 0.01
+    },
+    "proteins_canonical": {
+      "bound": 0.02249,
+      "per_search_q": 0.01
+    }
+  },
+  "units": [
+    "precursors",
+    "peptides",
+    "protein_isoform_groups",
+    "proteins_canonical"
+  ]
+}
