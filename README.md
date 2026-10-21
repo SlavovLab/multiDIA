@@ -1,6 +1,6 @@
 # multiDIA
 
-Analysis and figures for the preprint *Scalable, proteoform-resolved proteomics using multiDIA for neurodegenerative disease*
+Analysis and figures for the preprint [*Scalable, proteoform-resolved proteomics using multiDIA for neurodegenerative disease*](https://doi.org/10.64898/2026.10.16.756994)
 (Orhun Kok, Corinna Friedrich, Kirsten Altig, Derek Oakley, Bradley T. Hyman, Mahlon Collins, Nikolai Slavov, 2026): Spectronaut directDIA reports from three parallel digests (trypsin,
 Lys-C, Glu-C) of one human PD brain cohort. Raw data, search results and settings are
 in MassIVE, MSV000103483.
