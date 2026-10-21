@@ -47,7 +47,7 @@ Ultra (65 min, 60 windows) and searched with Spectronaut 21.1 directDIA at 1% FD
 
 ## Preprint
 
-Orhun Kok, Corinna Friedrich, Kirsten Altig, Derek Oakley, Bradley T. Hyman, Mahlon Collins, Nikolai Slavov. *Scalable, proteoform-resolved proteomics using multiDIA for neurodegenerative disease*. Preprint, 2026.
+Orhun Kok, Corinna Friedrich, Kirsten Altig, Derek Oakley, Bradley T. Hyman, Mahlon Collins, Nikolai Slavov.  [*Scalable, proteoform-resolved proteomics using multiDIA for neurodegenerative disease*](https://www.biorxiv.org/content/10.64898/2026.10.16.756994v1), *bioRxiv*, doi: [10.64898/2026.10.16.756994](https://doi.org/10.64898/2026.10.16.756994)  2026.
 
 Raw data, search results and Spectronaut settings: MassIVE
 [MSV000103483](https://massive.ucsd.edu/ProteoSAFe/QueryMSV?id=MSV000103483).
